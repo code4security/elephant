@@ -28,6 +28,7 @@
         <module>elephant-persist</module>
         <module>elephant-service</module>
         <module>elephant-starter</module>
+        <module>elephant-biz</module>
     </modules>
 
     <dependencyManagement>
@@ -37,6 +38,12 @@
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis-starter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sjhy.platform</groupId>
+                <artifactId>elephant-client</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
         </dependencies>

@@ -10,9 +10,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.sjhy.platform</groupId>
     <artifactId>elephant-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
 
 </project>

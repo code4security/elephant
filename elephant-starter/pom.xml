@@ -10,9 +10,7 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.sjhy.platform</groupId>
   <artifactId>elephant-starter</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
 
   <name>elephant-starter</name>
   <!-- FIXME change it to the project's website -->
@@ -23,6 +21,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sjhy.platform</groupId>
+      <artifactId>elephant-biz</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
   </dependencies>
