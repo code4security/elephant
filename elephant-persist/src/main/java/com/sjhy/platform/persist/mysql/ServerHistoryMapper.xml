@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.ServerHistoryMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.base.ServerHistory" >
+        <id column="player_id" property="playerId" jdbcType="BIGINT" />
+        <result column="server_id" property="serverId" jdbcType="INTEGER" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        player_id, server_id, last_login_time
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.base.ServerHistoryExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from server_history
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from server_history
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from server_history
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.sjhy.platform.client.dto.base.ServerHistoryExample" >
+        delete from server_history
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.base.ServerHistory" >
+        insert into server_history (player_id, server_id, last_login_time
+            )
+        values (#{playerId,jdbcType=BIGINT}, #{serverId,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.base.ServerHistory" >
+        insert into server_history
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="playerId != null" >
+                player_id,
+            </if>
+            <if test="serverId != null" >
+                server_id,
+            </if>
+            <if test="lastLoginTime != null" >
+                last_login_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="playerId != null" >
+                #{playerId,jdbcType=BIGINT},
+            </if>
+            <if test="serverId != null" >
+                #{serverId,jdbcType=INTEGER},
+            </if>
+            <if test="lastLoginTime != null" >
+                #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.sjhy.platform.client.dto.base.ServerHistoryExample" resultType="java.lang.Integer" >
+        select count(*) from server_history
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update server_history
+        <set >
+            <if test="record.playerId != null" >
+                player_id = #{record.playerId,jdbcType=BIGINT},
+            </if>
+            <if test="record.serverId != null" >
+                server_id = #{record.serverId,jdbcType=INTEGER},
+            </if>
+            <if test="record.lastLoginTime != null" >
+                last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update server_history
+        set player_id = #{record.playerId,jdbcType=BIGINT},
+            server_id = #{record.serverId,jdbcType=INTEGER},
+            last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.base.ServerHistory" >
+        update server_history
+        <set >
+            <if test="serverId != null" >
+                server_id = #{serverId,jdbcType=INTEGER},
+            </if>
+            <if test="lastLoginTime != null" >
+                last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.base.ServerHistory" >
+        update server_history
+        set server_id = #{serverId,jdbcType=INTEGER},
+            last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </update>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.IpLocationMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.base.IpLocation" >
+        <id column="start_ip_num" property="startIpNum" jdbcType="BIGINT" />
+        <result column="end_ip_num" property="endIpNum" jdbcType="BIGINT" />
+        <result column="locid" property="locid" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        start_ip_num, end_ip_num, locid
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.base.IpLocationExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from ip_location
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from ip_location
+        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from ip_location
+        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.sjhy.platform.client.dto.base.IpLocationExample" >
+        delete from ip_location
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.base.IpLocation" >
+        insert into ip_location (start_ip_num, end_ip_num, locid
+            )
+        values (#{startIpNum,jdbcType=BIGINT}, #{endIpNum,jdbcType=BIGINT}, #{locid,jdbcType=INTEGER}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.base.IpLocation" >
+        insert into ip_location
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="startIpNum != null" >
+                start_ip_num,
+            </if>
+            <if test="endIpNum != null" >
+                end_ip_num,
+            </if>
+            <if test="locid != null" >
+                locid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="startIpNum != null" >
+                #{startIpNum,jdbcType=BIGINT},
+            </if>
+            <if test="endIpNum != null" >
+                #{endIpNum,jdbcType=BIGINT},
+            </if>
+            <if test="locid != null" >
+                #{locid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.sjhy.platform.client.dto.base.IpLocationExample" resultType="java.lang.Integer" >
+        select count(*) from ip_location
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update ip_location
+        <set >
+            <if test="record.startIpNum != null" >
+                start_ip_num = #{record.startIpNum,jdbcType=BIGINT},
+            </if>
+            <if test="record.endIpNum != null" >
+                end_ip_num = #{record.endIpNum,jdbcType=BIGINT},
+            </if>
+            <if test="record.locid != null" >
+                locid = #{record.locid,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update ip_location
+        set start_ip_num = #{record.startIpNum,jdbcType=BIGINT},
+            end_ip_num = #{record.endIpNum,jdbcType=BIGINT},
+            locid = #{record.locid,jdbcType=INTEGER}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.base.IpLocation" >
+        update ip_location
+        <set >
+            <if test="endIpNum != null" >
+                end_ip_num = #{endIpNum,jdbcType=BIGINT},
+            </if>
+            <if test="locid != null" >
+                locid = #{locid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.base.IpLocation" >
+        update ip_location
+        set end_ip_num = #{endIpNum,jdbcType=BIGINT},
+            locid = #{locid,jdbcType=INTEGER}
+        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+    </update>
+</mapper>

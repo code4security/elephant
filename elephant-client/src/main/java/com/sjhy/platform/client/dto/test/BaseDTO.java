@@ -1,4 +1,4 @@
-package com.sjhy.platform.client.dto.base;
+package com.sjhy.platform.client.dto.test;
 
 import lombok.Data;
 

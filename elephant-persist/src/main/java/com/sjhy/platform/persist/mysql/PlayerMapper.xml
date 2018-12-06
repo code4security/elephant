@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.PlayerMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.base.Player" >
+        <id column="player_id" property="playerId" jdbcType="BIGINT" />
+        <result column="server_id" property="serverId" jdbcType="INTEGER" />
+        <result column="device_model" property="deviceModel" jdbcType="VARCHAR" />
+        <result column="device_uniquely_id" property="deviceUniquelyId" jdbcType="VARCHAR" />
+        <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+        <result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP" />
+        <result column="first_login_ip" property="firstLoginIp" jdbcType="VARCHAR" />
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
+        <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+        <result column="ip_region" property="ipRegion" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Example_Where_Clause" >
+        <where >
+            <foreach collection="oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Update_By_Example_Where_Clause" >
+        <where >
+            <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+                <if test="criteria.valid" >
+                    <trim prefix="(" suffix=")" prefixOverrides="and" >
+                        <foreach collection="criteria.criteria" item="criterion" >
+                            <choose >
+                                <when test="criterion.noValue" >
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue" >
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue" >
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue" >
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <sql id="Base_Column_List" >
+        player_id, server_id, device_model, device_uniquely_id, channel_name, first_login_time, 
+        first_login_ip, last_login_time, last_login_ip, ip_region
+    </sql>
+
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.base.PlayerExample" >
+        select
+        <if test="distinct" >
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from player
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null" >
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from player
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from player
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByExample" parameterType="com.sjhy.platform.client.dto.base.PlayerExample" >
+        delete from player
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.base.Player" >
+        insert into player (player_id, server_id, device_model, 
+            device_uniquely_id, channel_name, first_login_time, 
+            first_login_ip, last_login_time, last_login_ip, 
+            ip_region)
+        values (#{playerId,jdbcType=BIGINT}, #{serverId,jdbcType=INTEGER}, #{deviceModel,jdbcType=VARCHAR}, 
+            #{deviceUniquelyId,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, #{firstLoginTime,jdbcType=TIMESTAMP}, 
+            #{firstLoginIp,jdbcType=VARCHAR}, #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastLoginIp,jdbcType=VARCHAR}, 
+            #{ipRegion,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.base.Player" >
+        insert into player
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="playerId != null" >
+                player_id,
+            </if>
+            <if test="serverId != null" >
+                server_id,
+            </if>
+            <if test="deviceModel != null" >
+                device_model,
+            </if>
+            <if test="deviceUniquelyId != null" >
+                device_uniquely_id,
+            </if>
+            <if test="channelName != null" >
+                channel_name,
+            </if>
+            <if test="firstLoginTime != null" >
+                first_login_time,
+            </if>
+            <if test="firstLoginIp != null" >
+                first_login_ip,
+            </if>
+            <if test="lastLoginTime != null" >
+                last_login_time,
+            </if>
+            <if test="lastLoginIp != null" >
+                last_login_ip,
+            </if>
+            <if test="ipRegion != null" >
+                ip_region,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="playerId != null" >
+                #{playerId,jdbcType=BIGINT},
+            </if>
+            <if test="serverId != null" >
+                #{serverId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceModel != null" >
+                #{deviceModel,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceUniquelyId != null" >
+                #{deviceUniquelyId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null" >
+                #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLoginTime != null" >
+                #{firstLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstLoginIp != null" >
+                #{firstLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginTime != null" >
+                #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginIp != null" >
+                #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="ipRegion != null" >
+                #{ipRegion,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="countByExample" parameterType="com.sjhy.platform.client.dto.base.PlayerExample" resultType="java.lang.Integer" >
+        select count(*) from player
+        <if test="_parameter != null" >
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+
+    <update id="updateByExampleSelective" parameterType="map" >
+        update player
+        <set >
+            <if test="record.playerId != null" >
+                player_id = #{record.playerId,jdbcType=BIGINT},
+            </if>
+            <if test="record.serverId != null" >
+                server_id = #{record.serverId,jdbcType=INTEGER},
+            </if>
+            <if test="record.deviceModel != null" >
+                device_model = #{record.deviceModel,jdbcType=VARCHAR},
+            </if>
+            <if test="record.deviceUniquelyId != null" >
+                device_uniquely_id = #{record.deviceUniquelyId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.channelName != null" >
+                channel_name = #{record.channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.firstLoginTime != null" >
+                first_login_time = #{record.firstLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.firstLoginIp != null" >
+                first_login_ip = #{record.firstLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="record.lastLoginTime != null" >
+                last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.lastLoginIp != null" >
+                last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ipRegion != null" >
+                ip_region = #{record.ipRegion,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByExample" parameterType="map" >
+        update player
+        set player_id = #{record.playerId,jdbcType=BIGINT},
+            server_id = #{record.serverId,jdbcType=INTEGER},
+            device_model = #{record.deviceModel,jdbcType=VARCHAR},
+            device_uniquely_id = #{record.deviceUniquelyId,jdbcType=VARCHAR},
+            channel_name = #{record.channelName,jdbcType=VARCHAR},
+            first_login_time = #{record.firstLoginTime,jdbcType=TIMESTAMP},
+            first_login_ip = #{record.firstLoginIp,jdbcType=VARCHAR},
+            last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+            last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
+            ip_region = #{record.ipRegion,jdbcType=INTEGER}
+        <if test="_parameter != null" >
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.base.Player" >
+        update player
+        <set >
+            <if test="serverId != null" >
+                server_id = #{serverId,jdbcType=INTEGER},
+            </if>
+            <if test="deviceModel != null" >
+                device_model = #{deviceModel,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceUniquelyId != null" >
+                device_uniquely_id = #{deviceUniquelyId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelName != null" >
+                channel_name = #{channelName,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLoginTime != null" >
+                first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstLoginIp != null" >
+                first_login_ip = #{firstLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginTime != null" >
+                last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLoginIp != null" >
+                last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="ipRegion != null" >
+                ip_region = #{ipRegion,jdbcType=INTEGER},
+            </if>
+        </set>
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.base.Player" >
+        update player
+        set server_id = #{serverId,jdbcType=INTEGER},
+            device_model = #{deviceModel,jdbcType=VARCHAR},
+            device_uniquely_id = #{deviceUniquelyId,jdbcType=VARCHAR},
+            channel_name = #{channelName,jdbcType=VARCHAR},
+            first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
+            first_login_ip = #{firstLoginIp,jdbcType=VARCHAR},
+            last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+            last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+            ip_region = #{ipRegion,jdbcType=INTEGER}
+        where player_id = #{playerId,jdbcType=BIGINT}
+    </update>
+</mapper>
