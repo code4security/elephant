@@ -19,10 +19,11 @@ public class GameController {
     @RequestMapping(value = "/get.do",method = RequestMethod.GET)
     public String getGame(int id){
         Game game = gameMapper.selectByPrimaryKey(id);
+
         if (game == null){
-            return "ok";
-        }else {
             return "no";
+        }else {
+            return "ok\n"+game.toString();
         }
     }
 }
