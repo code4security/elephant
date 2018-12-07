@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.ChannelPayParameterMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="sub_channel_id" property="subChannelId" jdbcType="INTEGER" />
+        <result column="os" property="os" jdbcType="VARCHAR" />
+        <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+        <result column="app_secret" property="appSecret" jdbcType="VARCHAR" />
+        <result column="app_id" property="appId" jdbcType="VARCHAR" />
+        <result column="public_key" property="publicKey" jdbcType="VARCHAR" />
+        <result column="private_key" property="privateKey" jdbcType="VARCHAR" />
+        <result column="pay_public_key" property="payPublicKey" jdbcType="VARCHAR" />
+        <result column="pay_private_key" property="payPrivateKey" jdbcType="VARCHAR" />
+        <result column="server_id" property="serverId" jdbcType="VARCHAR" />
+        <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+        <result column="cp_id" property="cpId" jdbcType="VARCHAR" />
+        <result column="pay_key" property="payKey" jdbcType="VARCHAR" />
+        <result column="notify_url" property="notifyUrl" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, game_id, channel_id, sub_channel_id, os, app_key, app_secret, app_id, public_key, 
+        private_key, pay_public_key, pay_private_key, server_id, merchant_id, cp_id, pay_key, 
+        notify_url
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from channel_pay_parameter
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from channel_pay_parameter
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+        insert into channel_pay_parameter (id, game_id, channel_id, 
+            sub_channel_id, os, app_key, 
+            app_secret, app_id, public_key, 
+            private_key, pay_public_key, pay_private_key, 
+            server_id, merchant_id, cp_id, 
+            pay_key, notify_url)
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER}, #{channelId,jdbcType=VARCHAR}, 
+            #{subChannelId,jdbcType=INTEGER}, #{os,jdbcType=VARCHAR}, #{appKey,jdbcType=VARCHAR}, 
+            #{appSecret,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{publicKey,jdbcType=VARCHAR}, 
+            #{privateKey,jdbcType=VARCHAR}, #{payPublicKey,jdbcType=VARCHAR}, #{payPrivateKey,jdbcType=VARCHAR}, 
+            #{serverId,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR}, #{cpId,jdbcType=VARCHAR}, 
+            #{payKey,jdbcType=VARCHAR}, #{notifyUrl,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+        insert into channel_pay_parameter
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="subChannelId != null" >
+                sub_channel_id,
+            </if>
+            <if test="os != null" >
+                os,
+            </if>
+            <if test="appKey != null" >
+                app_key,
+            </if>
+            <if test="appSecret != null" >
+                app_secret,
+            </if>
+            <if test="appId != null" >
+                app_id,
+            </if>
+            <if test="publicKey != null" >
+                public_key,
+            </if>
+            <if test="privateKey != null" >
+                private_key,
+            </if>
+            <if test="payPublicKey != null" >
+                pay_public_key,
+            </if>
+            <if test="payPrivateKey != null" >
+                pay_private_key,
+            </if>
+            <if test="serverId != null" >
+                server_id,
+            </if>
+            <if test="merchantId != null" >
+                merchant_id,
+            </if>
+            <if test="cpId != null" >
+                cp_id,
+            </if>
+            <if test="payKey != null" >
+                pay_key,
+            </if>
+            <if test="notifyUrl != null" >
+                notify_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="subChannelId != null" >
+                #{subChannelId,jdbcType=INTEGER},
+            </if>
+            <if test="os != null" >
+                #{os,jdbcType=VARCHAR},
+            </if>
+            <if test="appKey != null" >
+                #{appKey,jdbcType=VARCHAR},
+            </if>
+            <if test="appSecret != null" >
+                #{appSecret,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null" >
+                #{appId,jdbcType=VARCHAR},
+            </if>
+            <if test="publicKey != null" >
+                #{publicKey,jdbcType=VARCHAR},
+            </if>
+            <if test="privateKey != null" >
+                #{privateKey,jdbcType=VARCHAR},
+            </if>
+            <if test="payPublicKey != null" >
+                #{payPublicKey,jdbcType=VARCHAR},
+            </if>
+            <if test="payPrivateKey != null" >
+                #{payPrivateKey,jdbcType=VARCHAR},
+            </if>
+            <if test="serverId != null" >
+                #{serverId,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantId != null" >
+                #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="cpId != null" >
+                #{cpId,jdbcType=VARCHAR},
+            </if>
+            <if test="payKey != null" >
+                #{payKey,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null" >
+                #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+        update channel_pay_parameter
+        <set >
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="subChannelId != null" >
+                sub_channel_id = #{subChannelId,jdbcType=INTEGER},
+            </if>
+            <if test="os != null" >
+                os = #{os,jdbcType=VARCHAR},
+            </if>
+            <if test="appKey != null" >
+                app_key = #{appKey,jdbcType=VARCHAR},
+            </if>
+            <if test="appSecret != null" >
+                app_secret = #{appSecret,jdbcType=VARCHAR},
+            </if>
+            <if test="appId != null" >
+                app_id = #{appId,jdbcType=VARCHAR},
+            </if>
+            <if test="publicKey != null" >
+                public_key = #{publicKey,jdbcType=VARCHAR},
+            </if>
+            <if test="privateKey != null" >
+                private_key = #{privateKey,jdbcType=VARCHAR},
+            </if>
+            <if test="payPublicKey != null" >
+                pay_public_key = #{payPublicKey,jdbcType=VARCHAR},
+            </if>
+            <if test="payPrivateKey != null" >
+                pay_private_key = #{payPrivateKey,jdbcType=VARCHAR},
+            </if>
+            <if test="serverId != null" >
+                server_id = #{serverId,jdbcType=VARCHAR},
+            </if>
+            <if test="merchantId != null" >
+                merchant_id = #{merchantId,jdbcType=VARCHAR},
+            </if>
+            <if test="cpId != null" >
+                cp_id = #{cpId,jdbcType=VARCHAR},
+            </if>
+            <if test="payKey != null" >
+                pay_key = #{payKey,jdbcType=VARCHAR},
+            </if>
+            <if test="notifyUrl != null" >
+                notify_url = #{notifyUrl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+        update channel_pay_parameter
+        set game_id = #{gameId,jdbcType=INTEGER},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            sub_channel_id = #{subChannelId,jdbcType=INTEGER},
+            os = #{os,jdbcType=VARCHAR},
+            app_key = #{appKey,jdbcType=VARCHAR},
+            app_secret = #{appSecret,jdbcType=VARCHAR},
+            app_id = #{appId,jdbcType=VARCHAR},
+            public_key = #{publicKey,jdbcType=VARCHAR},
+            private_key = #{privateKey,jdbcType=VARCHAR},
+            pay_public_key = #{payPublicKey,jdbcType=VARCHAR},
+            pay_private_key = #{payPrivateKey,jdbcType=VARCHAR},
+            server_id = #{serverId,jdbcType=VARCHAR},
+            merchant_id = #{merchantId,jdbcType=VARCHAR},
+            cp_id = #{cpId,jdbcType=VARCHAR},
+            pay_key = #{payKey,jdbcType=VARCHAR},
+            notify_url = #{notifyUrl,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

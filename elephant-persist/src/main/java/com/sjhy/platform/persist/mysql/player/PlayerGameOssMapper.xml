@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.player.PlayerGameOssMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="bucket" property="bucket" jdbcType="VARCHAR" />
+        <result column="obj_type" property="objType" jdbcType="INTEGER" />
+        <result column="obj_key" property="objKey" jdbcType="VARCHAR" />
+        <result column="gold" property="gold" jdbcType="BIGINT" />
+        <result column="save_time" property="saveTime" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+        <result column="meta_md5" property="metaMd5" jdbcType="VARCHAR" />
+        <result column="fname" property="fname" jdbcType="VARCHAR" />
+        <result column="backup_oss_time" property="backupOssTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, role_id, bucket, obj_type, obj_key, gold, save_time, create_time, update_time, 
+        status, end_time, meta_md5, fname, backup_oss_time
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from player_game_oss
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from player_game_oss
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        insert into player_game_oss (id, role_id, bucket, 
+            obj_type, obj_key, gold, 
+            save_time, create_time, update_time, 
+            status, end_time, meta_md5, 
+            fname, backup_oss_time)
+        values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{bucket,jdbcType=VARCHAR}, 
+            #{objType,jdbcType=INTEGER}, #{objKey,jdbcType=VARCHAR}, #{gold,jdbcType=BIGINT}, 
+            #{saveTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+            #{status,jdbcType=INTEGER}, #{endTime,jdbcType=TIMESTAMP}, #{metaMd5,jdbcType=VARCHAR}, 
+            #{fname,jdbcType=VARCHAR}, #{backupOssTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        insert into player_game_oss
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="bucket != null" >
+                bucket,
+            </if>
+            <if test="objType != null" >
+                obj_type,
+            </if>
+            <if test="objKey != null" >
+                obj_key,
+            </if>
+            <if test="gold != null" >
+                gold,
+            </if>
+            <if test="saveTime != null" >
+                save_time,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="updateTime != null" >
+                update_time,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="endTime != null" >
+                end_time,
+            </if>
+            <if test="metaMd5 != null" >
+                meta_md5,
+            </if>
+            <if test="fname != null" >
+                fname,
+            </if>
+            <if test="backupOssTime != null" >
+                backup_oss_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null" >
+                #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="bucket != null" >
+                #{bucket,jdbcType=VARCHAR},
+            </if>
+            <if test="objType != null" >
+                #{objType,jdbcType=INTEGER},
+            </if>
+            <if test="objKey != null" >
+                #{objKey,jdbcType=VARCHAR},
+            </if>
+            <if test="gold != null" >
+                #{gold,jdbcType=BIGINT},
+            </if>
+            <if test="saveTime != null" >
+                #{saveTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="endTime != null" >
+                #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="metaMd5 != null" >
+                #{metaMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="fname != null" >
+                #{fname,jdbcType=VARCHAR},
+            </if>
+            <if test="backupOssTime != null" >
+                #{backupOssTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        update player_game_oss
+        <set >
+            <if test="roleId != null" >
+                role_id = #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="bucket != null" >
+                bucket = #{bucket,jdbcType=VARCHAR},
+            </if>
+            <if test="objType != null" >
+                obj_type = #{objType,jdbcType=INTEGER},
+            </if>
+            <if test="objKey != null" >
+                obj_key = #{objKey,jdbcType=VARCHAR},
+            </if>
+            <if test="gold != null" >
+                gold = #{gold,jdbcType=BIGINT},
+            </if>
+            <if test="saveTime != null" >
+                save_time = #{saveTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null" >
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="metaMd5 != null" >
+                meta_md5 = #{metaMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="fname != null" >
+                fname = #{fname,jdbcType=VARCHAR},
+            </if>
+            <if test="backupOssTime != null" >
+                backup_oss_time = #{backupOssTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        update player_game_oss
+        set role_id = #{roleId,jdbcType=BIGINT},
+            bucket = #{bucket,jdbcType=VARCHAR},
+            obj_type = #{objType,jdbcType=INTEGER},
+            obj_key = #{objKey,jdbcType=VARCHAR},
+            gold = #{gold,jdbcType=BIGINT},
+            save_time = #{saveTime,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP},
+            status = #{status,jdbcType=INTEGER},
+            end_time = #{endTime,jdbcType=TIMESTAMP},
+            meta_md5 = #{metaMd5,jdbcType=VARCHAR},
+            fname = #{fname,jdbcType=VARCHAR},
+            backup_oss_time = #{backupOssTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

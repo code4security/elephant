@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.player.PlayerBanListMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.player.PlayerBanList" >
+        <id column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="ban_minute" property="banMinute" jdbcType="INTEGER" />
+        <result column="is_ban" property="isBan" jdbcType="BIT" />
+        <result column="ban_time" property="banTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        role_id, ban_minute, is_ban, ban_time
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select 
+        <include refid="Base_Column_List" />
+        from player_ban_list
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from player_ban_list
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
+        insert into player_ban_list (role_id, ban_minute, is_ban, 
+            ban_time)
+        values (#{roleId,jdbcType=BIGINT}, #{banMinute,jdbcType=INTEGER}, #{isBan,jdbcType=BIT}, 
+            #{banTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
+        insert into player_ban_list
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="banMinute != null" >
+                ban_minute,
+            </if>
+            <if test="isBan != null" >
+                is_ban,
+            </if>
+            <if test="banTime != null" >
+                ban_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="roleId != null" >
+                #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="banMinute != null" >
+                #{banMinute,jdbcType=INTEGER},
+            </if>
+            <if test="isBan != null" >
+                #{isBan,jdbcType=BIT},
+            </if>
+            <if test="banTime != null" >
+                #{banTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
+        update player_ban_list
+        <set >
+            <if test="banMinute != null" >
+                ban_minute = #{banMinute,jdbcType=INTEGER},
+            </if>
+            <if test="isBan != null" >
+                is_ban = #{isBan,jdbcType=BIT},
+            </if>
+            <if test="banTime != null" >
+                ban_time = #{banTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
+        update player_ban_list
+        set ban_minute = #{banMinute,jdbcType=INTEGER},
+            is_ban = #{isBan,jdbcType=BIT},
+            ban_time = #{banTime,jdbcType=TIMESTAMP}
+        where role_id = #{roleId,jdbcType=BIGINT}
+    </update>
+</mapper>

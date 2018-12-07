@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.PayGoodsMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.PayGoods" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name_cn" property="nameCn" jdbcType="VARCHAR" />
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="currency" property="currency" jdbcType="INTEGER" />
+        <result column="rmb" property="rmb" jdbcType="DOUBLE" />
+        <result column="goods_des" property="goodsDes" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, name_cn, goods_name, channel_id, game_id, currency, rmb, goods_des
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from pay_goods
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from pay_goods
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
+        insert into pay_goods (id, name_cn, goods_name, 
+            channel_id, game_id, currency, 
+            rmb, goods_des)
+        values (#{id,jdbcType=INTEGER}, #{nameCn,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
+            #{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=INTEGER}, #{currency,jdbcType=INTEGER}, 
+            #{rmb,jdbcType=DOUBLE}, #{goodsDes,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
+        insert into pay_goods
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="nameCn != null" >
+                name_cn,
+            </if>
+            <if test="goodsName != null" >
+                goods_name,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="currency != null" >
+                currency,
+            </if>
+            <if test="rmb != null" >
+                rmb,
+            </if>
+            <if test="goodsDes != null" >
+                goods_des,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="nameCn != null" >
+                #{nameCn,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null" >
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="currency != null" >
+                #{currency,jdbcType=INTEGER},
+            </if>
+            <if test="rmb != null" >
+                #{rmb,jdbcType=DOUBLE},
+            </if>
+            <if test="goodsDes != null" >
+                #{goodsDes,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
+        update pay_goods
+        <set >
+            <if test="nameCn != null" >
+                name_cn = #{nameCn,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null" >
+                goods_name = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="currency != null" >
+                currency = #{currency,jdbcType=INTEGER},
+            </if>
+            <if test="rmb != null" >
+                rmb = #{rmb,jdbcType=DOUBLE},
+            </if>
+            <if test="goodsDes != null" >
+                goods_des = #{goodsDes,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
+        update pay_goods
+        set name_cn = #{nameCn,jdbcType=VARCHAR},
+            goods_name = #{goodsName,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            game_id = #{gameId,jdbcType=INTEGER},
+            currency = #{currency,jdbcType=INTEGER},
+            rmb = #{rmb,jdbcType=DOUBLE},
+            goods_des = #{goodsDes,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

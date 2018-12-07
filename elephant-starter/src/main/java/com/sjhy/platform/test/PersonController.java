@@ -19,6 +19,7 @@ public class PersonController {
 
     @RequestMapping(value = "/hello.do", method = RequestMethod.GET)
     public String hello(String name) {
+        Person p = new Person();
         return "hi, " + name;
     }
 

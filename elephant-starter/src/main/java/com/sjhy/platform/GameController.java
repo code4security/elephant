@@ -1,7 +1,5 @@
 package com.sjhy.platform;
 
-import com.sjhy.platform.client.dto.base.Game;
-import com.sjhy.platform.persist.mysql.GameMapper;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

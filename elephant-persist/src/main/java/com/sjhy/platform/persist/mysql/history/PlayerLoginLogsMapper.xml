@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.history.PlayerLoginLogsMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.history.PlayerLoginLogs" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="player_id" property="playerId" jdbcType="BIGINT" />
+        <result column="is_login" property="isLogin" jdbcType="BIT" />
+        <result column="server_id" property="serverId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="device_model" property="deviceModel" jdbcType="VARCHAR" />
+        <result column="Device_uniquely_id" property="deviceUniquelyId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, create_time, player_id, is_login, server_id, game_id, channel_id, device_model, 
+        Device_uniquely_id
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from player_login_logs
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from player_login_logs
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.history.PlayerLoginLogs" >
+        insert into player_login_logs (id, create_time, player_id, 
+            is_login, server_id, game_id, 
+            channel_id, device_model, Device_uniquely_id
+            )
+        values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{playerId,jdbcType=BIGINT}, 
+            #{isLogin,jdbcType=BIT}, #{serverId,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER}, 
+            #{channelId,jdbcType=VARCHAR}, #{deviceModel,jdbcType=VARCHAR}, #{deviceUniquelyId,jdbcType=VARCHAR}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.PlayerLoginLogs" >
+        insert into player_login_logs
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="playerId != null" >
+                player_id,
+            </if>
+            <if test="isLogin != null" >
+                is_login,
+            </if>
+            <if test="serverId != null" >
+                server_id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="deviceModel != null" >
+                device_model,
+            </if>
+            <if test="deviceUniquelyId != null" >
+                Device_uniquely_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="playerId != null" >
+                #{playerId,jdbcType=BIGINT},
+            </if>
+            <if test="isLogin != null" >
+                #{isLogin,jdbcType=BIT},
+            </if>
+            <if test="serverId != null" >
+                #{serverId,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceModel != null" >
+                #{deviceModel,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceUniquelyId != null" >
+                #{deviceUniquelyId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.history.PlayerLoginLogs" >
+        update player_login_logs
+        <set >
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="playerId != null" >
+                player_id = #{playerId,jdbcType=BIGINT},
+            </if>
+            <if test="isLogin != null" >
+                is_login = #{isLogin,jdbcType=BIT},
+            </if>
+            <if test="serverId != null" >
+                server_id = #{serverId,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceModel != null" >
+                device_model = #{deviceModel,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceUniquelyId != null" >
+                Device_uniquely_id = #{deviceUniquelyId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.history.PlayerLoginLogs" >
+        update player_login_logs
+        set create_time = #{createTime,jdbcType=TIMESTAMP},
+            player_id = #{playerId,jdbcType=BIGINT},
+            is_login = #{isLogin,jdbcType=BIT},
+            server_id = #{serverId,jdbcType=INTEGER},
+            game_id = #{gameId,jdbcType=INTEGER},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            device_model = #{deviceModel,jdbcType=VARCHAR},
+            Device_uniquely_id = #{deviceUniquelyId,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

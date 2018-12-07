@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="rmb" property="rmb" jdbcType="REAL" />
+        <result column="currency_get" property="currencyGet" jdbcType="INTEGER" />
+        <result column="currency_get_extra" property="currencyGetExtra" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, role_id, game_id, channel_id, goods_name, create_time, rmb, currency_get, currency_get_extra, 
+        order_id
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from player_pay_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from player_pay_log
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        insert into player_pay_log (id, role_id, game_id, 
+            channel_id, goods_name, create_time, 
+            rmb, currency_get, currency_get_extra, 
+            order_id)
+        values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=INTEGER}, 
+            #{channelId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+            #{rmb,jdbcType=REAL}, #{currencyGet,jdbcType=INTEGER}, #{currencyGetExtra,jdbcType=INTEGER}, 
+            #{orderId,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        insert into player_pay_log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="goodsName != null" >
+                goods_name,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+            <if test="rmb != null" >
+                rmb,
+            </if>
+            <if test="currencyGet != null" >
+                currency_get,
+            </if>
+            <if test="currencyGetExtra != null" >
+                currency_get_extra,
+            </if>
+            <if test="orderId != null" >
+                order_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null" >
+                #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null" >
+                #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="rmb != null" >
+                #{rmb,jdbcType=REAL},
+            </if>
+            <if test="currencyGet != null" >
+                #{currencyGet,jdbcType=INTEGER},
+            </if>
+            <if test="currencyGetExtra != null" >
+                #{currencyGetExtra,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null" >
+                #{orderId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        update player_pay_log
+        <set >
+            <if test="roleId != null" >
+                role_id = #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsName != null" >
+                goods_name = #{goodsName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="rmb != null" >
+                rmb = #{rmb,jdbcType=REAL},
+            </if>
+            <if test="currencyGet != null" >
+                currency_get = #{currencyGet,jdbcType=INTEGER},
+            </if>
+            <if test="currencyGetExtra != null" >
+                currency_get_extra = #{currencyGetExtra,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null" >
+                order_id = #{orderId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        update player_pay_log
+        set role_id = #{roleId,jdbcType=BIGINT},
+            game_id = #{gameId,jdbcType=INTEGER},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            goods_name = #{goodsName,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            rmb = #{rmb,jdbcType=REAL},
+            currency_get = #{currencyGet,jdbcType=INTEGER},
+            currency_get_extra = #{currencyGetExtra,jdbcType=INTEGER},
+            order_id = #{orderId,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

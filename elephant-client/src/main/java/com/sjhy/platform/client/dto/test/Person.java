@@ -1,5 +1,6 @@
 package com.sjhy.platform.client.dto.test;
 
+import com.sjhy.platform.client.dto.base.BaseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

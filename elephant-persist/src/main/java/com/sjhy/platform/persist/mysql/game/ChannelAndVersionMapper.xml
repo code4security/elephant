@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.ChannelAndVersion" >
+        <id column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="is_available" property="isAvailable" jdbcType="BIT" />
+        <result column="channel_info" property="channelInfo" jdbcType="VARCHAR" />
+        <result column="version_num" property="versionNum" jdbcType="VARCHAR" />
+        <result column="version_download" property="versionDownload" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        channel_id, game_id, is_available, channel_info, version_num, version_download
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select 
+        <include refid="Base_Column_List" />
+        from channel_and_version
+        where channel_id = #{channelId,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+        delete from channel_and_version
+        where channel_id = #{channelId,jdbcType=VARCHAR}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.ChannelAndVersion" >
+        insert into channel_and_version (channel_id, game_id, is_available, 
+            channel_info, version_num, version_download
+            )
+        values (#{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=INTEGER}, #{isAvailable,jdbcType=BIT}, 
+            #{channelInfo,jdbcType=VARCHAR}, #{versionNum,jdbcType=VARCHAR}, #{versionDownload,jdbcType=VARCHAR}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.ChannelAndVersion" >
+        insert into channel_and_version
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="isAvailable != null" >
+                is_available,
+            </if>
+            <if test="channelInfo != null" >
+                channel_info,
+            </if>
+            <if test="versionNum != null" >
+                version_num,
+            </if>
+            <if test="versionDownload != null" >
+                version_download,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="isAvailable != null" >
+                #{isAvailable,jdbcType=BIT},
+            </if>
+            <if test="channelInfo != null" >
+                #{channelInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="versionNum != null" >
+                #{versionNum,jdbcType=VARCHAR},
+            </if>
+            <if test="versionDownload != null" >
+                #{versionDownload,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.ChannelAndVersion" >
+        update channel_and_version
+        <set >
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=INTEGER},
+            </if>
+            <if test="isAvailable != null" >
+                is_available = #{isAvailable,jdbcType=BIT},
+            </if>
+            <if test="channelInfo != null" >
+                channel_info = #{channelInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="versionNum != null" >
+                version_num = #{versionNum,jdbcType=VARCHAR},
+            </if>
+            <if test="versionDownload != null" >
+                version_download = #{versionDownload,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where channel_id = #{channelId,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.ChannelAndVersion" >
+        update channel_and_version
+        set game_id = #{gameId,jdbcType=INTEGER},
+            is_available = #{isAvailable,jdbcType=BIT},
+            channel_info = #{channelInfo,jdbcType=VARCHAR},
+            version_num = #{versionNum,jdbcType=VARCHAR},
+            version_download = #{versionDownload,jdbcType=VARCHAR}
+        where channel_id = #{channelId,jdbcType=VARCHAR}
+    </update>
+</mapper>
