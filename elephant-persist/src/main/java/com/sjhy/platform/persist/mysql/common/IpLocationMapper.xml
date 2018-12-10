@@ -3,37 +3,41 @@
 <mapper namespace="com.sjhy.platform.persist.mysql.common.IpLocationMapper" >
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.IpLocation" >
-        <id column="start_ip_num" property="startIpNum" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="start_ip_num" property="startIpNum" jdbcType="BIGINT" />
         <result column="end_ip_num" property="endIpNum" jdbcType="BIGINT" />
         <result column="locid" property="locid" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        start_ip_num, end_ip_num, locid
+        id, start_ip_num, end_ip_num, locid
     </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select 
         <include refid="Base_Column_List" />
         from ip_location
-        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
         delete from ip_location
-        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
-        insert into ip_location (start_ip_num, end_ip_num, locid
-            )
-        values (#{startIpNum,jdbcType=BIGINT}, #{endIpNum,jdbcType=BIGINT}, #{locid,jdbcType=INTEGER}
-            )
+        insert into ip_location (id, start_ip_num, end_ip_num, 
+            locid)
+        values (#{id,jdbcType=INTEGER}, #{startIpNum,jdbcType=BIGINT}, #{endIpNum,jdbcType=BIGINT}, 
+            #{locid,jdbcType=INTEGER})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
         insert into ip_location
         <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
             <if test="startIpNum != null" >
                 start_ip_num,
             </if>
@@ -45,6 +49,9 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
             <if test="startIpNum != null" >
                 #{startIpNum,jdbcType=BIGINT},
             </if>
@@ -60,6 +67,9 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
         update ip_location
         <set >
+            <if test="startIpNum != null" >
+                start_ip_num = #{startIpNum,jdbcType=BIGINT},
+            </if>
             <if test="endIpNum != null" >
                 end_ip_num = #{endIpNum,jdbcType=BIGINT},
             </if>
@@ -67,13 +77,14 @@
                 locid = #{locid,jdbcType=INTEGER},
             </if>
         </set>
-        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
         update ip_location
-        set end_ip_num = #{endIpNum,jdbcType=BIGINT},
+        set start_ip_num = #{startIpNum,jdbcType=BIGINT},
+            end_ip_num = #{endIpNum,jdbcType=BIGINT},
             locid = #{locid,jdbcType=INTEGER}
-        where start_ip_num = #{startIpNum,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

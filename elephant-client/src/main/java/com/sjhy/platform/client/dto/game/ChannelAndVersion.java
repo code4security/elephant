@@ -8,15 +8,20 @@ import lombok.NoArgsConstructor;
 /**
  * 渠道和版本信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChannelAndVersion {
+    /**
+     * ID
+     */
+    private Integer id;
+
     /**
      * 渠道id
      */
@@ -25,7 +30,7 @@ public class ChannelAndVersion {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 是否可用

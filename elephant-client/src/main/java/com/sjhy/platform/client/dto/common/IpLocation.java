@@ -8,15 +8,20 @@ import lombok.NoArgsConstructor;
 /**
  * ip记录表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class IpLocation {
+    /**
+     * ID
+     */
+    private Integer id;
+
     /**
      * 开始ip数
      */

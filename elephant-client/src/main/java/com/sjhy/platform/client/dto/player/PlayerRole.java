@@ -10,15 +10,20 @@ import java.util.Date;
 /**
  * 游戏角色信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerRole {
+    /**
+     * ID
+     */
+    private Integer id;
+
     /**
      * 角色id
      */
@@ -35,14 +40,14 @@ public class PlayerRole {
     private String roleName;
 
     /**
+     * 游戏id
+     */
+    private String gameId;
+
+    /**
      * 渠道id
      */
     private String channelId;
-
-    /**
-     * 游戏id
-     */
-    private Integer gameId;
 
     /**
      * 创建时间

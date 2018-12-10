@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjhy.platform.persist.mysql.game.LipinmaMapper" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.LipinmaListMapper" >
 
-    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.Lipinma" >
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.LipinmaList" >
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="INTEGER" />
         <result column="lp_name" property="lpName" jdbcType="VARCHAR" />
@@ -24,28 +24,28 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select 
         <include refid="Base_Column_List" />
-        from lipinma
+        from lipinma_list
         where id = #{id,jdbcType=INTEGER}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-        delete from lipinma
+        delete from lipinma_list
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.Lipinma" >
-        insert into lipinma (id, game_id, channel_id, 
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.LipinmaList" >
+        insert into lipinma_list (id, game_id, channel_id, 
             type, lp_name, desc_txt, 
             lp_reward_id, lp_num, begin_time, 
             end_time, create_time)
-        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER}, #{channelId,jdbcType=VARCHAR}, 
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
             #{type,jdbcType=INTEGER}, #{lpName,jdbcType=VARCHAR}, #{descTxt,jdbcType=VARCHAR}, 
             #{lpRewardId,jdbcType=VARCHAR}, #{lpNum,jdbcType=INTEGER}, #{beginTime,jdbcType=VARCHAR}, 
             #{endTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
     </insert>
 
-    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.Lipinma" >
-        insert into lipinma
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.LipinmaList" >
+        insert into lipinma_list
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 id,
@@ -86,7 +86,7 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="gameId != null" >
-                #{gameId,jdbcType=INTEGER},
+                #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 #{channelId,jdbcType=VARCHAR},
@@ -118,11 +118,11 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.Lipinma" >
-        update lipinma
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.LipinmaList" >
+        update lipinma_list
         <set >
             <if test="gameId != null" >
-                game_id = #{gameId,jdbcType=INTEGER},
+                game_id = #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 channel_id = #{channelId,jdbcType=VARCHAR},
@@ -155,9 +155,9 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.Lipinma" >
-        update lipinma
-        set game_id = #{gameId,jdbcType=INTEGER},
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.LipinmaList" >
+        update lipinma_list
+        set game_id = #{gameId,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
             type = #{type,jdbcType=INTEGER},
             lp_name = #{lpName,jdbcType=VARCHAR},

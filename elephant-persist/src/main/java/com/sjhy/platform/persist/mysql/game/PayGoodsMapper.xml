@@ -7,7 +7,7 @@
         <result column="name_cn" property="nameCn" jdbcType="VARCHAR" />
         <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
-        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="currency" property="currency" jdbcType="INTEGER" />
         <result column="rmb" property="rmb" jdbcType="DOUBLE" />
         <result column="goods_des" property="goodsDes" jdbcType="VARCHAR" />
@@ -34,7 +34,7 @@
             channel_id, game_id, currency, 
             rmb, goods_des)
         values (#{id,jdbcType=INTEGER}, #{nameCn,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
-            #{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=INTEGER}, #{currency,jdbcType=INTEGER}, 
+            #{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=VARCHAR}, #{currency,jdbcType=INTEGER}, 
             #{rmb,jdbcType=DOUBLE}, #{goodsDes,jdbcType=VARCHAR})
     </insert>
 
@@ -80,7 +80,7 @@
                 #{channelId,jdbcType=VARCHAR},
             </if>
             <if test="gameId != null" >
-                #{gameId,jdbcType=INTEGER},
+                #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="currency != null" >
                 #{currency,jdbcType=INTEGER},
@@ -107,7 +107,7 @@
                 channel_id = #{channelId,jdbcType=VARCHAR},
             </if>
             <if test="gameId != null" >
-                game_id = #{gameId,jdbcType=INTEGER},
+                game_id = #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="currency != null" >
                 currency = #{currency,jdbcType=INTEGER},
@@ -127,7 +127,7 @@
         set name_cn = #{nameCn,jdbcType=VARCHAR},
             goods_name = #{goodsName,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
-            game_id = #{gameId,jdbcType=INTEGER},
+            game_id = #{gameId,jdbcType=VARCHAR},
             currency = #{currency,jdbcType=INTEGER},
             rmb = #{rmb,jdbcType=DOUBLE},
             goods_des = #{goodsDes,jdbcType=VARCHAR}

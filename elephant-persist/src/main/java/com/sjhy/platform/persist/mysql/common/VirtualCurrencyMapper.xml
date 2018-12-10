@@ -5,10 +5,11 @@
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.VirtualCurrency" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="unit" property="unit" jdbcType="VARCHAR" />
+        <result column="explain" property="explain" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, unit
+        id, unit, explain
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -24,8 +25,10 @@
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
-        insert into virtual_currency (id, unit)
-        values (#{id,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR})
+        insert into virtual_currency (id, unit, explain
+            )
+        values (#{id,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, #{explain,jdbcType=VARCHAR}
+            )
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
@@ -37,6 +40,9 @@
             <if test="unit != null" >
                 unit,
             </if>
+            <if test="explain != null" >
+                explain,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -44,6 +50,9 @@
             </if>
             <if test="unit != null" >
                 #{unit,jdbcType=VARCHAR},
+            </if>
+            <if test="explain != null" >
+                #{explain,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -54,13 +63,17 @@
             <if test="unit != null" >
                 unit = #{unit,jdbcType=VARCHAR},
             </if>
+            <if test="explain != null" >
+                explain = #{explain,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
         update virtual_currency
-        set unit = #{unit,jdbcType=VARCHAR}
+        set unit = #{unit,jdbcType=VARCHAR},
+            explain = #{explain,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

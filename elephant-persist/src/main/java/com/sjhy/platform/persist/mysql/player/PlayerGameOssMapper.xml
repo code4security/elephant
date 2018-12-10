@@ -4,6 +4,8 @@
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.player.PlayerGameOss" >
         <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="role_id" property="roleId" jdbcType="BIGINT" />
         <result column="bucket" property="bucket" jdbcType="VARCHAR" />
         <result column="obj_type" property="objType" jdbcType="INTEGER" />
@@ -20,8 +22,8 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, role_id, bucket, obj_type, obj_key, gold, save_time, create_time, update_time, 
-        status, end_time, meta_md5, fname, backup_oss_time
+        id, game_id, channel_id, role_id, bucket, obj_type, obj_key, gold, save_time, create_time, 
+        update_time, status, end_time, meta_md5, fname, backup_oss_time
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -37,16 +39,18 @@
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
-        insert into player_game_oss (id, role_id, bucket, 
-            obj_type, obj_key, gold, 
-            save_time, create_time, update_time, 
-            status, end_time, meta_md5, 
-            fname, backup_oss_time)
-        values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{bucket,jdbcType=VARCHAR}, 
-            #{objType,jdbcType=INTEGER}, #{objKey,jdbcType=VARCHAR}, #{gold,jdbcType=BIGINT}, 
-            #{saveTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-            #{status,jdbcType=INTEGER}, #{endTime,jdbcType=TIMESTAMP}, #{metaMd5,jdbcType=VARCHAR}, 
-            #{fname,jdbcType=VARCHAR}, #{backupOssTime,jdbcType=TIMESTAMP})
+        insert into player_game_oss (id, game_id, channel_id, 
+            role_id, bucket, obj_type, 
+            obj_key, gold, save_time, 
+            create_time, update_time, status, 
+            end_time, meta_md5, fname, 
+            backup_oss_time)
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
+            #{roleId,jdbcType=BIGINT}, #{bucket,jdbcType=VARCHAR}, #{objType,jdbcType=INTEGER}, 
+            #{objKey,jdbcType=VARCHAR}, #{gold,jdbcType=BIGINT}, #{saveTime,jdbcType=VARCHAR}, 
+            #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+            #{endTime,jdbcType=TIMESTAMP}, #{metaMd5,jdbcType=VARCHAR}, #{fname,jdbcType=VARCHAR}, 
+            #{backupOssTime,jdbcType=TIMESTAMP})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
@@ -54,6 +58,12 @@
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
             </if>
             <if test="roleId != null" >
                 role_id,
@@ -98,6 +108,12 @@
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 #{id,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
             </if>
             <if test="roleId != null" >
                 #{roleId,jdbcType=BIGINT},
@@ -144,6 +160,12 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
         update player_game_oss
         <set >
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
             <if test="roleId != null" >
                 role_id = #{roleId,jdbcType=BIGINT},
             </if>
@@ -189,7 +211,9 @@
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
         update player_game_oss
-        set role_id = #{roleId,jdbcType=BIGINT},
+        set game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            role_id = #{roleId,jdbcType=BIGINT},
             bucket = #{bucket,jdbcType=VARCHAR},
             obj_type = #{objType,jdbcType=INTEGER},
             obj_key = #{objKey,jdbcType=VARCHAR},

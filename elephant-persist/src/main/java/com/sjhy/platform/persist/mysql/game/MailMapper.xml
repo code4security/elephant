@@ -3,10 +3,11 @@
 <mapper namespace="com.sjhy.platform.persist.mysql.game.MailMapper" >
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.Mail" >
-        <id column="mail_id" property="mailId" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="INTEGER" />
         <result column="send_role_id" property="sendRoleId" jdbcType="BIGINT" />
         <result column="recv_role_id" property="recvRoleId" jdbcType="BIGINT" />
-        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="SMALLINT" />
         <result column="title" property="title" jdbcType="VARCHAR" />
         <result column="context" property="context" jdbcType="VARCHAR" />
@@ -17,38 +18,40 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        mail_id, send_role_id, recv_role_id, game_id, type, title, context, goods_id, goods_num, 
-        send_time, status
+        id, send_role_id, recv_role_id, game_id, channel_id, type, title, context, goods_id, 
+        goods_num, send_time, status
     </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select 
         <include refid="Base_Column_List" />
         from mail
-        where mail_id = #{mailId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
         delete from mail
-        where mail_id = #{mailId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.Mail" >
-        insert into mail (mail_id, send_role_id, recv_role_id, 
-            game_id, type, title, 
-            context, goods_id, goods_num, 
-            send_time, status)
-        values (#{mailId,jdbcType=BIGINT}, #{sendRoleId,jdbcType=BIGINT}, #{recvRoleId,jdbcType=BIGINT}, 
-            #{gameId,jdbcType=INTEGER}, #{type,jdbcType=SMALLINT}, #{title,jdbcType=VARCHAR}, 
-            #{context,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, #{goodsNum,jdbcType=INTEGER}, 
-            #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT})
+        insert into mail (id, send_role_id, recv_role_id, 
+            game_id, channel_id, type, 
+            title, context, goods_id, 
+            goods_num, send_time, status
+            )
+        values (#{id,jdbcType=INTEGER}, #{sendRoleId,jdbcType=BIGINT}, #{recvRoleId,jdbcType=BIGINT}, 
+            #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, 
+            #{title,jdbcType=VARCHAR}, #{context,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, 
+            #{goodsNum,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT}
+            )
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.Mail" >
         insert into mail
         <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="mailId != null" >
-                mail_id,
+            <if test="id != null" >
+                id,
             </if>
             <if test="sendRoleId != null" >
                 send_role_id,
@@ -58,6 +61,9 @@
             </if>
             <if test="gameId != null" >
                 game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
             </if>
             <if test="type != null" >
                 type,
@@ -82,8 +88,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="mailId != null" >
-                #{mailId,jdbcType=BIGINT},
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
             </if>
             <if test="sendRoleId != null" >
                 #{sendRoleId,jdbcType=BIGINT},
@@ -92,7 +98,10 @@
                 #{recvRoleId,jdbcType=BIGINT},
             </if>
             <if test="gameId != null" >
-                #{gameId,jdbcType=INTEGER},
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
             </if>
             <if test="type != null" >
                 #{type,jdbcType=SMALLINT},
@@ -128,7 +137,10 @@
                 recv_role_id = #{recvRoleId,jdbcType=BIGINT},
             </if>
             <if test="gameId != null" >
-                game_id = #{gameId,jdbcType=INTEGER},
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
             </if>
             <if test="type != null" >
                 type = #{type,jdbcType=SMALLINT},
@@ -152,14 +164,15 @@
                 status = #{status,jdbcType=BIT},
             </if>
         </set>
-        where mail_id = #{mailId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.Mail" >
         update mail
         set send_role_id = #{sendRoleId,jdbcType=BIGINT},
             recv_role_id = #{recvRoleId,jdbcType=BIGINT},
-            game_id = #{gameId,jdbcType=INTEGER},
+            game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
             type = #{type,jdbcType=SMALLINT},
             title = #{title,jdbcType=VARCHAR},
             context = #{context,jdbcType=VARCHAR},
@@ -167,6 +180,6 @@
             goods_num = #{goodsNum,jdbcType=INTEGER},
             send_time = #{sendTime,jdbcType=TIMESTAMP},
             status = #{status,jdbcType=BIT}
-        where mail_id = #{mailId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

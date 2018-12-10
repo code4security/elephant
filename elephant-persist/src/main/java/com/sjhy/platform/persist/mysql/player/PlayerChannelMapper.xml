@@ -4,6 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.player.PlayerChannel" >
         <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="sub_channel" property="subChannel" jdbcType="INTEGER" />
         <result column="channel_user_id" property="channelUserId" jdbcType="VARCHAR" />
@@ -11,7 +12,7 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, channel_id, sub_channel, channel_user_id, player_id
+        id, game_id, channel_id, sub_channel, channel_user_id, player_id
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -27,10 +28,12 @@
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
-        insert into player_channel (id, channel_id, sub_channel, 
-            channel_user_id, player_id)
-        values (#{id,jdbcType=INTEGER}, #{channelId,jdbcType=VARCHAR}, #{subChannel,jdbcType=INTEGER}, 
-            #{channelUserId,jdbcType=VARCHAR}, #{playerId,jdbcType=BIGINT})
+        insert into player_channel (id, game_id, channel_id, 
+            sub_channel, channel_user_id, player_id
+            )
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
+            #{subChannel,jdbcType=INTEGER}, #{channelUserId,jdbcType=VARCHAR}, #{playerId,jdbcType=BIGINT}
+            )
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
@@ -38,6 +41,9 @@
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
             </if>
             <if test="channelId != null" >
                 channel_id,
@@ -55,6 +61,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 #{id,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 #{channelId,jdbcType=VARCHAR},
@@ -74,6 +83,9 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
         update player_channel
         <set >
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
             <if test="channelId != null" >
                 channel_id = #{channelId,jdbcType=VARCHAR},
             </if>
@@ -92,7 +104,8 @@
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
         update player_channel
-        set channel_id = #{channelId,jdbcType=VARCHAR},
+        set game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
             sub_channel = #{subChannel,jdbcType=INTEGER},
             channel_user_id = #{channelUserId,jdbcType=VARCHAR},
             player_id = #{playerId,jdbcType=BIGINT}

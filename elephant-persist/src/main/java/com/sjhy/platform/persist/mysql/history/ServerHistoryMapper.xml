@@ -3,37 +3,51 @@
 <mapper namespace="com.sjhy.platform.persist.mysql.history.ServerHistoryMapper" >
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.history.ServerHistory" >
-        <id column="player_id" property="playerId" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="player_id" property="playerId" jdbcType="BIGINT" />
         <result column="server_id" property="serverId" jdbcType="INTEGER" />
         <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        player_id, server_id, last_login_time
+        id, game_id, channel_id, player_id, server_id, last_login_time
     </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select 
         <include refid="Base_Column_List" />
         from server_history
-        where player_id = #{playerId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
         delete from server_history
-        where player_id = #{playerId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.history.ServerHistory" >
-        insert into server_history (player_id, server_id, last_login_time
+        insert into server_history (id, game_id, channel_id, 
+            player_id, server_id, last_login_time
             )
-        values (#{playerId,jdbcType=BIGINT}, #{serverId,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP}
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
+            #{playerId,jdbcType=BIGINT}, #{serverId,jdbcType=INTEGER}, #{lastLoginTime,jdbcType=TIMESTAMP}
             )
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.ServerHistory" >
         insert into server_history
         <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
             <if test="playerId != null" >
                 player_id,
             </if>
@@ -45,6 +59,15 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
             <if test="playerId != null" >
                 #{playerId,jdbcType=BIGINT},
             </if>
@@ -60,6 +83,15 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.history.ServerHistory" >
         update server_history
         <set >
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="playerId != null" >
+                player_id = #{playerId,jdbcType=BIGINT},
+            </if>
             <if test="serverId != null" >
                 server_id = #{serverId,jdbcType=INTEGER},
             </if>
@@ -67,13 +99,16 @@
                 last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where player_id = #{playerId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.history.ServerHistory" >
         update server_history
-        set server_id = #{serverId,jdbcType=INTEGER},
+        set game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            player_id = #{playerId,jdbcType=BIGINT},
+            server_id = #{serverId,jdbcType=INTEGER},
             last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
-        where player_id = #{playerId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

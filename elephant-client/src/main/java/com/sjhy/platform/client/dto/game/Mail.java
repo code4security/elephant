@@ -10,9 +10,9 @@ import java.util.Date;
 /**
  * 邮件表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -20,9 +20,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class Mail {
     /**
-     * 邮件id
+     * ID
      */
-    private Long mailId;
+    private Integer id;
 
     /**
      * 发送者id
@@ -37,7 +37,12 @@ public class Mail {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
+
+    /**
+     * 渠道id
+     */
+    private String channelId;
 
     /**
      * 邮件类型

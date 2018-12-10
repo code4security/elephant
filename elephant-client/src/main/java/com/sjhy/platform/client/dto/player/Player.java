@@ -10,9 +10,9 @@ import java.util.Date;
 /**
  * 玩家信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -22,7 +22,22 @@ public class Player {
     /**
      * ID
      */
+    private Integer id;
+
+    /**
+     * 玩家id
+     */
     private Long playerId;
+
+    /**
+     * 游戏id
+     */
+    private String gameId;
+
+    /**
+     * 渠道id
+     */
+    private String channelId;
 
     /**
      * 服务器id
@@ -38,11 +53,6 @@ public class Player {
      * 设备id
      */
     private String deviceUniquelyId;
-
-    /**
-     * 渠道中文名
-     */
-    private String channelName;
 
     /**
      * 首次登陆

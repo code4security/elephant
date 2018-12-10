@@ -10,9 +10,9 @@ import java.util.Date;
 /**
  * 游戏内周边按钮跳转页面信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -27,7 +27,7 @@ public class GameJumpSite {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 渠道id
@@ -63,4 +63,5 @@ public class GameJumpSite {
      * 点击人数
      */
     private Integer playerNum;
+
 }

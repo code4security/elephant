@@ -11,15 +11,30 @@ import java.util.Date;
  * 玩家封账号表
 
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlayerBanList {
+    /**
+     * ID
+     */
+    private Integer id;
+
+    /**
+     * 游戏id
+     */
+    private String gameId;
+
+    /**
+     * 渠道id
+     */
+    private String channelId;
+
     /**
      * 角色id
      */

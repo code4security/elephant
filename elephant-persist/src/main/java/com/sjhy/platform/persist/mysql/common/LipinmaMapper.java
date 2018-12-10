@@ -1,6 +1,6 @@
-package com.sjhy.platform.persist.mysql.game;
+package com.sjhy.platform.persist.mysql.common;
 
-import com.sjhy.platform.client.dto.game.Lipinma;
+import com.sjhy.platform.client.dto.common.Lipinma;
 
 public interface LipinmaMapper {
     int deleteByPrimaryKey(Integer id);

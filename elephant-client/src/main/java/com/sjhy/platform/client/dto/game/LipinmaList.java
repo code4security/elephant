@@ -10,15 +10,15 @@ import java.util.Date;
 /**
  * 礼品码信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Lipinma {
+public class LipinmaList {
     /**
      * ID
      */
@@ -27,7 +27,7 @@ public class Lipinma {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 渠道id

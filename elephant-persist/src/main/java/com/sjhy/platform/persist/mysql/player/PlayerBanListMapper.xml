@@ -3,38 +3,52 @@
 <mapper namespace="com.sjhy.platform.persist.mysql.player.PlayerBanListMapper" >
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.player.PlayerBanList" >
-        <id column="role_id" property="roleId" jdbcType="BIGINT" />
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
         <result column="ban_minute" property="banMinute" jdbcType="INTEGER" />
         <result column="is_ban" property="isBan" jdbcType="BIT" />
         <result column="ban_time" property="banTime" jdbcType="TIMESTAMP" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        role_id, ban_minute, is_ban, ban_time
+        id, game_id, channel_id, role_id, ban_minute, is_ban, ban_time
     </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select 
         <include refid="Base_Column_List" />
         from player_ban_list
-        where role_id = #{roleId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
         delete from player_ban_list
-        where role_id = #{roleId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
-        insert into player_ban_list (role_id, ban_minute, is_ban, 
+        insert into player_ban_list (id, game_id, channel_id, 
+            role_id, ban_minute, is_ban, 
             ban_time)
-        values (#{roleId,jdbcType=BIGINT}, #{banMinute,jdbcType=INTEGER}, #{isBan,jdbcType=BIT}, 
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
+            #{roleId,jdbcType=BIGINT}, #{banMinute,jdbcType=INTEGER}, #{isBan,jdbcType=BIT}, 
             #{banTime,jdbcType=TIMESTAMP})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
         insert into player_ban_list
         <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
             <if test="roleId != null" >
                 role_id,
             </if>
@@ -49,6 +63,15 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
             <if test="roleId != null" >
                 #{roleId,jdbcType=BIGINT},
             </if>
@@ -67,6 +90,15 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
         update player_ban_list
         <set >
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="roleId != null" >
+                role_id = #{roleId,jdbcType=BIGINT},
+            </if>
             <if test="banMinute != null" >
                 ban_minute = #{banMinute,jdbcType=INTEGER},
             </if>
@@ -77,14 +109,17 @@
                 ban_time = #{banTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where role_id = #{roleId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
         update player_ban_list
-        set ban_minute = #{banMinute,jdbcType=INTEGER},
+        set game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            role_id = #{roleId,jdbcType=BIGINT},
+            ban_minute = #{banMinute,jdbcType=INTEGER},
             is_ban = #{isBan,jdbcType=BIT},
             ban_time = #{banTime,jdbcType=TIMESTAMP}
-        where role_id = #{roleId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

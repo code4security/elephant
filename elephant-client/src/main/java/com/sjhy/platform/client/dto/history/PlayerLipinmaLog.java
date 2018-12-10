@@ -10,15 +10,15 @@ import java.util.Date;
 /**
  * 玩家领取的礼品码记录信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerLipinmaList {
+public class PlayerLipinmaLog {
     /**
      * ID
      */
@@ -47,7 +47,7 @@ public class PlayerLipinmaList {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 渠道id

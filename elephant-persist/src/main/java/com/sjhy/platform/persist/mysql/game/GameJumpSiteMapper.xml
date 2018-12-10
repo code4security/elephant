@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.GameJumpSite" >
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="button_id" property="buttonId" jdbcType="INTEGER" />
         <result column="is_show" property="isShow" jdbcType="INTEGER" />
@@ -35,7 +35,7 @@
             button_id, is_show, jump_url, 
             create_time, number, player_num
             )
-        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER}, #{channelId,jdbcType=VARCHAR}, 
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
             #{buttonId,jdbcType=INTEGER}, #{isShow,jdbcType=INTEGER}, #{jumpUrl,jdbcType=VARCHAR}, 
             #{createTime,jdbcType=DATE}, #{number,jdbcType=INTEGER}, #{playerNum,jdbcType=INTEGER}
             )
@@ -77,7 +77,7 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="gameId != null" >
-                #{gameId,jdbcType=INTEGER},
+                #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 #{channelId,jdbcType=VARCHAR},
@@ -107,7 +107,7 @@
         update game_jump_site
         <set >
             <if test="gameId != null" >
-                game_id = #{gameId,jdbcType=INTEGER},
+                game_id = #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 channel_id = #{channelId,jdbcType=VARCHAR},
@@ -136,7 +136,7 @@
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.GameJumpSite" >
         update game_jump_site
-        set game_id = #{gameId,jdbcType=INTEGER},
+        set game_id = #{gameId,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
             button_id = #{buttonId,jdbcType=INTEGER},
             is_show = #{isShow,jdbcType=INTEGER},

@@ -8,15 +8,20 @@ import lombok.NoArgsConstructor;
 /**
  * 服务器信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Server {
+    /**
+     * ID
+     */
+    private Integer id;
+
     /**
      * 服务器id
      */
@@ -25,17 +30,17 @@ public class Server {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 语言
      */
-    private byte[] language;
+    private String language;
 
     /**
      * 名字
      */
-    private byte[] name;
+    private String name;
 
     /**
      * 是否可用
@@ -50,7 +55,7 @@ public class Server {
     /**
      * 服务器ip地址（外网）
      */
-    private byte[] ip;
+    private String ip;
 
     /**
      * 服务器ip地址（内网）
@@ -67,5 +72,5 @@ public class Server {
     /**
      * 版本号
      */
-    private byte[] versionNum;
+    private String versionNum;
 }

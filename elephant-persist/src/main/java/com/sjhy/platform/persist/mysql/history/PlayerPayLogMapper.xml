@@ -5,7 +5,7 @@
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.history.PlayerPayLog" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="role_id" property="roleId" jdbcType="BIGINT" />
-        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -37,7 +37,7 @@
             channel_id, goods_name, create_time, 
             rmb, currency_get, currency_get_extra, 
             order_id)
-        values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=INTEGER}, 
+        values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR}, 
             #{channelId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
             #{rmb,jdbcType=REAL}, #{currencyGet,jdbcType=INTEGER}, #{currencyGetExtra,jdbcType=INTEGER}, 
             #{orderId,jdbcType=VARCHAR})
@@ -85,7 +85,7 @@
                 #{roleId,jdbcType=BIGINT},
             </if>
             <if test="gameId != null" >
-                #{gameId,jdbcType=INTEGER},
+                #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 #{channelId,jdbcType=VARCHAR},
@@ -118,7 +118,7 @@
                 role_id = #{roleId,jdbcType=BIGINT},
             </if>
             <if test="gameId != null" >
-                game_id = #{gameId,jdbcType=INTEGER},
+                game_id = #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 channel_id = #{channelId,jdbcType=VARCHAR},
@@ -148,7 +148,7 @@
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
         update player_pay_log
         set role_id = #{roleId,jdbcType=BIGINT},
-            game_id = #{gameId,jdbcType=INTEGER},
+            game_id = #{gameId,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
             goods_name = #{goodsName,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},

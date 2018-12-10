@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.ModuleSwitch" >
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="module_name" property="moduleName" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="BIT" />
@@ -29,7 +29,7 @@
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.ModuleSwitch" >
         insert into module_switch (id, game_id, channel_id, 
             module_name, status)
-        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER}, #{channelId,jdbcType=VARCHAR}, 
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
             #{moduleName,jdbcType=VARCHAR}, #{status,jdbcType=BIT})
     </insert>
 
@@ -57,7 +57,7 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="gameId != null" >
-                #{gameId,jdbcType=INTEGER},
+                #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 #{channelId,jdbcType=VARCHAR},
@@ -75,7 +75,7 @@
         update module_switch
         <set >
             <if test="gameId != null" >
-                game_id = #{gameId,jdbcType=INTEGER},
+                game_id = #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 channel_id = #{channelId,jdbcType=VARCHAR},
@@ -92,7 +92,7 @@
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.ModuleSwitch" >
         update module_switch
-        set game_id = #{gameId,jdbcType=INTEGER},
+        set game_id = #{gameId,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
             module_name = #{moduleName,jdbcType=VARCHAR},
             status = #{status,jdbcType=BIT}

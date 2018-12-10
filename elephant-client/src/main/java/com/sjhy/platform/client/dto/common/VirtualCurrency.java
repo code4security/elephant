@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 /**
  * 游戏内虚拟货币单位信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -23,7 +23,12 @@ public class VirtualCurrency {
     private Integer id;
 
     /**
-     * 货币单位
+     * 货币编号
      */
     private String unit;
+
+    /**
+     * 货币说明
+     */
+    private String explain;
 }

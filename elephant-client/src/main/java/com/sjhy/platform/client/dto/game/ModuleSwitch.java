@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 /**
  * 游戏模块开关
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -18,14 +18,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModuleSwitch {
     /**
-     * 模块ID
+     * ID
      */
     private Integer id;
 
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 渠道id

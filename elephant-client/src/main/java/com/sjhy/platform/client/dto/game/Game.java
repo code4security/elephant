@@ -1,12 +1,21 @@
 package com.sjhy.platform.client.dto.game;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 游戏名单信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Game {
     /**
      * ID
@@ -14,9 +23,14 @@ public class Game {
     private Integer id;
 
     /**
+     * 游戏id
+     */
+    private String gameId;
+
+    /**
      * 中文名
      */
-    private String name;
+    private String nameCn;
 
     /**
      * 英文名
@@ -28,35 +42,4 @@ public class Game {
      */
     private Integer type;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getNameEn() {
-        return nameEn;
-    }
-
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn == null ? null : nameEn.trim();
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjhy.platform.persist.mysql.common.LipinmaListMapper" >
+<mapper namespace="com.sjhy.platform.persist.mysql.common.LipinmaMapper" >
 
-    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.LipinmaList" >
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.Lipinma" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="lp_list_id" property="lpListId" jdbcType="VARCHAR" />
         <result column="lp_id" property="lpId" jdbcType="INTEGER" />
@@ -15,24 +15,24 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select 
         <include refid="Base_Column_List" />
-        from lipinma_list
+        from lipinma
         where id = #{id,jdbcType=INTEGER}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-        delete from lipinma_list
+        delete from lipinma
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.LipinmaList" >
-        insert into lipinma_list (id, lp_list_id, lp_id
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.Lipinma" >
+        insert into lipinma (id, lp_list_id, lp_id
             )
         values (#{id,jdbcType=INTEGER}, #{lpListId,jdbcType=VARCHAR}, #{lpId,jdbcType=INTEGER}
             )
     </insert>
 
-    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.LipinmaList" >
-        insert into lipinma_list
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.Lipinma" >
+        insert into lipinma
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 id,
@@ -57,8 +57,8 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.common.LipinmaList" >
-        update lipinma_list
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.common.Lipinma" >
+        update lipinma
         <set >
             <if test="lpListId != null" >
                 lp_list_id = #{lpListId,jdbcType=VARCHAR},
@@ -70,8 +70,8 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.LipinmaList" >
-        update lipinma_list
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.Lipinma" >
+        update lipinma
         set lp_list_id = #{lpListId,jdbcType=VARCHAR},
             lp_id = #{lpId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}

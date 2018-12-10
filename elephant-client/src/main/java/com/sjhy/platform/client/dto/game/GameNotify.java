@@ -10,9 +10,9 @@ import java.util.Date;
 /**
  * 游戏内展示公告信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -27,7 +27,12 @@ public class GameNotify {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
+
+    /**
+     * 渠道id
+     */
+    private String channelId;
 
     /**
      * 公告内容

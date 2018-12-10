@@ -4,13 +4,14 @@
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.Game" >
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="name_cn" property="nameCn" jdbcType="VARCHAR" />
         <result column="name_en" property="nameEn" jdbcType="VARCHAR" />
         <result column="type" property="type" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, name, name_en, type
+        id, game_id, name_cn, name_en, type
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -26,10 +27,10 @@
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.Game" >
-        insert into game (id, name, name_en, 
-            type)
-        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{nameEn,jdbcType=VARCHAR}, 
-            #{type,jdbcType=INTEGER})
+        insert into game (id, game_id, name_cn, 
+            name_en, type)
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{nameCn,jdbcType=VARCHAR}, 
+            #{nameEn,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.Game" >
@@ -38,8 +39,11 @@
             <if test="id != null" >
                 id,
             </if>
-            <if test="name != null" >
-                name,
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="nameCn != null" >
+                name_cn,
             </if>
             <if test="nameEn != null" >
                 name_en,
@@ -52,8 +56,11 @@
             <if test="id != null" >
                 #{id,jdbcType=INTEGER},
             </if>
-            <if test="name != null" >
-                #{name,jdbcType=VARCHAR},
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="nameCn != null" >
+                #{nameCn,jdbcType=VARCHAR},
             </if>
             <if test="nameEn != null" >
                 #{nameEn,jdbcType=VARCHAR},
@@ -67,8 +74,11 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.Game" >
         update game
         <set >
-            <if test="name != null" >
-                name = #{name,jdbcType=VARCHAR},
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="nameCn != null" >
+                name_cn = #{nameCn,jdbcType=VARCHAR},
             </if>
             <if test="nameEn != null" >
                 name_en = #{nameEn,jdbcType=VARCHAR},
@@ -82,7 +92,8 @@
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.Game" >
         update game
-        set name = #{name,jdbcType=VARCHAR},
+        set game_id = #{gameId,jdbcType=VARCHAR},
+            name_cn = #{nameCn,jdbcType=VARCHAR},
             name_en = #{nameEn,jdbcType=VARCHAR},
             type = #{type,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}

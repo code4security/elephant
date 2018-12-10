@@ -4,7 +4,7 @@
 
     <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
         <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="game_id" property="gameId" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="sub_channel_id" property="subChannelId" jdbcType="INTEGER" />
         <result column="os" property="os" jdbcType="VARCHAR" />
@@ -47,7 +47,7 @@
             private_key, pay_public_key, pay_private_key, 
             server_id, merchant_id, cp_id, 
             pay_key, notify_url)
-        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=INTEGER}, #{channelId,jdbcType=VARCHAR}, 
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
             #{subChannelId,jdbcType=INTEGER}, #{os,jdbcType=VARCHAR}, #{appKey,jdbcType=VARCHAR}, 
             #{appSecret,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{publicKey,jdbcType=VARCHAR}, 
             #{privateKey,jdbcType=VARCHAR}, #{payPublicKey,jdbcType=VARCHAR}, #{payPrivateKey,jdbcType=VARCHAR}, 
@@ -115,7 +115,7 @@
                 #{id,jdbcType=INTEGER},
             </if>
             <if test="gameId != null" >
-                #{gameId,jdbcType=INTEGER},
+                #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 #{channelId,jdbcType=VARCHAR},
@@ -169,7 +169,7 @@
         update channel_pay_parameter
         <set >
             <if test="gameId != null" >
-                game_id = #{gameId,jdbcType=INTEGER},
+                game_id = #{gameId,jdbcType=VARCHAR},
             </if>
             <if test="channelId != null" >
                 channel_id = #{channelId,jdbcType=VARCHAR},
@@ -222,7 +222,7 @@
 
     <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
         update channel_pay_parameter
-        set game_id = #{gameId,jdbcType=INTEGER},
+        set game_id = #{gameId,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
             sub_channel_id = #{subChannelId,jdbcType=INTEGER},
             os = #{os,jdbcType=VARCHAR},

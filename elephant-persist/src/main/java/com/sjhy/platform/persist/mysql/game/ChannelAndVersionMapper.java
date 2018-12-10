@@ -3,13 +3,13 @@ package com.sjhy.platform.persist.mysql.game;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
 
 public interface ChannelAndVersionMapper {
-    int deleteByPrimaryKey(String channelId);
+    int deleteByPrimaryKey(Integer id);
 
     int insert(ChannelAndVersion record);
 
     int insertSelective(ChannelAndVersion record);
 
-    ChannelAndVersion selectByPrimaryKey(String channelId);
+    ChannelAndVersion selectByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(ChannelAndVersion record);
 

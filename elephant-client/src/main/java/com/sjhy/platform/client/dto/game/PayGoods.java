@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 /**
  * 游戏商店中展示的商品表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -40,7 +40,7 @@ public class PayGoods {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 虚拟货币

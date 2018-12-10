@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 /**
  * 违禁词表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder

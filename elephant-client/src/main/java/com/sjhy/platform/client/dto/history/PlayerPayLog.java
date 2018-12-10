@@ -10,9 +10,9 @@ import java.util.Date;
 /**
  * 玩家购买物品信息表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
@@ -32,7 +32,7 @@ public class PlayerPayLog {
     /**
      * 游戏id
      */
-    private Integer gameId;
+    private String gameId;
 
     /**
      * 渠道id

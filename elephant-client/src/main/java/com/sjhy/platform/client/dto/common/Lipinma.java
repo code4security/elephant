@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 /**
  * 礼品码生成表
  * 
- * @author wcyong
+ * @author HJ
  * 
- * @date 2018-12-07
+ * @date 2018-12-10
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LipinmaList {
+public class Lipinma {
     /**
      * ID
      */
