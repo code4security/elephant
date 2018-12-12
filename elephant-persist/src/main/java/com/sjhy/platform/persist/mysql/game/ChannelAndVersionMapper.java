@@ -14,4 +14,7 @@ public interface ChannelAndVersionMapper {
     int updateByPrimaryKeySelective(ChannelAndVersion record);
 
     int updateByPrimaryKey(ChannelAndVersion record);
+
+    //验证渠道
+    ChannelAndVersion verifyChannel(ChannelAndVersion record);
 }

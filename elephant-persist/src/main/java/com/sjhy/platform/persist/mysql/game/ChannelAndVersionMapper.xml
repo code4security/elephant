@@ -122,4 +122,12 @@
             version_download = #{versionDownload,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="verifyChannel" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.ChannelAndVersion" >
+        select
+        <include refid="Base_Column_List" />
+        from channel_and_version
+        where channel_id = #{channelId,jdbcType=VARCHAR}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
 </mapper>

@@ -182,4 +182,13 @@
             ip_region = #{ipRegion,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询玩家id -->
+    <select id="selectByPlayerId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.Player" >
+        select
+        <include refid="Base_Column_List" />
+        from player
+        where player_id = #{playerId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
 </mapper>

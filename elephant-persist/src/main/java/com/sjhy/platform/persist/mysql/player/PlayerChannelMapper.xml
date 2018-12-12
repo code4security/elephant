@@ -111,4 +111,14 @@
             player_id = #{playerId,jdbcType=BIGINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询玩家渠道id -->
+    <select id="selectByChannelUserId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
+        select
+        <include refid="Base_Column_List" />
+        from player_channel
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and channel_id = #{channelId,jdbcType=VARCHAR}
+        and channel_user_id = #{channelUserId,jdbcType=VARCHAR}
+    </select>
 </mapper>

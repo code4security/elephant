@@ -1,5 +1,7 @@
 package com.sjhy.platform.biz.game;
 
+import com.sjhy.platform.client.dto.game.ChannelAndVersion;
+import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -9,21 +11,12 @@ import javax.annotation.Resource;
  * 渠道
  */
 @Service
-public class ChannelBo {
+public class ChannelBO {
     @Resource
     private ChannelAndVersionMapper channelAndVersionMapper;
 
-    public String queryChannelId(String channelId){
-        ChannelAndVersion channelAndVersion = channelAndVersionMapper.selectByPrimaryKey(channelId);
-        if (channelAndVersion != null){
-            return "OK,"+channelAndVersion.toString();
-        }else {
-            return "NO，不存在该渠道";
-        }
-    }
-
     public String verifyChannel(ChannelAndVersion channelAndVersion){
-        ChannelAndVersion channel = channelAndVersionMapper.selectByGameAndChannel(channelAndVersion);
+        ChannelAndVersion channel = channelAndVersionMapper.verifyChannel(channelAndVersion);
         if (channel != null){
             if (channelAndVersion.getVersionNum().equals(channel.getVersionNum()) || channelAndVersion.getVersionNum() == channel.getVersionNum()){
                 return "OK,"+channel.toString();

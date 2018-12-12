@@ -14,4 +14,7 @@ public interface GameMapper {
     int updateByPrimaryKeySelective(Game record);
 
     int updateByPrimaryKey(Game record);
+
+    //查询游戏id
+    Game selectByGameId(String gameId);
 }

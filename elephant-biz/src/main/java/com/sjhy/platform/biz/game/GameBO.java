@@ -11,12 +11,12 @@ import javax.annotation.Resource;
  * 游戏
  */
 @Service
-public class GameBo {
+public class GameBO {
     @Resource
     private GameMapper gameMapper;
 
-    public String queryGameId(int gameId){
-        Game game = gameMapper.selectByPrimaryKey(gameId);
+    public String queryGameId(String gameId){
+        Game game = gameMapper.selectByGameId(gameId);
         if (game != null){
             return "OK";
         }else {

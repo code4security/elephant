@@ -98,4 +98,12 @@
             type = #{type,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询gameId -->
+    <select id="selectByGameId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        from game
+        where game_id = #{gameId,jdbcType=INTEGER}
+    </select>
 </mapper>

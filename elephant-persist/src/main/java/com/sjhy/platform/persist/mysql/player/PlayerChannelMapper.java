@@ -14,4 +14,7 @@ public interface PlayerChannelMapper {
     int updateByPrimaryKeySelective(PlayerChannel record);
 
     int updateByPrimaryKey(PlayerChannel record);
+
+    //查询玩家渠道id
+    PlayerChannel selectByChannelUserId(PlayerChannel record);
 }

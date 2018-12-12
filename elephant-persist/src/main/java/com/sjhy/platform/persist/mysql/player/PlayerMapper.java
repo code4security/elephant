@@ -14,4 +14,7 @@ public interface PlayerMapper {
     int updateByPrimaryKeySelective(Player record);
 
     int updateByPrimaryKey(Player record);
+
+    //查询玩家id
+    Player selectByPlayerId(Player record);
 }
