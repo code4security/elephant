@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.GiftCodeListMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.GiftCodeList" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="gift_name" property="giftName" jdbcType="VARCHAR" />
+        <result column="desc_txt" property="descTxt" jdbcType="VARCHAR" />
+        <result column="gift_reward_id" property="giftRewardId" jdbcType="VARCHAR" />
+        <result column="gift_num" property="giftNum" jdbcType="INTEGER" />
+        <result column="begin_time" property="beginTime" jdbcType="VARCHAR" />
+        <result column="end_time" property="endTime" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, game_id, channel_id, type, gift_name, desc_txt, gift_reward_id, gift_num, begin_time, 
+        end_time, create_time
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from gift_code_list
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from gift_code_list
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.GiftCodeList" >
+        insert into gift_code_list (id, game_id, channel_id, 
+            type, gift_name, desc_txt, 
+            gift_reward_id, gift_num, begin_time, 
+            end_time, create_time)
+        values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
+            #{type,jdbcType=INTEGER}, #{giftName,jdbcType=VARCHAR}, #{descTxt,jdbcType=VARCHAR}, 
+            #{giftRewardId,jdbcType=VARCHAR}, #{giftNum,jdbcType=INTEGER}, #{beginTime,jdbcType=VARCHAR}, 
+            #{endTime,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.GiftCodeList" >
+        insert into gift_code_list
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="giftName != null" >
+                gift_name,
+            </if>
+            <if test="descTxt != null" >
+                desc_txt,
+            </if>
+            <if test="giftRewardId != null" >
+                gift_reward_id,
+            </if>
+            <if test="giftNum != null" >
+                gift_num,
+            </if>
+            <if test="beginTime != null" >
+                begin_time,
+            </if>
+            <if test="endTime != null" >
+                end_time,
+            </if>
+            <if test="createTime != null" >
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="giftName != null" >
+                #{giftName,jdbcType=VARCHAR},
+            </if>
+            <if test="descTxt != null" >
+                #{descTxt,jdbcType=VARCHAR},
+            </if>
+            <if test="giftRewardId != null" >
+                #{giftRewardId,jdbcType=VARCHAR},
+            </if>
+            <if test="giftNum != null" >
+                #{giftNum,jdbcType=INTEGER},
+            </if>
+            <if test="beginTime != null" >
+                #{beginTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null" >
+                #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.GiftCodeList" >
+        update gift_code_list
+        <set >
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="giftName != null" >
+                gift_name = #{giftName,jdbcType=VARCHAR},
+            </if>
+            <if test="descTxt != null" >
+                desc_txt = #{descTxt,jdbcType=VARCHAR},
+            </if>
+            <if test="giftRewardId != null" >
+                gift_reward_id = #{giftRewardId,jdbcType=VARCHAR},
+            </if>
+            <if test="giftNum != null" >
+                gift_num = #{giftNum,jdbcType=INTEGER},
+            </if>
+            <if test="beginTime != null" >
+                begin_time = #{beginTime,jdbcType=VARCHAR},
+            </if>
+            <if test="endTime != null" >
+                end_time = #{endTime,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.GiftCodeList" >
+        update gift_code_list
+        set game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            type = #{type,jdbcType=INTEGER},
+            gift_name = #{giftName,jdbcType=VARCHAR},
+            desc_txt = #{descTxt,jdbcType=VARCHAR},
+            gift_reward_id = #{giftRewardId,jdbcType=VARCHAR},
+            gift_num = #{giftNum,jdbcType=INTEGER},
+            begin_time = #{beginTime,jdbcType=VARCHAR},
+            end_time = #{endTime,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

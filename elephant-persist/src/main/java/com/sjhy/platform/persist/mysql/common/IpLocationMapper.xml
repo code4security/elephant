@@ -87,4 +87,15 @@
             locid = #{locid,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询ip区域 -->
+    <select id="selectByStart" parameterType="map" resultMap="BaseResultMap">
+        select
+            start_ip_num, end_ip_num, locid
+        from
+            ip_location
+        where
+            start_ip_num &lt; #{startIp,jdbcType=BIGINT}
+        order by start_ip_num DESC limit 1
+    </select>
 </mapper>

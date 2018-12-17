@@ -14,4 +14,7 @@ public interface ServerHistoryMapper {
     int updateByPrimaryKeySelective(ServerHistory record);
 
     int updateByPrimaryKey(ServerHistory record);
+
+    //查询玩家登陆服务器记录
+    ServerHistory selectByHistory(ServerHistory record);
 }

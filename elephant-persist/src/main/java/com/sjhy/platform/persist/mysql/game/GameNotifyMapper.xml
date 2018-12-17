@@ -146,4 +146,12 @@
             update_time = #{updateTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询最新公告 -->
+    <select id="selectLatestNotify" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.GameNotify" >
+         select * from game_notify
+         where status = 0
+           and game_id = #{gameId,jdbcType=VARCHAR}
+         order by create_time DESC limit 1
+    </select>
 </mapper>

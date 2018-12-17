@@ -182,4 +182,12 @@
             version_num = #{versionNum,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByServer" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.Server" >
+        select
+        <include refid="Base_Column_List" />
+        from server
+        where server_id = #{serverId,jdbcType=INTEGER},
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
 </mapper>

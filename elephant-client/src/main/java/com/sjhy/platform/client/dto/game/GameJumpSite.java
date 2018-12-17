@@ -12,7 +12,7 @@ import java.util.Date;
  * 
  * @author HJ
  * 
- * @date 2018-12-10
+ * @date 2018-12-17
  */
 @Data
 @Builder
@@ -63,5 +63,4 @@ public class GameJumpSite {
      * 点击人数
      */
     private Integer playerNum;
-
 }

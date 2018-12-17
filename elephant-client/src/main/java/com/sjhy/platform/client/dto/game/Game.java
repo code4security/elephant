@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * 
  * @author HJ
  * 
- * @date 2018-12-10
+ * @date 2018-12-17
  */
 @Data
 @Builder
@@ -41,5 +41,4 @@ public class Game {
      * 类型（单机、网游）
      */
     private Integer type;
-
 }

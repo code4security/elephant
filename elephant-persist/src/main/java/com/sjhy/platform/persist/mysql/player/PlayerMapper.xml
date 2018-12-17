@@ -191,4 +191,9 @@
         where player_id = #{playerId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
+
+    <!-- 查询玩家数量 -->
+    <select id="selectByCount" parameterType="com.sjhy.platform.client.dto.player.Player" resultType="java.lang.Integer">
+        select count(*) from player
+    </select>
 </mapper>

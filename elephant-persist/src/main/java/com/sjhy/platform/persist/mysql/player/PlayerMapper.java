@@ -17,4 +17,7 @@ public interface PlayerMapper {
 
     //查询玩家id
     Player selectByPlayerId(Player record);
+
+    // 查询所有玩家
+    int selectByCount(Player record);
 }

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.common.GiftCodeMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.GiftCode" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="gift_code" property="giftCode" jdbcType="VARCHAR" />
+        <result column="gift_list_id" property="giftListId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, gift_code, gift_list_id
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from gift_code
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from gift_code
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+        insert into gift_code (id, gift_code, gift_list_id
+            )
+        values (#{id,jdbcType=INTEGER}, #{giftCode,jdbcType=VARCHAR}, #{giftListId,jdbcType=INTEGER}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+        insert into gift_code
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="giftCode != null" >
+                gift_code,
+            </if>
+            <if test="giftListId != null" >
+                gift_list_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="giftCode != null" >
+                #{giftCode,jdbcType=VARCHAR},
+            </if>
+            <if test="giftListId != null" >
+                #{giftListId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+        update gift_code
+        <set >
+            <if test="giftCode != null" >
+                gift_code = #{giftCode,jdbcType=VARCHAR},
+            </if>
+            <if test="giftListId != null" >
+                gift_list_id = #{giftListId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+        update gift_code
+        set gift_code = #{giftCode,jdbcType=VARCHAR},
+            gift_list_id = #{giftListId,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 查询礼品码 -->
+    <select id="selectByGiftCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from gift_code
+        where gift_code = #{giftCode,jdbcType=VARCHAR}
+    </select>
+</mapper>

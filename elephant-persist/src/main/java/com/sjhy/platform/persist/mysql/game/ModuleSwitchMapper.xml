@@ -98,4 +98,13 @@
             status = #{status,jdbcType=BIT}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询模块开关 -->
+    <select id="selectByModule" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.ModuleSwitch" >
+        select
+        <include refid="Base_Column_List" />
+        from module_switch
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and module_name = #{moduleName,jdbcType=VARCHAR}
+    </select>
 </mapper>

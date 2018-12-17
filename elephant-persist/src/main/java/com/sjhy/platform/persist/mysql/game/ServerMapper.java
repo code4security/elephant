@@ -1,6 +1,7 @@
 package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.Server;
+import org.apache.ibatis.annotations.Param;
 
 public interface ServerMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +15,7 @@ public interface ServerMapper {
     int updateByPrimaryKeySelective(Server record);
 
     int updateByPrimaryKey(Server record);
+
+    //查询服务器
+    Server selectByServer(Server record);
 }

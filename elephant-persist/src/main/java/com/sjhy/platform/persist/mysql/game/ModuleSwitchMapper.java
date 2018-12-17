@@ -14,4 +14,7 @@ public interface ModuleSwitchMapper {
     int updateByPrimaryKeySelective(ModuleSwitch record);
 
     int updateByPrimaryKey(ModuleSwitch record);
+
+    //查询游戏模块开关
+    ModuleSwitch selectByModule(ModuleSwitch record);
 }
