@@ -4,6 +4,7 @@ import com.sjhy.platform.biz.config.AppConfig;
 import com.sjhy.platform.biz.config.KairoErrorCode;
 import com.sjhy.platform.biz.enumerate.ModuleEnum;
 import com.sjhy.platform.biz.exception.*;
+import com.sjhy.platform.biz.redis.RedisService;
 import com.sjhy.platform.biz.srp.SRPAuthenticationFailedException;
 import com.sjhy.platform.biz.srp.SRPFactory;
 import com.sjhy.platform.biz.srp.SRPVerifier;
@@ -11,6 +12,7 @@ import com.sjhy.platform.biz.utils.StringUtils;
 import com.sjhy.platform.biz.utils.UtilDate;
 import com.sjhy.platform.biz.vo.*;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
+import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.game.Server;
 import com.sjhy.platform.client.dto.history.PlayerLoginLog;
 import com.sjhy.platform.client.dto.player.Player;
@@ -52,6 +54,8 @@ public class LoginBO {
     private PlayerLoginLogMapper playerLoginLogMapper;
     @Resource
     private ServerMapper serverMapper;
+    @Resource
+    private RedisService redisService;
 
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";
@@ -192,7 +196,7 @@ public class LoginBO {
             }
 
             // 使用sessionVO.AccountName中保存的设备唯一标识建立账号
-            Player player = playerBO.createNewPlayerByCooperate(channelId, sessionVO.deviceUniquelyId, serverId, "", ip);
+            Player player = playerBO.createNewPlayerByCooperate(channelId, sessionVO.deviceUniquelyId, serverId, "", ip, gameId);
             playerId = player.getPlayerId();
 
             playerBO.createPlayer(sessionVO.channelId, sessionVO.channelUserId, player.getPlayerId(),gameId);

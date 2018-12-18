@@ -120,7 +120,7 @@ public class PlayerBO {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public Player createNewPlayerByCooperate(String channelId, String deviceUniquelyId, Integer serverId, String deviceModel, String ip) {
+    public Player createNewPlayerByCooperate(String channelId, String deviceUniquelyId, Integer serverId, String deviceModel, String ip, String gameId) {
         // 需要更新的信息
         Date now = Calendar.getInstance().getTime();
         Date zero = new Date(0);
@@ -131,6 +131,7 @@ public class PlayerBO {
         player.setDeviceModel(deviceModel); // 硬件类型信息
         player.setDeviceUniquelyId(deviceUniquelyId); // 设备唯一标识(暂定IMEI+MAC与苹果id)
         player.setChannelId(channelId); // 绑定类型(null则未绑定)
+        player.setGameId(gameId); // 绑定游戏id
 
         player.setFirstLoginTime(now); // 首次登录时间
         player.setFirstLoginIp(ip); // 首次登录IP
