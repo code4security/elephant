@@ -14,4 +14,7 @@ public interface PlayerBanListMapper {
     int updateByPrimaryKeySelective(PlayerBanList record);
 
     int updateByPrimaryKey(PlayerBanList record);
+
+    // 查询玩家是在封禁
+    PlayerBanList selectByBan(PlayerBanList record);
 }

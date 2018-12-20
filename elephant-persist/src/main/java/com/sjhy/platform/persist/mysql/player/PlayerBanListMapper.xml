@@ -122,4 +122,14 @@
             ban_time = #{banTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询玩家是否被封禁 -->
+    <select id="selectByBan" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerBanList" >
+        select
+        <include refid="Base_Column_List" />
+        from player_ban_list
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and channel_id = #{channelId,jdbcType=VARCHAR}
+        and role_id = #{roleId,jdbcType=BIGINT}
+    </select>
 </mapper>

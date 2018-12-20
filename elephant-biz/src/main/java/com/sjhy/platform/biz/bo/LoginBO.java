@@ -16,10 +16,15 @@ import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.game.Server;
 import com.sjhy.platform.client.dto.history.PlayerLoginLog;
 import com.sjhy.platform.client.dto.player.Player;
+import com.sjhy.platform.client.dto.player.PlayerBanList;
+import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
+import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.game.ServerMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerLoginLogMapper;
+import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerMapper;
+import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -56,6 +61,16 @@ public class LoginBO {
     private ServerMapper serverMapper;
     @Resource
     private RedisService redisService;
+    @Resource
+    private GameMapper gameMapper;
+    @Resource
+    private PlayerRoleMapper playerRoleMapper;
+    @Resource
+    private RoleBO roleBO;
+    @Resource
+    private PlayerBanListMapper playerBanListMapper;
+    @Resource
+    private GameBO gameBO;
 
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";
@@ -98,7 +113,6 @@ public class LoginBO {
         LoginSessionVO sessionVO = new LoginSessionVO();
         sessionVO.Session = SRPFactory.getInstance().newServerSession( verifier );
 
-        //缓存
         //根据返回的account判断是不是该设备第一次登陆游戏，如果不是第一次登陆游戏accountID大于0;如果是第一次登陆游戏的accountID等于0，将设备唯一标识放入到sessionVO的AccountName中
         if ( account.getPlayerId() > 0 ) {
             sessionVO.isFirstLogin = false;
@@ -118,7 +132,7 @@ public class LoginBO {
         // 玩家激活状况
         sessionVO.activationState = account.getActivationState();
 
-        // 缓存(注释)
+        // 缓存（注释）
         /*sessionCacheMgr.put(clientId, sessionVO);
         channelUserMgr.put(channelUserID, gameId, account);*/
         
@@ -158,9 +172,11 @@ public class LoginBO {
         // 缓存（注释）
         /* sessionVO = sessionCacheMgr.get( clientId );
         sessionCacheMgr.remove( clientId );
-        if ( sessionVO == null ){ throw new NotChallengeYetException();}
-        Game game = KrGlobalCache.getGameById(gameId);
-        if(game == null){ throw new NotChallengeYetException();}*/
+        if ( sessionVO == null ){ throw new NotChallengeYetException();}*/
+        Game game = gameMapper.selectByGameId(gameId);
+        if (game == null){
+            throw new NotChallengeYetException();
+        }
 
         // 使用客户端的公匙A-暂时删除
         sessionVO.Session.setClientPublicKey_A( a );
@@ -201,7 +217,7 @@ public class LoginBO {
 
             playerBO.createPlayer(sessionVO.channelId, sessionVO.channelUserId, player.getPlayerId(),gameId);
 
-            //缓存(注释)
+            //缓存（注释）
             // channelUserMgr.update(sessionVO.CooperateId, playerId, gameId);
         } else {
             playerId = sessionVO.playerId;
@@ -351,5 +367,57 @@ public class LoginBO {
         //logService.saveLoginLog(channelId, channelUserMgr.getChUserId(playerId, gameId), playerId+"", gameId, ip);
 
         return new LoginVO(player.getPlayerId(),player.getServerId(),server.getVersionNum());
+    }
+
+    /**
+     * 验证角色登陆，返回角色基本信息
+     * @param playerId
+     * @param gameId
+     * @param deviceModel
+     * @param deviceToken
+     * @return
+     * @throws PleaseLoginAgainException
+     * @throws NoSuchRoleException
+     * @throws AlreadyExistsPlayerRoleException
+     * @throws AdmiralNameIsNotNullableException
+     * @throws AdmiralNameIsTooLongException
+     * @throws AdmiralNameIncludeHarmonyException
+     * @throws AdmiralNameCoincideException
+     * @throws CreateRoleException
+     * @throws GameIdIsNotExsitsException
+     * @throws KairoException
+     */
+    public PlayerRoleVO enterGame(long playerId, String gameId, int deviceModel, String deviceToken) throws PleaseLoginAgainException, NoSuchRoleException, AlreadyExistsPlayerRoleException, AdmiralNameIsNotNullableException, AdmiralNameIsTooLongException, AdmiralNameIncludeHarmonyException, AdmiralNameCoincideException, CreateRoleException, GameIdIsNotExsitsException, KairoException {
+
+        // 缓存（注释）
+        // 1.验证用户的 sessionKey
+        /* String redisSessionKey = SessionKeyHMapCpt.getSessionKey(userId + "_" + gameId);
+        if(redisSessionKey == null){throw new PleaseLoginAgainException();}
+        gameServerChannelHandler.setPacketCrypt( new PacketCrypt(redisSessionKey) );*/
+
+        // 2.判断是否已经成功初始化用户信息
+        PlayerRoleVO playerRoleVo = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(gameId,playerId);
+        if(playerRoleVo == null){
+            // 首次登陆，自动创建角色
+            playerRoleVo = roleBO.createNewPlayer(playerId, gameId, playerId+"_"+gameId, deviceToken);
+        }
+
+        // 判断玩家是否处于封停状态
+        PlayerBanList playerBanList = new PlayerBanList();
+        playerBanList.setGameId(playerRoleVo.getGameId());
+        playerBanList.setChannelId(playerRoleVo.getChannelId());
+        playerBanList.setRoleId(playerRoleVo.getRoleId());
+        playerBanList = playerBanListMapper.selectByBan(playerBanList);
+        if(gameBO.isRealBan(playerBanList)){
+            throw new KairoException(KairoErrorCode.ERROR_IS_BANED);
+        }
+        // 3.更新登录时间
+        roleBO.updateLastLoginTime(playerRoleVo.getRoleId());
+        // 缓存（注释）
+        // playerRoleService.removeInCache(playerRoleVO.getRoleId());
+        // 5.埋点（注释）
+        // logService.setRoleLoginLog(playerRoleVO);
+        // 6.发送封测奖励
+        return playerRoleVo;
     }
 }

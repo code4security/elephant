@@ -253,4 +253,28 @@
             currency = #{currency,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 根据playerId查询玩家 -->
+    <select id="selectByPlayerId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerRole" >
+        select
+        <include refid="Base_Column_List" />
+        from player_role
+        where player_id = #{playerId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询玩家总数 -->
+    <select id="countByRole" parameterType="com.sjhy.platform.client.dto.player.PlayerRole" resultType="java.lang.Integer" >
+        select count(*) from player_role
+    </select>
+
+    <!-- 根据roleId查询玩家 -->
+    <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerRole" >
+        select
+        <include refid="Base_Column_List" />
+        from player_role
+        where role_id = #{roleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
 </mapper>
