@@ -182,4 +182,38 @@
             status = #{status,jdbcType=BIT}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询邮件id -->
+    <select id="selectByMailId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.Mail" >
+        select
+        <include refid="Base_Column_List" />
+        from mail
+        where id = #{id,jdbcType=INTEGER}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询角色所有未领取邮件 -->
+    <select id="selcetByRoleMail" parameterType="com.sjhy.platform.client.dto.game.Mail" >
+        select
+        <include refid="Base_Column_List" />
+        from mail
+        where recv_role_id = #{recvRoleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        and status = 0
+    </select>
+
+    <!-- 查询邮件列表 -->
+    <select id="selectMailsByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            mail
+        WHERE
+            recv_role_id = #{recvRoleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        AND status = 0
+        ORDER BY
+            send_time DESC
+        LIMIT #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}
+  </select>
 </mapper>

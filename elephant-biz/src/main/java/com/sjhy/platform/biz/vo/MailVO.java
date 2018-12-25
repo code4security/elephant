@@ -25,8 +25,8 @@ public class MailVO {
 	private String title;
 	private String context;
 	private Date sendTime;
-	private int itemId = -1;
-	private int itemNum = -1;
+	private int goodId = -1;
+	private int goodNum = -1;
 	private boolean status;
 	private String admiralAvatar;
 }

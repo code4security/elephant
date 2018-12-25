@@ -16,5 +16,5 @@ import lombok.NoArgsConstructor;
 public class AddItemToPackVO {
 	private int itemId; // 物品ID
 	private int itemNum; // 物品数量
-	private short strengthenLevel = 1; // 物品的强化等级
+	// private short strengthenLevel = 1; // 物品的强化等级
 }
