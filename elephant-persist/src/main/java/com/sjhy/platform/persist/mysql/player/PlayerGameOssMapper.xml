@@ -237,4 +237,33 @@
         where id = #{id,jdbcType=INTEGER}
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
+
+    <!-- 查询oss文件id -->
+    <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        select
+        <include refid="Base_Column_List" />
+        from player_game_oss
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and role_id = #{roleId,jdbcType=BIGINT}
+    </select>
+
+    <!-- 修改最后时间 -->
+    <update id="updateEndtimeByRoleId" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss"  >
+  	    update player_game_oss
+  	    set end_time = CURRENT_TIMESTAMP(),update_time=CURRENT_TIMESTAMP()
+  	    where game_id = #{gameId,jdbcType=VARCHAR}
+        and role_id = #{roleId,jdbcType=BIGINT}
+    </update>
+
+    <!-- 查询objKey -->
+    <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        select
+        <include refid="Base_Column_List" />
+        from player_game_oss
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and role_id = #{roleId,jdbcType=BIGINT}
+        and bucket = #{bucket,jdbcType=VARCHAR}
+        and obj_key = #{objKey,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

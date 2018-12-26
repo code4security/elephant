@@ -23,6 +23,6 @@ public class AliOssAccessKeyVO {
     // key更新时间
     private Date updateTime;
     
-    private int gameId;
+    private String gameId;
     private String channelId;
 }

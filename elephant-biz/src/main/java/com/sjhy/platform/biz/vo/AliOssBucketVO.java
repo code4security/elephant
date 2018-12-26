@@ -15,7 +15,8 @@ public class AliOssBucketVO {
 	private String objkey;
 	
 	private long gold;
-	private int gameId;
+	private String gameId;
+	private String channelId;
 	
 	private int operateId;
 
