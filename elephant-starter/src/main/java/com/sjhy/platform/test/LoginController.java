@@ -1,9 +1,9 @@
 package com.sjhy.platform.test;
 
 import com.sjhy.platform.biz.bo.LoginBO;
-import com.sjhy.platform.biz.exception.*;
-import com.sjhy.platform.biz.srp.SRPAuthenticationFailedException;
-import com.sjhy.platform.biz.vo.RegularLoginVO;
+import com.sjhy.platform.client.dto.exception.*;
+import com.sjhy.platform.client.dto.srp.SRPAuthenticationFailedException;
+import com.sjhy.platform.client.dto.vo.RegularLoginVO;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

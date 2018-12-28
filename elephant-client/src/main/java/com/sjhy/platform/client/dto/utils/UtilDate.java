@@ -1,6 +1,7 @@
 package com.sjhy.platform.client.dto.utils;
 
 import org.apache.commons.lang.time.FastDateFormat;
+import org.apache.commons.lang.StringUtils;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
