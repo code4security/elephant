@@ -1,13 +1,13 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.config.KairoErrorCode;
-import com.sjhy.platform.biz.enumerate.MailTypeEnum;
-import com.sjhy.platform.biz.exception.MailItemErrorException;
-import com.sjhy.platform.biz.exception.MailNotBelongThisRoleException;
-import com.sjhy.platform.biz.exception.NoSuchRoleException;
-import com.sjhy.platform.biz.vo.AddItemToPackVO;
-import com.sjhy.platform.biz.vo.MailVO;
-import com.sjhy.platform.biz.vo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.config.KairoErrorCode;
+import com.sjhy.platform.client.dto.enumerate.MailTypeEnum;
+import com.sjhy.platform.client.dto.exception.MailItemErrorException;
+import com.sjhy.platform.client.dto.exception.MailNotBelongThisRoleException;
+import com.sjhy.platform.client.dto.exception.NoSuchRoleException;
+import com.sjhy.platform.client.dto.vo.AddItemToPackVO;
+import com.sjhy.platform.client.dto.vo.MailVO;
+import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.game.Mail;
 import com.sjhy.platform.persist.mysql.game.MailMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;

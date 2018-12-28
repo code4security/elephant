@@ -1,16 +1,17 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.config.ProtocolKey;
-import com.sjhy.platform.biz.exception.AccountAlreadyBindingOtherException;
-import com.sjhy.platform.biz.exception.NotExistAccountException;
-import com.sjhy.platform.biz.utils.IPOperator;
-import com.sjhy.platform.biz.utils.MD5Util;
-import com.sjhy.platform.biz.vo.AccountVO;
+import com.sjhy.platform.client.dto.config.ProtocolKey;
+import com.sjhy.platform.client.dto.exception.AccountAlreadyBindingOtherException;
+import com.sjhy.platform.client.dto.exception.NotExistAccountException;
+import com.sjhy.platform.client.dto.utils.IPOperator;
+import com.sjhy.platform.client.dto.utils.MD5Util;
+import com.sjhy.platform.client.dto.vo.AccountVO;
 import com.sjhy.platform.client.dto.game.ModuleSwitch;
 import com.sjhy.platform.client.dto.common.IpLocation;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
 import com.sjhy.platform.client.dto.player.Player;
 import com.sjhy.platform.client.dto.player.PlayerChannel;
+import com.sjhy.platform.client.dto.vo.AccountVO;
 import com.sjhy.platform.persist.mysql.common.IpLocationMapper;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import com.sjhy.platform.persist.mysql.game.ModuleSwitchMapper;

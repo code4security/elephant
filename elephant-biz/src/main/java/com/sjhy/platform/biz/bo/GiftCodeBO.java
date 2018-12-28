@@ -1,6 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.utils.UtilDate;
+import com.sjhy.platform.client.dto.utils.UtilDate;
 import com.sjhy.platform.client.dto.common.GiftCode;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;

@@ -1,10 +1,9 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.config.AppConfig;
-import com.sjhy.platform.biz.exception.*;
-import com.sjhy.platform.biz.utils.StringUtils;
-import com.sjhy.platform.biz.vo.AccountVO;
-import com.sjhy.platform.biz.vo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.config.AppConfig;
+import com.sjhy.platform.client.dto.exception.*;
+import com.sjhy.platform.client.dto.utils.StringUtils;
+import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.player.Player;
 import com.sjhy.platform.client.dto.player.PlayerRole;

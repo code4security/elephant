@@ -1,6 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.vo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
