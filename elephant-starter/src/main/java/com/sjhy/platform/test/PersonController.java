@@ -1,6 +1,7 @@
 package com.sjhy.platform.test;
 
 import com.sjhy.platform.biz.test.PersonBO;
+import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.test.Person;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
