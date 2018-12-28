@@ -1,0 +1,77 @@
+[33mcommit a3260c187d27d1713ad80befaa47fcea9bc54cd3[m[33m ([m[1;36mHEAD -> [m[1;32mdev-dh[m[33m)[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Tue Dec 25 18:39:47 2018 +0800
+
+    12.25提交，邮件功能完成，oss存档删除功能
+
+[33mcommit 6b47e6cd8a722939619e841b69ec232f2a5ca2d4[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Mon Dec 24 11:06:46 2018 +0800
+
+    12.24提交，删除邮件
+
+[33mcommit f2dbad8b3e219b4dead5fc7a682effecbea41ecb[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Thu Dec 20 18:28:16 2018 +0800
+
+    12.20提交，编写玩家登陆和黑名单相关代码
+
+[33mcommit cbe37ded07e02d6940d88c3eaf89db07bc83e445[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Tue Dec 18 20:36:32 2018 +0800
+
+    12.18提交，部署rides缓存配置，并未使用
+
+[33mcommit ce2fb9170b2c4a2026fb4718a37a0de68137fde6[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Mon Dec 17 19:02:51 2018 +0800
+
+    12.17提交，带有测试代码和正常逻辑
+
+[33mcommit 0856bd16e700bf312561e4c026b414736eb0ad22[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Wed Dec 12 17:51:09 2018 +0800
+
+    BO类添加，完成第一次握手相关代码编写，相关缓存和埋点删除，并未添加
+
+[33mcommit 67fb614c5a561e7e2a1831d795c5ab8bcc9bd80b[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Mon Dec 10 11:59:09 2018 +0800
+
+    为合并数据，修改数据库结构，添加独立id主键
+
+[33mcommit 4ccfad9031122192a799692d71f7ea9f94304b9c[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Fri Dec 7 17:07:46 2018 +0800
+
+    db_update
+
+[33mcommit 44dc1c594883a543d72b4921044167ff357415ac[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Thu Dec 6 17:14:45 2018 +0800
+
+    db-test2-add_office.sql
+
+[33mcommit e7eae2541bd92ab84014c28ae25dc21bd3d52dfe[m
+Author: duhui <duhui@blackwings.com.cn>
+Date:   Thu Dec 6 16:59:00 2018 +0800
+
+    db-test
+
+[33mcommit 669c06118a1f4cbd1849ec6046539b9822a7af0b[m
+Author: lz109550 <lz109550@alibaba-inc.com>
+Date:   Wed Dec 5 23:43:04 2018 +0800
+
+    init
+
+[33mcommit 3818eab92465d2a67246c4a581c1b5bba4295518[m
+Author: lz109550 <lz109550@alibaba-inc.com>
+Date:   Wed Dec 5 11:47:49 2018 +0800
+
+    init
+
+[33mcommit 5455ebf213bbae6d9fa64cc2a718f829498de1ba[m
+Author: lz109550 <lz109550@alibaba-inc.com>
+Date:   Wed Dec 5 11:47:30 2018 +0800
+
+    init
