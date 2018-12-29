@@ -11,9 +11,9 @@ spring:
   redis:
     host: 47.92.153.243
     password:
-     port: 7000
-     pool:
-       max-idle: 100
-       min-idle: 1
-       max-active: 1000
-       max-wait: -1
+    port: 7000
+    pool:
+      max-idle: 100
+      min-idle: 1
+      max-active: 1000
+      max-wait: -1

@@ -133,4 +133,14 @@
             goods_des = #{goodsDes,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 根据渠道id 查询商品 -->
+    <select id="selectByGChannelId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from pay_goods
+        where channel_id = #{channelId,jdbcType=VARCHAR}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        and goods_name = #{goodsName,jdbcType=VARCHAR}
+    </select>
 </mapper>

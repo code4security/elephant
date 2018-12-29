@@ -76,4 +76,11 @@
             explain = #{explain,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByUnit" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
+        select
+        <include refid="Base_Column_List" />
+        from virtual_currency
+        where unit = #{unit,jdbcType=VARCHAR}
+    </select>
 </mapper>

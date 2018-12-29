@@ -16,6 +16,6 @@ public interface GiftCodeMapper {
 
     int updateByPrimaryKey(GiftCode record);
 
-    //查询礼品码
-    GiftCode selectByGiftCode(@Param("giftCode") String giftCode);
+    // 查询礼品码
+    GiftCode selectByCode(@Param("giftCode") String giftCode);
 }

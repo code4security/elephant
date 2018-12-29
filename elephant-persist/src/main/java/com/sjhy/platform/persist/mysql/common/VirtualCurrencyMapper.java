@@ -1,6 +1,7 @@
 package com.sjhy.platform.persist.mysql.common;
 
 import com.sjhy.platform.client.dto.common.VirtualCurrency;
+import org.apache.ibatis.annotations.Param;
 
 public interface VirtualCurrencyMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +15,7 @@ public interface VirtualCurrencyMapper {
     int updateByPrimaryKeySelective(VirtualCurrency record);
 
     int updateByPrimaryKey(VirtualCurrency record);
+
+    // 查询货币是否存在
+    VirtualCurrency selectByUnit(@Param("unit") String unit);
 }

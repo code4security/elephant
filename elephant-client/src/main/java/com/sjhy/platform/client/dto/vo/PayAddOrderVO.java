@@ -19,6 +19,7 @@ public class PayAddOrderVO {
 	private String goodId;
 	private int goodNumber;
 	private int channel;
+	private String gameId;
 	private String remark;
 	private String publishChannel;
 	

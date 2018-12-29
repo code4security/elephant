@@ -240,4 +240,12 @@
             notify_url = #{notifyUrl,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByPrimaryKey" resultMap="java.lang.Integer" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+        select
+        sub_channel_id
+        from channel_pay_parameter
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        AND channel_id = #{channelId,jdbcType=VARCHAR}
+    </select>
 </mapper>
