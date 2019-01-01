@@ -14,13 +14,13 @@
 
     <select id="get" resultMap="Person">
         SELECT id, gmt_create, gmt_modified, name, age
-        FROM person
+        FROM test_person
         WHERE id = #{personId}
     </select>
 
     <select id="countPerson" resultType="java.lang.Integer">
         SELECT count(1)
-        FROM person
+        FROM test_person
     </select>
 
 </mapper>
