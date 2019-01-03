@@ -8,7 +8,9 @@ import com.sjhy.platform.client.dto.test.Person;
  * @author 万二(Zheng Liu)
  */
 public interface PersonService {
+     ResultDTO<String> test();
 
-     ResultDTO<Person> get(ServiceContext sc, Integer personId);
+     ResultDTO<Person> get(ServiceContext sc, Long personId);
 
+     Person get(Integer personId);
 }

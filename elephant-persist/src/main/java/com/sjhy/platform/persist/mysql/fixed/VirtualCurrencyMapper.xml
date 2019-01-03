@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjhy.platform.persist.mysql.common.VirtualCurrencyMapper" >
+<mapper namespace="com.sjhy.platform.persist.mysql.fixed.VirtualCurrencyMapper" >
 
-    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.VirtualCurrency" >
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.fixed.VirtualCurrency" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="unit" property="unit" jdbcType="VARCHAR" />
         <result column="explain" property="explain" jdbcType="VARCHAR" />
@@ -24,14 +24,14 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.fixed.VirtualCurrency" >
         insert into virtual_currency (id, unit, explain
             )
         values (#{id,jdbcType=INTEGER}, #{unit,jdbcType=VARCHAR}, #{explain,jdbcType=VARCHAR}
             )
     </insert>
 
-    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.fixed.VirtualCurrency" >
         insert into virtual_currency
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -57,7 +57,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.fixed.VirtualCurrency" >
         update virtual_currency
         <set >
             <if test="unit != null" >
@@ -70,14 +70,14 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.fixed.VirtualCurrency" >
         update virtual_currency
         set unit = #{unit,jdbcType=VARCHAR},
             explain = #{explain,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectByUnit" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.common.VirtualCurrency" >
+    <select id="selectByUnit" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.fixed.VirtualCurrency" >
         select
         <include refid="Base_Column_List" />
         from virtual_currency

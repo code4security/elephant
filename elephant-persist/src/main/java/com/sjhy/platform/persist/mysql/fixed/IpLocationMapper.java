@@ -1,6 +1,6 @@
-package com.sjhy.platform.persist.mysql.common;
+package com.sjhy.platform.persist.mysql.fixed;
 
-import com.sjhy.platform.client.dto.common.IpLocation;
+import com.sjhy.platform.client.dto.fixed.IpLocation;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.sjhy.platform.client.dto.common;
+package com.sjhy.platform.client.dto.fixed;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

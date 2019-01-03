@@ -1,4 +1,4 @@
-package com.sjhy.platform.client.dto.common;
+package com.sjhy.platform.client.dto.fixed;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 游戏内虚拟货币单位信息表
+ * 礼品码生成表
  * 
  * @author HJ
  * 
@@ -16,19 +16,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VirtualCurrency {
+public class GiftCode {
     /**
      * ID
      */
     private Integer id;
 
     /**
-     * 货币编号
+     * 礼品码信息
      */
-    private String unit;
+    private String giftCode;
 
     /**
-     * 货币说明
+     * 批次号
      */
-    private String explain;
+    private Integer giftListId;
 }

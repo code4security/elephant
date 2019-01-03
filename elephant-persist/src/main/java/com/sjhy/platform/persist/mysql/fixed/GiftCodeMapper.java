@@ -1,6 +1,6 @@
-package com.sjhy.platform.persist.mysql.common;
+package com.sjhy.platform.persist.mysql.fixed;
 
-import com.sjhy.platform.client.dto.common.GiftCode;
+import com.sjhy.platform.client.dto.fixed.GiftCode;
 import org.apache.ibatis.annotations.Param;
 
 public interface GiftCodeMapper {

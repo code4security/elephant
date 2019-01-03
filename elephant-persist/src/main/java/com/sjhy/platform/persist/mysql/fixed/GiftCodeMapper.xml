@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjhy.platform.persist.mysql.common.GiftCodeMapper" >
+<mapper namespace="com.sjhy.platform.persist.mysql.fixed.GiftCodeMapper" >
 
-    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.GiftCode" >
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.fixed.GiftCode" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="gift_code" property="giftCode" jdbcType="VARCHAR" />
         <result column="gift_list_id" property="giftListId" jdbcType="INTEGER" />
@@ -24,14 +24,14 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.fixed.GiftCode" >
         insert into gift_code (id, gift_code, gift_list_id
             )
         values (#{id,jdbcType=INTEGER}, #{giftCode,jdbcType=VARCHAR}, #{giftListId,jdbcType=INTEGER}
             )
     </insert>
 
-    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.fixed.GiftCode" >
         insert into gift_code
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -57,7 +57,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.fixed.GiftCode" >
         update gift_code
         <set >
             <if test="giftCode != null" >
@@ -70,7 +70,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.GiftCode" >
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.fixed.GiftCode" >
         update gift_code
         set gift_code = #{giftCode,jdbcType=VARCHAR},
             gift_list_id = #{giftListId,jdbcType=INTEGER}

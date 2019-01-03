@@ -74,7 +74,7 @@ public class SRPServerSession
 	}
 
 	/**
-	 * Call to calculate the common session key (S/K in the docs)
+	 * Call to calculate the fixed session key (S/K in the docs)
 	 */
 	public void computeCommonValue_S()
 	{
@@ -139,9 +139,9 @@ public class SRPServerSession
 	}
 
 	/**
-	 * Returns the session common value which is the pre-hashed version of K
+	 * Returns the session fixed value which is the pre-hashed version of K
 	 * 
-	 * @return common value
+	 * @return fixed value
 	 */
 	public BigInteger getSessionCommonValue()
 	{

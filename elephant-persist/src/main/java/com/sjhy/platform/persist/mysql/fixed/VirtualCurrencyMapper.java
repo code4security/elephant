@@ -1,6 +1,6 @@
-package com.sjhy.platform.persist.mysql.common;
+package com.sjhy.platform.persist.mysql.fixed;
 
-import com.sjhy.platform.client.dto.common.VirtualCurrency;
+import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
 import org.apache.ibatis.annotations.Param;
 
 public interface VirtualCurrencyMapper {

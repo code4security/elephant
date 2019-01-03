@@ -137,9 +137,9 @@ public class SRPClientSession
 	}
 
 	/**
-	 * Returns the session common value which is the pre-hashed version of K
+	 * Returns the session fixed value which is the pre-hashed version of K
 	 * 
-	 * @return common value
+	 * @return fixed value
 	 */
 	public BigInteger getSessionCommonValue()
 	{

@@ -1,4 +1,4 @@
-package com.sjhy.platform.client.dto.common;
+package com.sjhy.platform.client.dto.fixed;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * ip记录表
+ * 游戏内虚拟货币单位信息表
  * 
  * @author HJ
  * 
@@ -16,24 +16,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class IpLocation {
+public class VirtualCurrency {
     /**
      * ID
      */
     private Integer id;
 
     /**
-     * 开始ip数
+     * 货币编号
      */
-    private Long startIpNum;
+    private String unit;
 
     /**
-     * 结束ip数
+     * 货币说明
      */
-    private Long endIpNum;
-
-    /**
-     * 标识
-     */
-    private Integer locid;
+    private String explain;
 }

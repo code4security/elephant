@@ -1,23 +1,18 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.client.dto.exception.KairoException;
 import com.sjhy.platform.client.dto.utils.UtilDate;
-import com.sjhy.platform.client.dto.common.GiftCode;
+import com.sjhy.platform.client.dto.fixed.GiftCode;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
-import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
-import com.sjhy.platform.persist.mysql.common.GiftCodeMapper;
+import com.sjhy.platform.persist.mysql.fixed.GiftCodeMapper;
 import com.sjhy.platform.persist.mysql.game.GiftCodeListMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerGiftLogMapper;
-import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.management.relation.RoleNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
 
 /**
  * @HJ

@@ -16,7 +16,7 @@ public class PersonBO {
     private PersonMapper personMapper;
 
     public String test() {
-        return "test";
+        return "test from PersonBO";
     }
 
     public Integer countPerson() {
@@ -25,6 +25,8 @@ public class PersonBO {
 
     public Person get(Long personId) {
 
-        return personMapper.get(personId);
+        Person p = personMapper.get(personId);
+
+        return p;
     }
 }

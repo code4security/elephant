@@ -1,13 +1,12 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.client.dto.common.VirtualCurrency;
+import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
 import com.sjhy.platform.client.dto.config.KairoErrorCode;
 import com.sjhy.platform.client.dto.exception.KairoException;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
-import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.utils.StringUtils;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
-import com.sjhy.platform.persist.mysql.common.VirtualCurrencyMapper;
+import com.sjhy.platform.persist.mysql.fixed.VirtualCurrencyMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 
 import javax.annotation.Resource;

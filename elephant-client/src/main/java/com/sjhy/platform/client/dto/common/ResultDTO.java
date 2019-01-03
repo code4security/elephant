@@ -16,13 +16,14 @@ public class ResultDTO<T> implements Serializable {
     protected String msg;   // 暴露客户端错误信息
     protected T result;
 
-    protected ResultDTO(){}
+    protected ResultDTO() {
+    }
 
     protected ResultDTO(boolean success, T result, String key, String innerMsg, String msg) {
         this.success = success;
         this.result = result;
         this.key = key;
-        this.innerMsg = (innerMsg != null) ? innerMsg: msg;
+        this.innerMsg = (innerMsg != null) ? innerMsg : msg;
         this.msg = msg;
     }
 

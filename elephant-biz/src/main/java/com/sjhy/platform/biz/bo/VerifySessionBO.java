@@ -82,7 +82,9 @@ public class VerifySessionBO {
         extraParams.put("verifyId", verifyId);
         extraParams.put("subChannelId", subChannelId);
         extraParams.put("gameId", gameId);
-        String channelUserId = verifySession.verify(channelId, sessionId, extraParams);
-        return channelUserId;
+        // 注释
+        // String channelUserId = verifySession.verify(channelId, sessionId, extraParams);
+        // return channelUserId;
+        return "";
     }
 }

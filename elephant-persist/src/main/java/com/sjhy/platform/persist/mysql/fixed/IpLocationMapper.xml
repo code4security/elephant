@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjhy.platform.persist.mysql.common.IpLocationMapper" >
+<mapper namespace="com.sjhy.platform.persist.mysql.fixed.IpLocationMapper" >
 
-    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.common.IpLocation" >
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.fixed.IpLocation" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="start_ip_num" property="startIpNum" jdbcType="BIGINT" />
         <result column="end_ip_num" property="endIpNum" jdbcType="BIGINT" />
@@ -25,14 +25,14 @@
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.fixed.IpLocation" >
         insert into ip_location (id, start_ip_num, end_ip_num, 
             locid)
         values (#{id,jdbcType=INTEGER}, #{startIpNum,jdbcType=BIGINT}, #{endIpNum,jdbcType=BIGINT}, 
             #{locid,jdbcType=INTEGER})
     </insert>
 
-    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.fixed.IpLocation" >
         insert into ip_location
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -64,7 +64,7 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.fixed.IpLocation" >
         update ip_location
         <set >
             <if test="startIpNum != null" >
@@ -80,7 +80,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.common.IpLocation" >
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.fixed.IpLocation" >
         update ip_location
         set start_ip_num = #{startIpNum,jdbcType=BIGINT},
             end_ip_num = #{endIpNum,jdbcType=BIGINT},

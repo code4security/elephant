@@ -1,6 +1,6 @@
-package com.sjhy.platform.persist.mysql.common;
+package com.sjhy.platform.persist.mysql.fixed;
 
-import com.sjhy.platform.client.dto.common.HarmonyWord;
+import com.sjhy.platform.client.dto.fixed.HarmonyWord;
 
 public interface HarmonyWordMapper {
     int deleteByPrimaryKey(Integer id);

@@ -205,7 +205,7 @@ public class SRPUtils
 	 * @param publicKey_B
 	 *            generated public key - B
 	 * @param commonValue_S
-	 *            the session common value - S
+	 *            the session fixed value - S
 	 * @return M(1)
 	 */
 	static BigInteger calcM1(BigInteger publicKey_A, BigInteger publicKey_B, BigInteger commonValue_S )
@@ -221,7 +221,7 @@ public class SRPUtils
 	 * @param evidenceValue_M1
 	 *            generated hash - M(1)
 	 * @param commonValue_S
-	 *            the session common value - S
+	 *            the session fixed value - S
 	 * @return M(1)
 	 */
 	static BigInteger calcM2(BigInteger publicKey_A, BigInteger evidenceValue_M1, BigInteger commonValue_S )
