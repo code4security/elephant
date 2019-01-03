@@ -29,9 +29,4 @@ public class PersonServiceImpl implements PersonService {
 
         return ResultDTO.getSuccessResult(personBO.get(personId));
     }
-
-    @Override
-    public Person get(Integer personId) {
-        return null;
-    }
 }
