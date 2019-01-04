@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjhy.platform.persist.mysql.game.ChannelPayParameterMapper" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.GameChannelSettingMapper" >
 
-    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.GameChannelSetting" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="game_id" property="gameId" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
@@ -31,17 +31,17 @@
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
         select 
         <include refid="Base_Column_List" />
-        from channel_pay_parameter
+        from game_channel_setting
         where id = #{id,jdbcType=INTEGER}
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-        delete from channel_pay_parameter
+        delete from game_channel_setting
         where id = #{id,jdbcType=INTEGER}
     </delete>
 
-    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
-        insert into channel_pay_parameter (id, game_id, channel_id, 
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
+        insert into game_channel_setting (id, game_id, channel_id, 
             sub_channel_id, os, app_key, 
             app_secret, app_id, public_key, 
             private_key, pay_public_key, pay_private_key, 
@@ -55,8 +55,8 @@
             #{payKey,jdbcType=VARCHAR}, #{notifyUrl,jdbcType=VARCHAR})
     </insert>
 
-    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
-        insert into channel_pay_parameter
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
+        insert into game_channel_setting
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 id,
@@ -165,8 +165,8 @@
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
-        update channel_pay_parameter
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
+        update game_channel_setting
         <set >
             <if test="gameId != null" >
                 game_id = #{gameId,jdbcType=VARCHAR},
@@ -220,8 +220,8 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
-        update channel_pay_parameter
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
+        update game_channel_setting
         set game_id = #{gameId,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
             sub_channel_id = #{subChannelId,jdbcType=INTEGER},
@@ -241,11 +241,23 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <select id="selectByPrimaryKey" resultMap="java.lang.Integer" parameterType="com.sjhy.platform.client.dto.game.ChannelPayParameter" >
+    <!-- 查询子渠道 -->
+    <select id="selectBySubId" resultMap="java.lang.Integer" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
         select
         sub_channel_id
-        from channel_pay_parameter
+        from game_channel_setting
         where game_id = #{gameId,jdbcType=VARCHAR}
         AND channel_id = #{channelId,jdbcType=VARCHAR}
     </select>
+
+    <!-- 验证子渠道是否存在 -->
+    <select id="verifySubId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
+        select
+        <include refid="Base_Column_List" />
+        from game_channel_setting
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and channel_id = #{channelId,jdbcType=VARCHAR}
+        and sub_channel_id = #{subChannelId,jdbcType=INTEGER}
+    </select>
+
 </mapper>

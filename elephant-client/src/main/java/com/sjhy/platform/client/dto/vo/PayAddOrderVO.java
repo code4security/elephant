@@ -21,7 +21,7 @@ public class PayAddOrderVO {
 	private int channel;
 	private String gameId;
 	private String remark;
-	private String publishChannel;
+	private String ChannelId;
 	
 	private String pf;
 	private String pfkey;

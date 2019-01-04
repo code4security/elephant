@@ -4,5 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <import resource="classpath:spring/springbeans-dubbo-provider.xml"/>
+    <import resource="applicationContext-service-context.xml" />
 
 </beans>

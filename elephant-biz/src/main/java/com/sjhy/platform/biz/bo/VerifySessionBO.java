@@ -1,7 +1,9 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.biz.verify.IVerifySession;
 import com.sjhy.platform.client.dto.exception.ChannelIDErrorException;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
+import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import org.apache.log4j.Logger;
 
@@ -14,6 +16,7 @@ public class VerifySessionBO {
     @Resource
     private ChannelAndVersionMapper channelAndVersionMapper;
 
+    private static Map<String, GameChannelSetting> C_Game_Channel_Setting = new HashMap<String, GameChannelSetting>();
     /**
      * 验证会话服务
      * @param gameId
@@ -72,19 +75,24 @@ public class VerifySessionBO {
         channelAndVersion.setChannelId(channelId);
         channelAndVersion.setGameId(gameId);
         channelAndVersion = channelAndVersionMapper.verifyChannel(channelAndVersion);
+
+        IVerifySession verifySession = (IVerifySession)GetBeanHelper.getApplicationContext().getBean(channelId.toString());
+
         // 验证渠道是否存在
         if (channelAndVersion == null){
             logger.error("渠道验证错误。。。，请检查渠道["+channelId+"]配置");
-
             throw new ChannelIDErrorException();
         }
         Map<String, Object> extraParams = new HashMap<String, Object>();
         extraParams.put("verifyId", verifyId);
         extraParams.put("subChannelId", subChannelId);
         extraParams.put("gameId", gameId);
-        // 注释
-        // String channelUserId = verifySession.verify(channelId, sessionId, extraParams);
-        // return channelUserId;
-        return "";
+
+        String channelUserId = verifySession.verify(channelId, sessionId, extraParams);
+        return channelUserId;
+    }
+
+    public static GameChannelSetting getGameChannelSetting(String gameId, String channelId){
+        return C_Game_Channel_Setting.get(gameId + "_" + channelId);
     }
 }

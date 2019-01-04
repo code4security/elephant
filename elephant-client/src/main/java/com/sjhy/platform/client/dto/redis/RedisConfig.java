@@ -48,7 +48,6 @@ public class RedisConfig extends CachingConfigurerSupport {
     /**
      * 管理缓存
      */
-    @Bean
     public CacheManager cacheManager(RedisTemplate redisTemplate) {
         RedisCacheManager rcm = RedisCacheManager.create((RedisConnectionFactory) redisTemplate);
         return rcm;

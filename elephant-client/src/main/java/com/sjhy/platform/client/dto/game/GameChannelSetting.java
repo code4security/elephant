@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChannelPayParameter {
+public class GameChannelSetting {
     /**
      * ID
      */
