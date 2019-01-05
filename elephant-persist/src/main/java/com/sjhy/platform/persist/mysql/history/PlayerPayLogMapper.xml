@@ -158,4 +158,38 @@
             order_id = #{orderId,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <!-- 查询玩家支付订单 -->
+    <select id="selectByPayLog" resultMap="java.util.List" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_pay_log
+        where role_id = #{roleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询玩家买过解锁内容 -->
+    <select id="selectByOpen" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_pay_log
+        where goods_name BETWEEN open_one_0 and open_two_1
+        and role_id = #{roleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询玩家是否购买过商品 -->
+    <select id="selectByGood" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_pay_log
+        where goods_name = #{goodsName,jdbcType=VARCHAR}
+        and role_id = #{roleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="countByPlayerPayLog" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" resultType="java.lang.Integer">
+        select count(*) from player_pay_log
+    </select>
+
 </mapper>

@@ -26,4 +26,7 @@ public class PayNotifyVO {
 	private String channelId;// 渠道Id
 	private String goodsName;// 商品注册Id
 	private float rmb;
+
+	// sendNotify使用
+	private Long roleId;
 }

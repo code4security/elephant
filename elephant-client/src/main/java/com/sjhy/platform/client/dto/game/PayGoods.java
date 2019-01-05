@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * 游戏商店中展示的商品表
  * 
@@ -56,4 +58,14 @@ public class PayGoods {
      * 商品说明
      */
     private String goodsDes;
+
+    /**
+     * 折扣开始时间
+     */
+    private Date discountBegin;
+
+    /**
+     * 折扣结束时间
+     */
+    private Date discountEnd;
 }

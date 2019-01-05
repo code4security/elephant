@@ -1,18 +1,27 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.dto.config.KairoErrorCode;
+import com.sjhy.platform.client.dto.exception.KairoException;
+import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
+import com.sjhy.platform.client.dto.utils.StringUtils;
 import com.sjhy.platform.client.dto.utils.UtilDate;
 import com.sjhy.platform.client.dto.fixed.GiftCode;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
+import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.persist.mysql.fixed.GiftCodeMapper;
+import com.sjhy.platform.persist.mysql.fixed.VirtualCurrencyMapper;
 import com.sjhy.platform.persist.mysql.game.GiftCodeListMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerGiftLogMapper;
+import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.management.relation.RoleNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 
 /**
  * @HJ
@@ -26,6 +35,12 @@ public class GiftCodeBO {
     private GiftCodeMapper giftCodeMapper;
     @Resource
     private GiftCodeListMapper giftCodeListMapper;
+    @Resource
+    private PlayerRoleMapper playerRoleMapper;
+    @Resource
+    private GiftCodeBO giftCodeBO;
+    @Resource
+    private VirtualCurrencyMapper virtualCurrencyMapper;
 
     /**
      * 查询是否使用过激活码
@@ -243,5 +258,59 @@ public class GiftCodeBO {
         playerGiftLog.setGiftListId(giftListId);
 
         return playerGiftLogMapper.insert(playerGiftLog);
+    }
+
+    /**
+     * 兑换码兑换逻辑
+     * @param roleId
+     * @param redeemCode
+     * @throws RoleNotFoundException
+     * @throws KairoException
+     */
+    public LinkedHashMap<Integer, Integer> redeemCodeExchange(long roleId, String redeemCode, String gameId) throws RoleNotFoundException, KairoException {
+        // 玩家信息取得
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        if(role == null) {
+            throw new RoleNotFoundException();
+        }
+
+        // 判断兑换码是否已被使用
+        GiftCodeList giftCodeList = giftCodeBO.isValidRedeemCode(redeemCode, role.getChannelId(), role.getGameId(), roleId);
+        if(giftCodeList == null){
+            throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
+        }
+
+        if(StringUtils.isBlank(giftCodeList.getGiftRewardId())) {
+            throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
+        }
+
+        // 检查同一批次是否已使用过
+        if(giftCodeBO.isUseForRedeemLot(roleId, giftCodeList.getId(), gameId) != null) {
+            throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
+        }
+
+        String goodsInfo  = giftCodeList.getGiftRewardId();
+
+        String[] goods    = goodsInfo.split(",");
+        String[] goodInfo = null;
+
+        LinkedHashMap<Integer, Integer> goodsMap = new LinkedHashMap<Integer, Integer>();
+
+        for(String good : goods) {
+            goodInfo = good.split(":");
+
+            if(goodInfo.length > 1) {
+                // goodId是否有效
+                VirtualCurrency unit = virtualCurrencyMapper.selectByUnit(goodInfo[0]);
+                if(unit != null) {
+                    goodsMap.put(StringUtils.getInt(goodInfo[0]), StringUtils.getInt(goodInfo[1]));
+                }
+            }
+        }
+
+        // 更新兑换码
+        giftCodeBO.redeemCode(redeemCode, role.getGameId(), role.getPlayerId(), roleId, role.getChannelId(), giftCodeList.getId());
+
+        return goodsMap;
     }
 }
