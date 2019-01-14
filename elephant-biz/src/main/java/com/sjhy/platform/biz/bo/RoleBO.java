@@ -2,6 +2,7 @@ package com.sjhy.platform.biz.bo;
 
 import com.sjhy.platform.client.dto.config.AppConfig;
 import com.sjhy.platform.client.dto.exception.*;
+import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.client.dto.utils.StringUtils;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.game.Game;
@@ -17,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
-
-import static java.lang.System.getProperty;
 
 @Service
 public class RoleBO {
@@ -136,7 +135,7 @@ public class RoleBO {
         record.setLastLoginTime(Calendar.getInstance().getTime());
         // 上传最后一次登录的服务器ID（修改，待验证）
         if("".equals(ServerID)){
-            ServerID = getProperty(AppConfig.SERVER_ID, "");
+            ServerID = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
         }
         record.setLastLoginServer(StringUtils.getInt(ServerID));
         playerRoleMapper.updateByPrimaryKeySelective(record);

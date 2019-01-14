@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.sjhy.platform.biz.bo.GetBeanHelper;
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.config.AppConfig;
 import com.sjhy.platform.client.dto.enumerate.SubChannelEnum;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
+import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.client.dto.utils.HttpUtil;
 import com.sjhy.platform.client.dto.utils.MD5Util;
 import com.sjhy.platform.client.dto.utils.StringUtils;

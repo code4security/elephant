@@ -4,6 +4,7 @@ import com.sjhy.platform.biz.verify.IVerifySession;
 import com.sjhy.platform.client.dto.exception.ChannelIDErrorException;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
+import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import org.apache.log4j.Logger;
 

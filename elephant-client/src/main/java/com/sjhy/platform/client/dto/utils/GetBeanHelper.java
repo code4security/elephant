@@ -1,9 +1,9 @@
-package com.sjhy.platform.biz.bo;
-
-import java.util.Properties;
+package com.sjhy.platform.client.dto.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
+
+import java.util.Properties;
 
 /**
  * 从Spring中获取非单例的对象(代替new)

@@ -3,6 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="serverConfig" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location" value="classpath:server.properties" />
+    </bean>
+
     <import resource="classpath:spring/springbeans-dubbo-provider.xml"/>
     <import resource="applicationContext-service-context.xml" />
 

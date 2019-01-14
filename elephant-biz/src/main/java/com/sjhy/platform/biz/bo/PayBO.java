@@ -17,6 +17,7 @@ import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.game.Server;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
 import com.sjhy.platform.client.dto.player.PlayerChannel;
+import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.client.dto.utils.HashKit;
 import com.sjhy.platform.client.dto.utils.MD5Util;
 import com.sjhy.platform.client.dto.utils.StringUtils;

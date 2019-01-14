@@ -4,10 +4,10 @@ import java.util.Properties;
 
 //import javax.annotation.Resource;
 
-import com.sjhy.platform.biz.bo.GetBeanHelper;
 import com.sjhy.platform.client.dto.config.AppConfig;
 import com.sjhy.platform.client.dto.config.GamePayConfig;
 import com.sjhy.platform.client.dto.utils.DESUtil;
+import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.client.dto.utils.HttpUtil;
 import com.sjhy.platform.client.dto.utils.MD5Util;
 import org.apache.log4j.Logger;
