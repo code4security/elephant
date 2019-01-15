@@ -67,66 +67,9 @@ public class PayBO {
     private AddTxOrderGPProxy addTxOrderGPProxy;
     @Resource
     private AddVivoOrderGPProxy addVivoOrderGPProxy;
-    @Resource
-    private PayNotifyVO payNotifyVO;
 
     private final String OFFLINE_GOOGS_ID_1 = "open_one_0";
     private final String OFFLINE_GOOGS_ID_2 = "open_two_1";
-
-    /**
-     * 兑换礼品码兑换逻辑
-     * @param roleId
-     * @param redeemCode
-     * @return
-     * @throws RoleNotFoundException
-     * @throws KairoException
-     */
-    public LinkedHashMap<Integer, Integer> redeemCodeExchange(long roleId, String gameId, String redeemCode) throws RoleNotFoundException, KairoException {
-        // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId, roleId);
-        if(role == null) {
-            throw new RoleNotFoundException();
-        }
-
-        // 判断兑换码是否已被使用
-        GiftCodeList giftCodeList = giftCodeBO.isValidRedeemCode(redeemCode, role.getChannelId(), role.getGameId(), roleId);
-        if(giftCodeList == null){
-            throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
-        }
-
-        if(StringUtils.isBlank(giftCodeList.getGiftRewardId())) {
-            throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
-        }
-
-        // 检查同一批次是否已使用过
-        if(giftCodeBO.isUseForRedeemLot(roleId, giftCodeList.getId(),gameId) != null) {
-            throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
-        }
-
-        String goodsInfo = giftCodeList.getGiftRewardId();
-
-        String[] goods = goodsInfo.split(",");
-        String[] goodInfo = null;
-
-        LinkedHashMap<Integer, Integer> goodsMap = new LinkedHashMap<Integer, Integer>();
-
-        for(String good : goods) {
-            goodInfo = good.split(":");
-
-            if(goodInfo.length > 1) {
-                // goodId是否有效
-                VirtualCurrency virtualCurrency = virtualCurrencyMapper.selectByUnit(StringUtils.getString(goodInfo[0]));
-                if(virtualCurrency != null) {
-                    goodsMap.put(StringUtils.getInt(goodInfo[0]), StringUtils.getInt(goodInfo[1]));
-                }
-            }
-        }
-
-        // 更新兑换码
-        giftCodeBO.redeemCode(redeemCode, role.getGameId(), role.getPlayerId(), roleId, role.getChannelId(), giftCodeList.getId());
-
-        return goodsMap;
-    }
 
     /**
      * 应用宝渠道
@@ -1000,10 +943,10 @@ public class PayBO {
      * @param orderId
      * @param gameId
      * @param channelId
-     * @param createTiem
+     * @param createTime
      * @return
      */
-    public String getMzPaySign(PayGoods goods, String orderId, String gameId, String channelId, long createTiem) {
+    public String getMzPaySign(PayGoods goods, String orderId, String gameId, String channelId, long createTime) {
         GameChannelSetting gameChannelSetting = VerifySessionBO.getGameChannelSetting(gameId, channelId);
 
         if(gameChannelSetting == null) {
@@ -1019,7 +962,7 @@ public class PayBO {
 
         builder.append("app_id" + equalStr + gameChannelSetting.getAppId() + andStr);
         builder.append("cp_order_id" + equalStr + orderId + andStr);
-        builder.append("create_time" + equalStr + createTiem + andStr);
+        builder.append("create_time" + equalStr + createTime + andStr);
         builder.append("pay_type" + equalStr + "0" + andStr);
 
         builder.append("product_body" + equalStr + goods.getGoodsDes() + andStr);

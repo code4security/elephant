@@ -19,4 +19,5 @@ public interface PlayerService {
 
     // 创建渠道用户id
     ResultDTO createPlayer(ServiceContext sc);
+
 }
