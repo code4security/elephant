@@ -8,6 +8,7 @@
     </bean>
 
     <import resource="classpath:spring/springbeans-dubbo-provider.xml"/>
+    <import resource="applicationContext-json-context.xml" />
     <import resource="applicationContext-service-context.xml" />
 
 </beans>

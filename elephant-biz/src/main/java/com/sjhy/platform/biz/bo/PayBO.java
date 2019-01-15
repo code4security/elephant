@@ -16,7 +16,6 @@ import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.game.Server;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
-import com.sjhy.platform.client.dto.player.PlayerChannel;
 import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.client.dto.utils.HashKit;
 import com.sjhy.platform.client.dto.utils.MD5Util;
@@ -56,8 +55,6 @@ public class PayBO {
     private ServerMapper serverMapper;
     @Resource
     private AddYYBOrderGPProxy addYYBOrderGPProxy;
-    @Resource
-    private AbstractGamePayProxy abstractGamePayProxy;
     @Resource
     private AddJinliOrderGPProxy addJinliOrderGPProxy;
     @Resource

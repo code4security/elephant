@@ -2,18 +2,38 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:util="http://www.springframework.org/schema/util"
 		xmlns:aop="http://www.springframework.org/schema/aop"
 		xmlns:task="http://www.springframework.org/schema/task"
 		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+				http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
 				http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
 				http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"			
 		default-autowire="byName" default-lazy-init="true">
-		
-	<!-- ******************************************************************** -->
-	<!-- This context file was generated and is not intended to be changed manually. -->
-	<!-- ******************************************************************** -->
-	<!-- 几乎每个项目都会用到的json解析 -->
-	<bean id="jacksonObjectMapper" class="org.codehaus.jackson.map.ObjectMapper" scope="singleton"/>
+
+	<!-- 商务逻辑处理BEAN,在类里加上 @Service("ApkInfoService") 的声明  -->
+	<context:component-scan base-package="com.sjhy.platform.biz" />
+	<context:component-scan base-package="com.sjhy.platform.client.dto.utils" />
 	
+	<!-- 线程池,自带定时执行的线程池 -->
+	<!-- <bean id="threadPoolManager" class="com.kairo.commons.utils.ThreadPoolManager" scope="singleton" /> -->
+	
+	<!-- 为了给每一个Channel通道创建一个新的Handler实例，我们需要实现一个ChannelPipelineFactory管道工厂 -->
+	<!--<bean id="gameServerPipeLineFactory" class="com.kairo.gameserver.network.GameServerPipeLineFactory" scope="singleton" />-->
+	<!-- 
+	<bean id="gameServerChannelHandler" class="com.kairo.gameserver.network.GameServerChannelHandler" scope="prototype" >
+		<constructor-arg index="0" ref="gameServerPacketHandlerFactory" />
+	</bean>
+	<bean id="gameServerPacketHandlerFactory" class="com.kairo.gameserver.network.GameServerPacketHandlerFactory" scope="prototype" init-method="init"/>
+	-->
+
+	<!-- ChannelGroup是Java 集合 API的一个特有扩展，ChannelGroup内部持有所有打开状态的Channel通道。 -->
+	<!-- 如果一个Channel通道对象被加入到ChannelGroup，如果这个Channel通道被关闭，ChannelGroup将自动移除这个关闭的Channel通道对象。 -->
+	<!-- 此外，你还可以对一个ChannelGroup对象内部的所有Channel通道对象执行相同的操作。 -->
+	<!-- 例如，当你关闭服务端应用时你可以关闭一个ChannelGroup内部的所有Channel通道对象。 -->
+	<bean id="channelGroup" class="org.jboss.netty.channel.group.DefaultChannelGroup" scope="singleton">
+		<constructor-arg index="0" value="KairoGameServer" />
+	</bean>
+
 </beans>

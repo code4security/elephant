@@ -1,6 +1,5 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.client.dto.config.KairoErrorCode;
 import com.sjhy.platform.client.dto.enumerate.MailTypeEnum;
 import com.sjhy.platform.client.dto.exception.MailItemErrorException;
 import com.sjhy.platform.client.dto.exception.MailNotBelongThisRoleException;
