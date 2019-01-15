@@ -210,10 +210,10 @@ public class LoginBO {
             }
 
             // 使用sessionVO.AccountName中保存的设备唯一标识建立账号
-            Player player = playerBO.createNewPlayerByCooperate(channelId, sessionVO.deviceUniquelyId, sc.getServerId(), "", ip, sc.getGameId());
+            Player player = playerBO.createNewPlayerByCooperate(sc, sessionVO.deviceUniquelyId, "", ip);
             playerId = player.getPlayerId();
 
-            playerBO.createPlayer(sessionVO.channelId, sessionVO.channelUserId, player.getPlayerId(),sc.getGameId());
+            playerBO.createPlayer(sc);
 
             //缓存（注释）
             // channelUserMgr.update(sessionVO.CooperateId, playerId, gameId);
@@ -402,7 +402,7 @@ public class LoginBO {
             throw new KairoException(KairoErrorCode.ERROR_IS_BANED);
         }
         // 3.更新登录时间
-        roleBO.updateLastLoginTime(playerRoleVo.getRoleId());
+        roleBO.updateLastLoginTime(sc);
         // 缓存（注释）
         // playerRoleService.removeInCache(playerRoleVO.getRoleId());
         // 5.埋点（注释）

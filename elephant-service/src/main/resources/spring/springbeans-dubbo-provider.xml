@@ -35,5 +35,15 @@
 
     <!-- declare the service interface to be exported -->
     <dubbo:service interface="com.sjhy.platform.client.service.test.PersonService" ref="personService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.LoginService" ref="loginService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.GameService" ref="gameService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.GiftCodeService" ref="giftCodeService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.MailService" ref="mailService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.OssService" ref="ossService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.PayService" ref="payService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.PlayerService" ref="playerService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.RoleService" ref="roleService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.ServerHistoryService" ref="serverHistoryService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.VerifySessionService" ref="verifySessionService"/>
 
 </beans>
