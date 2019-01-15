@@ -1,5 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.enumerate.MailTypeEnum;
 import com.sjhy.platform.client.dto.exception.MailItemErrorException;
 import com.sjhy.platform.client.dto.exception.MailNotBelongThisRoleException;
@@ -33,14 +34,15 @@ public class MailBO {
 
     /**
      * 删除邮件
-     * @param roleId
      * @param mailId
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public void deleteMail(long roleId, int mailId) {
+    public void deleteMail(ServiceContext sc, int mailId) {
         Mail deleteMail = new Mail();
 
         deleteMail.setId(mailId);
+        deleteMail.setGameId(sc.getGameId());
+        deleteMail.setRecvRoleId(sc.getRoleId());
         deleteMail.setStatus(true);
 
         mailMapper.updateByPrimaryKeySelective(deleteMail);
@@ -48,7 +50,6 @@ public class MailBO {
 
     /**
      * 获取邮件物品
-     * @param roleId
      * @param mailId
      * @param doType
      * @return
@@ -57,16 +58,16 @@ public class MailBO {
      * @throws MailItemErrorException
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public List<AddItemToPackVO> getMailItem(long roleId, int mailId, int doType, String gameId) throws NoSuchRoleException, MailNotBelongThisRoleException, MailItemErrorException
+    public List<AddItemToPackVO> getMailItem(ServiceContext sc, int mailId, int doType) throws NoSuchRoleException, MailNotBelongThisRoleException, MailItemErrorException
     {
-        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId); // 角色基本信息
+        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId()); // 角色基本信息
         if (playerRoleVO == null) {
             throw new NoSuchRoleException();
         }
 
         List<AddItemToPackVO> goods = new ArrayList<AddItemToPackVO>();
 
-        Mail mail = mailMapper.selectByMailId(mailId,gameId);
+        Mail mail = mailMapper.selectByMailId(mailId,sc.getGameId());
         if(mail == null){
             logger.error("This mail["+mailId+"] is not exist");
             return goods;
@@ -75,7 +76,7 @@ public class MailBO {
         }
 
         long recvRoleId = mail.getRecvRoleId();
-        if (recvRoleId != roleId) {
+        if (recvRoleId != sc.getRoleId()) {
             throw new MailNotBelongThisRoleException();
         }
 
@@ -93,7 +94,7 @@ public class MailBO {
             }
         }else if(doType == 2) {
             // 删除邮件
-            deleteMail(roleId, mailId);
+            deleteMail(sc, mailId);
 
             // 通知客户端（注释）
             /*GS2C_Mail_Delete_Res.Builder resBuilder = GS2C_Mail_Delete_Res.newBuilder();
@@ -106,19 +107,17 @@ public class MailBO {
 
     /**
      * 查询最新邮件数量
-     * @param roleId
-     * @Param gameId
      * @return
      * @throws NoSuchRoleException
      */
-    public int getNewMailNum(long roleId, String gameId) throws NoSuchRoleException {
-        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId); // 角色基本信息
+    public int getNewMailNum(ServiceContext sc) throws NoSuchRoleException {
+        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId()); // 角色基本信息
         if (playerRoleVO == null) {
             throw new NoSuchRoleException();
         }
         Mail mail = new Mail();
-        mail.setRecvRoleId(roleId);
-        mail.setGameId(gameId);
+        mail.setRecvRoleId(sc.getRoleId());
+        mail.setGameId(sc.getGameId());
         int newMailNum = mailMapper.selcetByRoleMail(mail);
 
         return newMailNum;
@@ -126,15 +125,14 @@ public class MailBO {
 
     /**
      * 获取邮件列表
-     * @param roleId
      * @param from
      * @param to
      * @return
      * @throws NoSuchRoleException
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public List<MailVO> getMailList(long roleId, String gameId, int from, int to) throws NoSuchRoleException {
-        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+    public List<MailVO> getMailList(ServiceContext sc, int from, int to) throws NoSuchRoleException {
+        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
 
         // 玩家是否存在验证
         if (playerRoleVO == null) {
@@ -142,8 +140,8 @@ public class MailBO {
         }
 
         Mail mails = new Mail();
-        mails.setGameId(gameId);
-        mails.setRecvRoleId(roleId);
+        mails.setGameId(sc.getGameId());
+        mails.setRecvRoleId(sc.getRoleId());
         List<Mail> roleMailList = mailMapper.selectByRoleId(mails, from, 30);
 
         List<MailVO> roleMailVOList = new ArrayList<MailVO>();

@@ -22,7 +22,7 @@ public interface LoginService {
     ResultDTO<ChannelAndVersionVO> checkChannelAndVersion(ServiceContext sc, String versionNum);
 
     // 确认登录服务器
-    ResultDTO<LoginVO> confirmServer(String ip, String activationCode);
+    ResultDTO<LoginVO> confirmServer(ServiceContext sc, String ip, String activationCode);
 
     // 验证角色登陆，返回角色基本信息
     ResultDTO<PlayerRoleVO> enterGame(ServiceContext sc, int deviceModel, String deviceToken);

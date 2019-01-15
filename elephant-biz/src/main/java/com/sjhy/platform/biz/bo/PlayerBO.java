@@ -1,5 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.config.ProtocolKey;
 import com.sjhy.platform.client.dto.exception.AccountAlreadyBindingOtherException;
 import com.sjhy.platform.client.dto.exception.NotExistAccountException;
@@ -46,36 +47,33 @@ public class PlayerBO {
 
     /**
      * 获取渠道验证
-     * @param channelId
-     * @param channelUserID
      * @param deviceUniqueID
-     * @param gameId
      * @return
      * @throws AccountAlreadyBindingOtherException
      * @throws NotExistAccountException
      */
-    public AccountVO getAccount(String channelId, String channelUserID, String deviceUniqueID, String gameId)
+    public AccountVO getAccount(ServiceContext sc, String deviceUniqueID)
             throws AccountAlreadyBindingOtherException, NotExistAccountException
     {
         AccountVO account = new AccountVO();
 
         ChannelAndVersion channelAndVersion = new ChannelAndVersion();
-        channelAndVersion.setChannelId(channelId);
-        channelAndVersion.setGameId(gameId);
+        channelAndVersion.setChannelId(sc.getChannelId());
+        channelAndVersion.setGameId(sc.getGameId());
 
         ChannelAndVersion channelAndVersion1 = channelAndVersionMapper.verifyChannel(channelAndVersion);
         if (channelAndVersion1 != null){
             //根据传入的账号ID查询玩家91绑定关系表
             PlayerChannel playChannel = new PlayerChannel();
-            playChannel.setGameId(gameId);
-            playChannel.setChannelId(channelId);
-            playChannel.setChannelUserId(channelUserID);
+            playChannel.setGameId(sc.getGameId());
+            playChannel.setChannelId(sc.getChannelId());
+            playChannel.setChannelUserId(sc.getChannelUserId());
 
             PlayerChannel playerChannel = playerChannelMapper.selectByChannelUserId(playChannel);
 
             if ( playerChannel != null ) {
                 Player play = new Player();
-                play.setChannelId(channelId);
+                play.setChannelId(sc.getChannelId());
                 play.setPlayerId(playerChannel.getPlayerId());
 
                 Player player = playerMapper.selectByPlayerId(play);
@@ -95,8 +93,8 @@ public class PlayerBO {
                         + deviceUniqueID.substring(1, 4)));
             }
 
-            account.setChUserId(channelUserID);
-            account.setChannelId(channelId);
+            account.setChUserId(sc.getChannelUserId());
+            account.setChannelId(sc.getChannelId());
         }
         return account;
     }
@@ -112,26 +110,24 @@ public class PlayerBO {
 
     /**
      * 根据玩家唯一标示创建玩家id
-     * @param channelId
      * @param deviceUniquelyId
-     * @param serverId
      * @param deviceModel
      * @param ip
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public Player createNewPlayerByCooperate(String channelId, String deviceUniquelyId, Integer serverId, String deviceModel, String ip, String gameId) {
+    public Player createNewPlayerByCooperate(ServiceContext sc, String deviceUniquelyId, String deviceModel, String ip) {
         // 需要更新的信息
         Date now = Calendar.getInstance().getTime();
         Date zero = new Date(0);
 
         Player player = new Player();
 
-        player.setServerId(serverId); // Server_ID(最后一次登陆的服务器id,如果是第一次的话分配一个推荐的服务器)
+        player.setServerId(sc.getServerId()); // Server_ID(最后一次登陆的服务器id,如果是第一次的话分配一个推荐的服务器)
         player.setDeviceModel(deviceModel); // 硬件类型信息
         player.setDeviceUniquelyId(deviceUniquelyId); // 设备唯一标识(暂定IMEI+MAC与苹果id)
-        player.setChannelId(channelId); // 绑定类型(null则未绑定)
-        player.setGameId(gameId); // 绑定游戏id
+        player.setChannelId(sc.getChannelId()); // 绑定类型(null则未绑定)
+        player.setGameId(sc.getGameId()); // 绑定游戏id
 
         player.setFirstLoginTime(now); // 首次登录时间
         player.setFirstLoginIp(ip); // 首次登录IP
@@ -152,30 +148,26 @@ public class PlayerBO {
 
     /**
      * 创建渠道用户id
-     * @param channelId
-     * @param channelUserId
-     * @param playerId
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public void createPlayer(String channelId, String channelUserId, long playerId,String gameId) {
+    public void createPlayer(ServiceContext sc) {
 
         PlayerChannel playerChannel = new PlayerChannel();
-        playerChannel.setChannelId(channelId);
-        playerChannel.setGameId(gameId);
-        playerChannel.setChannelUserId(channelUserId);
-        playerChannel.setPlayerId(playerId);
+        playerChannel.setChannelId(sc.getChannelId());
+        playerChannel.setGameId(sc.getGameId());
+        playerChannel.setChannelUserId(sc.getChannelUserId());
+        playerChannel.setPlayerId(sc.getPlayerId());
 
         playerChannelMapper.insert(playerChannel);
     }
 
     /**
      * 验证是否需要激活码
-     * @param gameid
      * @return
      */
-    public boolean checkModule(String gameid,String moduleName){
+    public boolean checkModule(ServiceContext sc,String moduleName){
         ModuleSwitch switchs = new ModuleSwitch();
-        switchs.setGameId(gameid);
+        switchs.setGameId(sc.getGameId());
         switchs.setModuleName(moduleName);
 
         ModuleSwitch mod = moduleSwitchMapper.selectByModule(switchs);

@@ -1,5 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
@@ -38,15 +39,13 @@ public class GameBO {
 
     /**
      * 封停或解封角色
-     * @param roleId
-     * @param gameId
      * @param banType
      * @param minute
      * @return
      */
-    public int banPlayer(long roleId, String gameId, String banType, int minute){
+    public int banPlayer(ServiceContext sc, String banType, int minute){
         // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(sc.getGameId(),sc.getRoleId());
         if(role == null){// 玩家不存在
             return -1;
         }
@@ -74,8 +73,8 @@ public class GameBO {
             playerBanList.setBanMinute(minute);
             playerBanList.setBanTime(Calendar.getInstance().getTime());
             playerBanList.setIsBan(true);
-            playerBanList.setRoleId(roleId);
-            playerBanList.setGameId(gameId);
+            playerBanList.setRoleId(sc.getRoleId());
+            playerBanList.setGameId(sc.getGameId());
             playerBanList.setChannelId(role.getChannelId());
 
             // 如果玩家在线踢出玩家（注释）

@@ -18,7 +18,7 @@ public class ServiceContext implements Serializable {
     // 玩家id
     private Long playerId;
     // 渠道用户id
-    private Long channelUserId;
+    private String channelUserId;
     // 服务器id
     private int serverId;
 }

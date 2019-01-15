@@ -11,6 +11,7 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.config.AppConfig;
 import com.sjhy.platform.client.dto.config.KairoErrorCode;
 import com.sjhy.platform.client.dto.exception.*;
@@ -31,6 +32,9 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @HJ
+ */
 public class OssBO {
     private static Logger logger = Logger.getLogger(OssBO.class);
 
@@ -72,17 +76,16 @@ public class OssBO {
 
     /**
      * 删除oss文件
-     * @param roleId
      * @param operateId
      */
-    public void delBucketObjkey(long roleId, int operateId, String gameId){
+    public void delBucketObjkey(ServiceContext sc, int operateId){
         // 删除文件信息
-        PlayerGameOss playerGameOss = playerGameOssMapper.selectByGameKey(operateId,gameId);
+        PlayerGameOss playerGameOss = playerGameOssMapper.selectByGameKey(operateId,sc.getGameId());
         if(playerGameOss == null){
             return;
         }
         // 异常情况处理
-        if(playerGameOss.getRoleId() != roleId){
+        if(playerGameOss.getRoleId() != sc.getRoleId()){
             return;
         }
         // 更新状态
@@ -96,39 +99,38 @@ public class OssBO {
 
     /**
      * 获取oss文件Bucketkeys
-     * @param roleId
      * @param keyType
      * @return
      * @throws OssBucketkeyException
      * @throws NoSuchRoleException
      */
-    public List<AliOssAccessKeyVO> getBucketkeys(long roleId, String gameId, int keyType) throws OssBucketkeyException, NoSuchRoleException {
+    public List<AliOssAccessKeyVO> getBucketkeys(ServiceContext sc, int keyType) throws OssBucketkeyException, NoSuchRoleException {
         List<AliOssAccessKeyVO> accessKeys = new ArrayList<AliOssAccessKeyVO>();
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
         if(role == null){
-            throw new NoSuchRoleException("指定的玩家不存在,roleId="+roleId);
+            throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
         if(1 == keyType){
-            AliOssAccessKeyVO accessKey = getOssStsToken(roleId, role.getGameId(), "read", role.getChannelId());
+            AliOssAccessKeyVO accessKey = getOssStsToken(sc.getRoleId(), role.getGameId(), "read", role.getChannelId());
             if(accessKey == null){
                 throw new OssBucketkeyException("read key error");
             }
             accessKeys.add(accessKey);
         }else if(2 == keyType){
-            AliOssAccessKeyVO accessKey = getOssStsToken(roleId, role.getGameId(), "write", role.getChannelId());
+            AliOssAccessKeyVO accessKey = getOssStsToken(sc.getRoleId(), role.getGameId(), "write", role.getChannelId());
             if(accessKey == null){
                 throw new OssBucketkeyException("write key error");
             }
             accessKeys.add(accessKey);
         }else if(-1 == keyType){
-            AliOssAccessKeyVO accessReadKey = getOssStsToken(roleId, role.getGameId(), "read", role.getChannelId());
+            AliOssAccessKeyVO accessReadKey = getOssStsToken(sc.getRoleId(), role.getGameId(), "read", role.getChannelId());
 
             if(accessReadKey == null){
                 throw new OssBucketkeyException("read key error");
             }
             accessKeys.add(accessReadKey);
-            AliOssAccessKeyVO accessWriteKey = getOssStsToken(roleId, role.getGameId(), "write", role.getChannelId());
+            AliOssAccessKeyVO accessWriteKey = getOssStsToken(sc.getRoleId(), role.getGameId(), "write", role.getChannelId());
             // still null
             if(accessWriteKey == null){
                 throw new OssBucketkeyException("write key error");
@@ -140,15 +142,14 @@ public class OssBO {
 
     /**
      * 取得用户上传信息
-     * @param roleId
      * @return
      * @throws NoSuchRoleException
      */
-    public List<AliOssBucketVO> getBucket(long roleId, String gameId) throws NoSuchRoleException{
+    public List<AliOssBucketVO> getBucket(ServiceContext sc) throws NoSuchRoleException{
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
         if(role == null){
-            throw new NoSuchRoleException("指定的玩家不存在,roleId="+roleId);
+            throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
         List<PlayerGameOss> playerGameOss = null;
         List<AliOssBucketVO> roleBuckets  = new ArrayList<AliOssBucketVO>();
@@ -160,7 +161,7 @@ public class OssBO {
         }else{
             playerGameOss = new ArrayList<PlayerGameOss>(cch.getPlayerGameOss().values());
         }*/
-        playerGameOss = playerGameOssMapper.selectByRoleId(gameId,roleId); // 暂代上方方法
+        playerGameOss = playerGameOssMapper.selectByRoleId(sc.getGameId(),sc.getRoleId()); // 暂代上方方法
 
         if(playerGameOss != null && playerGameOss.size() > 0){
             for(PlayerGameOss val : playerGameOss){
@@ -169,7 +170,7 @@ public class OssBO {
                 bucket.setGameId(role.getGameId());
                 bucket.setObjkey(val.getObjKey());
                 bucket.setOperateId(val.getId());
-                bucket.setGameId(gameId);
+                bucket.setGameId(sc.getGameId());
                 bucket.setGold(val.getGold()==null?0:val.getGold());
                 bucket.setSaveTime(val.getSaveTime()==null?"":val.getSaveTime());
                 bucket.setMetaMd5(val.getMetaMd5()==null?"":val.getMetaMd5());
@@ -184,12 +185,11 @@ public class OssBO {
 
     /**
      * 更新上传进度(客户端通知服务器上传结束)
-     * @param roleId
      * @param operateId
      * @throws KairoException
      * @throws NoSuchRoleException
      */
-    public void notifyEndPut(long roleId, String gameId, int operateId, int result, String md5) throws KairoException, NoSuchRoleException{
+    public void notifyEndPut(ServiceContext sc, int operateId, int result, String md5) throws KairoException, NoSuchRoleException{
         Date now = new Date();
 
         // 删除文件信息
@@ -197,7 +197,7 @@ public class OssBO {
 
         /*GameServerChannelHandler cch = GameServerSendService.getInstance().GetPlayerOnlineById(roleId);*/
         if(operateId > 0) {
-            playerGameOss = playerGameOssMapper.selectByGameKey(operateId,gameId);
+            playerGameOss = playerGameOssMapper.selectByGameKey(operateId,sc.getGameId());
             /*if(cch == null) {
                 playerGameOss = playerGameOssMapper.selectByPrimaryKey(operateId);
             }else{
@@ -205,17 +205,17 @@ public class OssBO {
             }*/
         }else{
             // 备份存档(不校验也备份)
-            setPlayerRoleOssFile(roleId,gameId);
+            setPlayerRoleOssFile(sc.getRoleId(),sc.getGameId());
         }
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
         if(role == null){
-            throw new NoSuchRoleException("指定的玩家不存在,roleId="+roleId);
+            throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
         if(playerGameOss == null) {
             // 如果result是成功状态则更新
             if(result == 1) {
-                playerGameOssMapper.updateEndtimeByRoleId(gameId,roleId);
+                playerGameOssMapper.updateEndtimeByRoleId(sc.getGameId(),sc.getRoleId());
                 // 刷新缓存 （注释）
                 /*if(cch != null) {
                     cch.refreshPlayerGameOssTime(now);
@@ -237,13 +237,13 @@ public class OssBO {
         }else{
             OSSClient client = null;
             try {
-                if(C_Player_Accesskey_Map.get(roleId) == null || C_Player_Accesskey_Map.get(roleId).get("read") == null){
+                if(C_Player_Accesskey_Map.get(sc.getRoleId()) == null || C_Player_Accesskey_Map.get(sc.getRoleId()).get("read") == null){
                     // 重新获得key
-                    AliOssAccessKeyVO roleAccessKey = getOssStsToken(roleId, role.getGameId(), "read", role.getChannelId());
+                    AliOssAccessKeyVO roleAccessKey = getOssStsToken(sc.getRoleId(), role.getGameId(), "read", role.getChannelId());
                     client = new OSSClient(getProperty(AppConfig.ALI_OSS_ENDPOINT_INTERNAL, ENDPOINT), roleAccessKey.getKeyId(), roleAccessKey.getKeySecret(), roleAccessKey.getToken());
                 }else{
                     // 用户删除access token取得
-                    AliOssAccessKeyVO roleAccessKey = C_Player_Accesskey_Map.get(roleId).get("read");
+                    AliOssAccessKeyVO roleAccessKey = C_Player_Accesskey_Map.get(sc.getRoleId()).get("read");
                     client = new OSSClient(getProperty(AppConfig.ALI_OSS_ENDPOINT_INTERNAL, ENDPOINT), roleAccessKey.getKeyId(), roleAccessKey.getKeySecret(), roleAccessKey.getToken());
                 }
                 // 获取文件的元信息
@@ -281,18 +281,17 @@ public class OssBO {
 
     /**
      * 申请上传操作
-     * @param roleId
      * @param objKey
      * @throws NoSuchRoleException
      * @throws AdmiralNameIsTooLongException
      * @throws IsHaveSpecialCharacterException
      * @throws KairoException
      */
-    public AliOssBucketVO putBucket(long roleId,String gameId, String objKey, long gold, String saveTime, String fname, int objType) throws NoSuchRoleException, AdmiralNameIsTooLongException, IsHaveSpecialCharacterException, KairoException{
+    public AliOssBucketVO putBucket(ServiceContext sc, String objKey, long gold, String saveTime, String fname, int objType) throws NoSuchRoleException, AdmiralNameIsTooLongException, IsHaveSpecialCharacterException, KairoException{
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId, roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(), sc.getRoleId());
         if(role == null){
-            throw new NoSuchRoleException("指定的玩家不存在,roleId="+roleId);
+            throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
         Date now = new Date();
         if(StringUtils.isBlank(objKey)){
@@ -303,13 +302,13 @@ public class OssBO {
             throw new IsHaveSpecialCharacterException("Oss 上传文件名太长");
         }
         // key设置
-        objKey = role.getChannelId() + "/" + roleId + "/" + role.getGameId() + "/" + objKey;
+        objKey = role.getChannelId() + "/" + sc.getRoleId() + "/" + role.getGameId() + "/" + objKey;
         if(objKey.length() > 64){
             throw new AdmiralNameIsTooLongException("Oss 上传文件名太长");
         }
         PlayerGameOss playerGameOss = null;
-        playerGameOss.setRoleId(roleId);
-        playerGameOss.setGameId(gameId);
+        playerGameOss.setRoleId(sc.getRoleId());
+        playerGameOss.setGameId(sc.getGameId());
         playerGameOss.setObjKey(objKey);
         playerGameOss.setBucket(getProperty(AppConfig.ALI_OSS_BUCKET, BUCKET_KEY));
         playerGameOss = playerGameOssMapper.selectByRoleIdAndObjKey(playerGameOss);
@@ -328,7 +327,7 @@ public class OssBO {
             playerGameOss.setCreateTime(now);
             playerGameOss.setBucket(getProperty(AppConfig.ALI_OSS_BUCKET, BUCKET_KEY));
 
-            playerGameOss.setRoleId(roleId);
+            playerGameOss.setRoleId(sc.getRoleId());
             playerGameOss.setObjKey(objKey);
         }else{
             // type check

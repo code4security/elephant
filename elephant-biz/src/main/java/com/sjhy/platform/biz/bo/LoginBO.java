@@ -1,5 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.config.AppConfig;
 import com.sjhy.platform.client.dto.config.KairoErrorCode;
 import com.sjhy.platform.client.dto.enumerate.ModuleEnum;
@@ -81,29 +82,26 @@ public class LoginBO {
     /**
      * 第一次握手
      * @param clientId           客户端id
-     * @param channelUserId     渠道账号id
      * @param deviceUniqueId    设备id
-     * @param channelId          渠道id
-     * @param gameId             游戏id
      * @return
      * @throws DeviceSignNullException
      * @throws EmptyAccountNameException
      * @throws AccountAlreadyBindingOtherException
      * @throws NotExistAccountException
      */
-    public RegularLoginVO loginChallenge(int clientId, String channelUserId, String deviceUniqueId, String channelId, String gameId) throws DeviceSignNullException,
+    public RegularLoginVO loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId) throws DeviceSignNullException,
             EmptyAccountNameException, AccountAlreadyBindingOtherException, NotExistAccountException
     {
         logger.error("LoginService|======================>loginChallenge");
 
         // 判断是否是空的账号名或是空的设备唯一标识
-        if (StringUtils.isBlank( channelUserId ) ||  StringUtils.isBlank( deviceUniqueId ))
+        if (StringUtils.isBlank( sc.getChannelUserId() ) ||  StringUtils.isBlank( deviceUniqueId ))
             throw new EmptyAccountNameException();
 
         logger.error("loginChallenge|deviceUniqueID="+deviceUniqueId);
 
         // 获取账户信息
-        AccountVO account = playerBO.getAccount(channelId, channelUserId, deviceUniqueId, gameId);
+        AccountVO account = playerBO.getAccount(sc, deviceUniqueId);
         RegularLoginVO result = new RegularLoginVO();
 
         // 产生校验器
@@ -122,14 +120,14 @@ public class LoginBO {
             sessionVO.deviceUniquelyId = account.getDeviceUniquelyId();
             sessionVO.ServerId  = account.getServerId();
             sessionVO.channelUserId = account.getChUserId();
-            sessionVO.channelId = channelId;
+            sessionVO.channelId = sc.getChannelId();
         } else {
             sessionVO.isFirstLogin = true;
             sessionVO.playerId = 0;
             sessionVO.deviceUniquelyId = deviceUniqueId;
             sessionVO.ServerId = 0;
-            sessionVO.channelUserId = channelUserId;
-            sessionVO.channelId = channelId;
+            sessionVO.channelUserId = sc.getChannelUserId();
+            sessionVO.channelId = sc.getChannelId();
         }
         // 玩家激活状况
         sessionVO.activationState = account.getActivationState();
@@ -156,14 +154,12 @@ public class LoginBO {
      * @param a
      * @param m1
      * @param sdkVersion
-     * @param serverId
-     * @param gameId
      * @return
      * @throws NotChallengeYetException
      * @throws SRPAuthenticationFailedException
      * @throws KairoException
      */
-    public RegularLoginVO loginProof(int clientId, String ip, BigInteger a, BigInteger m1 , String sdkVersion, int serverId, String gameId)
+    public RegularLoginVO loginProof(ServiceContext sc, int clientId, String ip, BigInteger a, BigInteger m1 , String sdkVersion)
             throws NotChallengeYetException, SRPAuthenticationFailedException, KairoException
     {
         logger.error("LoginService|======================>loginProof");
@@ -175,7 +171,7 @@ public class LoginBO {
         /* sessionVO = sessionCacheMgr.get( clientId );
         sessionCacheMgr.remove( clientId );
         if ( sessionVO == null ){ throw new NotChallengeYetException();}*/
-        Game game = gameMapper.selectByGameId(gameId);
+        Game game = gameMapper.selectByGameId(sc.getGameId());
         if (game == null){
             throw new NotChallengeYetException();
         }
@@ -214,16 +210,16 @@ public class LoginBO {
             }
 
             // 使用sessionVO.AccountName中保存的设备唯一标识建立账号
-            Player player = playerBO.createNewPlayerByCooperate(channelId, sessionVO.deviceUniquelyId, serverId, "", ip, gameId);
+            Player player = playerBO.createNewPlayerByCooperate(channelId, sessionVO.deviceUniquelyId, sc.getServerId(), "", ip, sc.getGameId());
             playerId = player.getPlayerId();
 
-            playerBO.createPlayer(sessionVO.channelId, sessionVO.channelUserId, player.getPlayerId(),gameId);
+            playerBO.createPlayer(sessionVO.channelId, sessionVO.channelUserId, player.getPlayerId(),sc.getGameId());
 
             //缓存（注释）
             // channelUserMgr.update(sessionVO.CooperateId, playerId, gameId);
         } else {
             playerId = sessionVO.playerId;
-            serverId = sessionVO.ServerId;
+            // serverId = sessionVO.ServerId;
         }
 
         // 缓存（注释）
@@ -238,10 +234,10 @@ public class LoginBO {
         // 告知M2
         result.getSrp6Info().setM2(sessionVO.Session.getEvidenceValue_M2());
 
-        boolean isOpenActivation = playerBO.checkModule(gameId,ModuleEnum.ACTIVATIONCODE.getModuleName());
+        boolean isOpenActivation = playerBO.checkModule(sc,ModuleEnum.ACTIVATIONCODE.getModuleName());
 
         // 是否需要激活码(激活码开关开启  && 玩家未激活状态=>1：已激活、0：未激活)
-        if(isOpenActivation && !giftCodeBO.isMeActivated(gameId, playerId)){
+        if(isOpenActivation && !giftCodeBO.isMeActivated(sc)){
             result.setNeedActivation(true);
         }else{
             result.setNeedActivation(false);
@@ -260,15 +256,13 @@ public class LoginBO {
 
     /**
      * 验证是否需要进行游戏版本更新
-     * @param gameId
-     * @param channelId
      * @param versionNum
      * @return
      */
-    public ChannelAndVersionVO checkChannelAndVersion(String gameId, String channelId, String versionNum) {
+    public ChannelAndVersionVO checkChannelAndVersion(ServiceContext sc, String versionNum) {
         ChannelAndVersion cav = new ChannelAndVersion();
-        cav.setGameId(gameId);
-        cav.setChannelId(channelId);
+        cav.setGameId(sc.getGameId());
+        cav.setChannelId(sc.getChannelId());
         ChannelAndVersion channelAndVersion = channelAndVersionMapper.verifyChannel(cav);
 
         logger.error("LoginService|======================>checkChannelAndVersion");
@@ -288,11 +282,7 @@ public class LoginBO {
 
     /**
      * 确认登录服务器
-     * @param playerId
-     * @param gameId
-     * @param serverId
      * @param ip
-     * @param channelId
      * @param activationCode
      * @return
      * @throws FreezeTheAccountException
@@ -302,7 +292,7 @@ public class LoginBO {
      * @throws ActivationCodeIsNotRightException
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public LoginVO confirmServer(long playerId, String gameId, int serverId, String ip, String channelId, String activationCode)  throws FreezeTheAccountException, NotChallengeYetException, NotExistAccountException, IpIsNotInWhiteListException, ActivationCodeIsNotRightException
+    public LoginVO confirmServer(ServiceContext sc, String ip, String activationCode)  throws FreezeTheAccountException, NotChallengeYetException, NotExistAccountException, IpIsNotInWhiteListException, ActivationCodeIsNotRightException
     {
         logger.error("LoginService|======================>confirmServer");
         // 缓存（注释）
@@ -314,22 +304,22 @@ public class LoginBO {
 
         // 查找player表看用户是否存在
         Player players = new Player();
-        players.setPlayerId(playerId);
-        players.setGameId(gameId);
+        players.setPlayerId(sc.getPlayerId());
+        players.setGameId(sc.getGameId());
         Player player = playerMapper.selectByPlayerId(players);
         if ( player == null ) {
             throw new NotExistAccountException();
         }
 
         // 激活码激活逻辑
-        boolean isActivationOpen = playerBO.checkModule(gameId,ModuleEnum.ACTIVATIONCODE.getModuleName());
+        boolean isActivationOpen = playerBO.checkModule(sc,ModuleEnum.ACTIVATIONCODE.getModuleName());
 
         // 需要激活
-        if(isActivationOpen && !giftCodeBO.isMeActivated(gameId, playerId)){
+        if(isActivationOpen && !giftCodeBO.isMeActivated(sc)){
             // 激活处理
-            int ret = giftCodeBO.activateCode(activationCode, gameId, playerId, channelId);
+            int ret = giftCodeBO.activateCode(sc, activationCode);
             if(ret < 0){
-                logger.error("channelId:" + channelId);
+                logger.error("channelId:" + sc.getChannelId());
                 throw new ActivationCodeIsNotRightException();
             }
         }
@@ -337,32 +327,32 @@ public class LoginBO {
         Date now  = Calendar.getInstance().getTime();
 
         // 完成具体的登录相关过程
-        player.setServerId(serverId); // Server_ID(最后一次登陆的服务器id)
+        player.setServerId(sc.getServerId()); // Server_ID(最后一次登陆的服务器id)
         player.setLastLoginTime(now); // 最后一次登录时间
         player.setLastLoginIp(ip); // 最后登录IP
         playerMapper.updateByPrimaryKey(player);
 
         // 记录登录服务器的历史记录
-        serverHistoryBO.updateServerHistory(playerId, serverId, gameId ,channelId); // 注意,这里 入参 serverId 与 player.getServerId() 不一定一样
+        serverHistoryBO.updateServerHistory(sc); // 注意,这里 入参 serverId 与 player.getServerId() 不一定一样
 
         // 记录登录日志
         PlayerLoginLog record = new PlayerLoginLog();
         // record.setDeviceModel(player.getDeviceModel()); // 硬件型号信息
         record.setCreateTime(now); // 创建时间
-        record.setPlayerId(playerId); // 玩家id
+        record.setPlayerId(sc.getPlayerId()); // 玩家id
         record.setIsLogin(true); // 是否是登陆(否则表示退出)
-        record.setServerId(serverId); // 登陆的ServiceId
-        record.setGameId(gameId); // 游戏id
+        record.setServerId(sc.getServerId()); // 登陆的ServiceId
+        record.setGameId(sc.getGameId()); // 游戏id
         record.setDeviceUniquelyId(player.getDeviceUniquelyId()); // 设备唯一标示
-        if(channelId != null){
-            record.setChannelId(channelId);  // 游戏分发渠道
+        if(sc.getChannelId() != null){
+            record.setChannelId(sc.getChannelId());  // 游戏分发渠道
         }
         playerLoginLogMapper.insert(record);
 
         // 获取服务器版本号
         Server servers = new Server();
-        servers.setGameId(gameId);
-        servers.setServerId(serverId);
+        servers.setGameId(sc.getGameId());
+        servers.setServerId(sc.getServerId());
         Server server = serverMapper.selectByServer(servers);
 
         // 埋点（注释）
@@ -373,8 +363,6 @@ public class LoginBO {
 
     /**
      * 验证角色登陆，返回角色基本信息
-     * @param playerId
-     * @param gameId
      * @param deviceModel
      * @param deviceToken
      * @return
@@ -389,7 +377,7 @@ public class LoginBO {
      * @throws GameIdIsNotExsitsException
      * @throws KairoException
      */
-    public PlayerRoleVO enterGame(long playerId, String gameId, int deviceModel, String deviceToken) throws PleaseLoginAgainException, NoSuchRoleException, AlreadyExistsPlayerRoleException, AdmiralNameIsNotNullableException, AdmiralNameIsTooLongException, AdmiralNameIncludeHarmonyException, AdmiralNameCoincideException, CreateRoleException, GameIdIsNotExsitsException, KairoException {
+    public PlayerRoleVO enterGame(ServiceContext sc, int deviceModel, String deviceToken) throws PleaseLoginAgainException, NoSuchRoleException, AlreadyExistsPlayerRoleException, AdmiralNameIsNotNullableException, AdmiralNameIsTooLongException, AdmiralNameIncludeHarmonyException, AdmiralNameCoincideException, CreateRoleException, GameIdIsNotExsitsException, KairoException {
 
         // 缓存（注释）
         // 1.验证用户的 sessionKey
@@ -398,10 +386,10 @@ public class LoginBO {
         gameServerChannelHandler.setPacketCrypt( new PacketCrypt(redisSessionKey) );*/
 
         // 2.判断是否已经成功初始化用户信息
-        PlayerRoleVO playerRoleVo = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(gameId,playerId);
+        PlayerRoleVO playerRoleVo = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(sc.getGameId(),sc.getPlayerId());
         if(playerRoleVo == null){
             // 首次登陆，自动创建角色
-            playerRoleVo = roleBO.createNewPlayer(playerId, gameId, playerId+"_"+gameId, deviceToken);
+            playerRoleVo = roleBO.createNewPlayer(sc, sc.getPlayerId()+"_"+sc.getGameId(), deviceToken);
         }
 
         // 判断玩家是否处于封停状态

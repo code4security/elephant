@@ -20,4 +20,7 @@ public interface PlayerService {
     // 创建渠道用户id
     ResultDTO createPlayer(ServiceContext sc);
 
+    // 验证是否需要激活码
+    ResultDTO<Boolean> checkModule(ServiceContext sc,String moduleName);
+
 }

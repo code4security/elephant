@@ -1,5 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.config.KairoErrorCode;
 import com.sjhy.platform.client.dto.exception.KairoException;
 import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
@@ -44,15 +45,13 @@ public class GiftCodeBO {
 
     /**
      * 查询是否使用过激活码
-     * @param gameId
-     * @param playerId
      * @return
      */
-    public boolean isMeActivated(String gameId, long playerId){
+    public boolean isMeActivated(ServiceContext sc){
         // 是否使用过激活码
         PlayerGiftLog playerGiftLog = new PlayerGiftLog();
-        playerGiftLog.setGameId(gameId);
-        playerGiftLog.setPlayerId(playerId);
+        playerGiftLog.setGameId(sc.getGameId());
+        playerGiftLog.setPlayerId(sc.getPlayerId());
         // 查询
         PlayerGiftLog lipinmaLog = playerGiftLogMapper.selectByUseGiftCode(playerGiftLog);
         if(lipinmaLog != null){
@@ -64,14 +63,11 @@ public class GiftCodeBO {
     /**
      * 使用激活码
      * @param code
-     * @param gameId
-     * @param playerId
-     * @param channelId
      * @return
      */
-    public int activateCode(String code, String gameId, long playerId, String channelId) {
+    public int activateCode(ServiceContext sc, String code) {
         // 激活码是否有效
-        GiftCodeList giftCodeList = isValidActivationCode(code, channelId, gameId, playerId);
+        GiftCodeList giftCodeList = isValidActivationCode(sc, code);
         if(giftCodeList == null){
             return -1;
         }
@@ -79,9 +75,9 @@ public class GiftCodeBO {
         PlayerGiftLog playerGiftLog = new PlayerGiftLog();
 
         playerGiftLog.setGiftCode(code);
-        playerGiftLog.setPlayerId(playerId);
-        playerGiftLog.setGameId(gameId);
-        playerGiftLog.setChannelId(channelId);
+        playerGiftLog.setPlayerId(sc.getPlayerId());
+        playerGiftLog.setGameId(sc.getGameId());
+        playerGiftLog.setChannelId(sc.getChannelId());
         playerGiftLog.setActivateTime(new Date());
         playerGiftLog.setGiftListId(giftCodeList.getId());
 
@@ -91,12 +87,9 @@ public class GiftCodeBO {
     /**
      * 激活码是否有效，并未被使用过
      * @param code
-     * @param channelId
-     * @param gameId
-     * @param playerId
      * @return
      */
-    public GiftCodeList isValidActivationCode(String code, String channelId, String gameId, long playerId) {
+    public GiftCodeList isValidActivationCode(ServiceContext sc, String code) {
         // 码信息取得
         GiftCode giftCode = giftCodeMapper.selectByCode(code);
         if(giftCode == null){
@@ -119,19 +112,19 @@ public class GiftCodeBO {
                 return null;
             }
 
-            if(gameId != maType.getGameId()){
+            if(sc.getGameId() != maType.getGameId()){
                 //logger.error("不同游戏不能使用|code="+code);
                 return null;
             }
 
-            if(!channelId.equals(maType.getChannelId())){
+            if(!sc.getChannelId().equals(maType.getChannelId())){
                 //logger.error("不同渠道不能使用|code="+code);
                 return null;
             }
 
             // 是否被使用过
             PlayerGiftLog playerGiftLog = new PlayerGiftLog();
-            playerGiftLog.setGameId(gameId);
+            playerGiftLog.setGameId(sc.getGameId());
             playerGiftLog.setGiftCode(code);
 
             PlayerGiftLog lipinmaLog = playerGiftLogMapper.selectByGiftCode(playerGiftLog);
@@ -147,12 +140,9 @@ public class GiftCodeBO {
     /**
      * 判断兑换码是否已被使用
      * @param code
-     * @param channelId
-     * @param gameId
-     * @param roleId
      * @return
      */
-    public GiftCodeList isValidRedeemCode(String code, String channelId, String gameId, long roleId) {
+    public GiftCodeList isValidRedeemCode(ServiceContext sc, String code) {
         // 码信息取得
         GiftCode giftCode = giftCodeMapper.selectByCode(code);
         if(giftCode == null){
@@ -174,19 +164,19 @@ public class GiftCodeBO {
                 return null;
             }
 
-            if(gameId != maType.getGameId()){
+            if(sc.getGameId() != maType.getGameId()){
                 logger.error("不同游戏不能使用|code="+code);
                 return null;
             }
 
-            if(!channelId.equals(maType.getChannelId())){
+            if(!sc.getChannelId().equals(maType.getChannelId())){
                 logger.error("不同渠道不能使用|code="+code);
                 return null;
             }
 
             // 检查激活码是否被使用过
             PlayerGiftLog playerGiftLog = new PlayerGiftLog();
-            playerGiftLog.setGameId(gameId);
+            playerGiftLog.setGameId(sc.getGameId());
             playerGiftLog.setGiftCode(code);
             playerGiftLog = playerGiftLogMapper.selectByGiftCode(playerGiftLog);
             if(playerGiftLog != null){
@@ -204,13 +194,13 @@ public class GiftCodeBO {
                 return null;
             }
 
-            if(gameId != maType.getGameId()){
+            if(sc.getGameId() != maType.getGameId()){
                 logger.error("不同游戏不能使用|code="+code);
                 return null;
             }
 
             // 检查是否使用过激活码
-            if(this.isUseForRedeemLot(roleId,giftCode.getGiftListId(),gameId) != null){
+            if(this.isUseForRedeemLot(sc,giftCode.getGiftListId()) != null){
                 logger.error("游戏已使用|code="+code);
                 return null;
             }
@@ -221,17 +211,15 @@ public class GiftCodeBO {
 
     /**
      * 是否使用过同一批次礼品码
-     * @param gameId
-     * @param roleId
      * @param giftListId
      * @return
      */
-    public PlayerGiftLog isUseForRedeemLot(long roleId, int giftListId, String gameId) {
+    public PlayerGiftLog isUseForRedeemLot(ServiceContext sc, int giftListId) {
         // 是否使用过同一批次礼品码
         PlayerGiftLog playerGiftLog = new PlayerGiftLog();
         playerGiftLog.setGiftListId(giftListId);
-        playerGiftLog.setRoleId(roleId);
-        playerGiftLog.setGameId(gameId);
+        playerGiftLog.setRoleId(sc.getRoleId());
+        playerGiftLog.setGameId(sc.getGameId());
 
         return playerGiftLogMapper.selectByUseGiftCode(playerGiftLog);
     }
@@ -239,21 +227,17 @@ public class GiftCodeBO {
     /**
      * 更新礼品码
      * @param code
-     * @param gameId
-     * @param playerId
-     * @param roleId
-     * @param channelId
      * @param giftListId
      * @return
      */
-    public int redeemCode(String code, String gameId, long playerId, long roleId, String channelId, int giftListId) {
+    public int redeemCode(ServiceContext sc, String code, int giftListId) {
         PlayerGiftLog playerGiftLog = new PlayerGiftLog();
 
         playerGiftLog.setGiftCode(code);
-        playerGiftLog.setRoleId(roleId);
-        playerGiftLog.setPlayerId(playerId);
-        playerGiftLog.setGameId(gameId);
-        playerGiftLog.setChannelId(channelId);
+        playerGiftLog.setRoleId(sc.getRoleId());
+        playerGiftLog.setPlayerId(sc.getPlayerId());
+        playerGiftLog.setGameId(sc.getGameId());
+        playerGiftLog.setChannelId(sc.getChannelId());
         playerGiftLog.setActivateTime(new Date());
         playerGiftLog.setGiftListId(giftListId);
 
@@ -262,20 +246,19 @@ public class GiftCodeBO {
 
     /**
      * 兑换码兑换逻辑
-     * @param roleId
      * @param redeemCode
      * @throws RoleNotFoundException
      * @throws KairoException
      */
-    public LinkedHashMap<Integer, Integer> redeemCodeExchange(long roleId, String redeemCode, String gameId) throws RoleNotFoundException, KairoException {
+    public LinkedHashMap<Integer, Integer> redeemCodeExchange(ServiceContext sc, String redeemCode) throws RoleNotFoundException, KairoException {
         // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
         if(role == null) {
             throw new RoleNotFoundException();
         }
 
         // 判断兑换码是否已被使用
-        GiftCodeList giftCodeList = giftCodeBO.isValidRedeemCode(redeemCode, role.getChannelId(), role.getGameId(), roleId);
+        GiftCodeList giftCodeList = giftCodeBO.isValidRedeemCode(sc, redeemCode);
         if(giftCodeList == null){
             throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
         }
@@ -285,7 +268,7 @@ public class GiftCodeBO {
         }
 
         // 检查同一批次是否已使用过
-        if(giftCodeBO.isUseForRedeemLot(roleId, giftCodeList.getId(), gameId) != null) {
+        if(giftCodeBO.isUseForRedeemLot(sc, giftCodeList.getId()) != null) {
             throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
         }
 
@@ -309,7 +292,7 @@ public class GiftCodeBO {
         }
 
         // 更新兑换码
-        giftCodeBO.redeemCode(redeemCode, role.getGameId(), role.getPlayerId(), roleId, role.getChannelId(), giftCodeList.getId());
+        giftCodeBO.redeemCode(sc, redeemCode, giftCodeList.getId());
 
         return goodsMap;
     }

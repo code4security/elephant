@@ -2,6 +2,7 @@ package com.sjhy.platform.biz.bo;
 
 import com.alibaba.fastjson.JSON;
 import com.sjhy.platform.biz.pay.*;
+import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.config.AppConfig;
 import com.sjhy.platform.client.dto.config.GamePayConfig;
 import com.sjhy.platform.client.dto.enumerate.PayChannelEnum;
@@ -73,16 +74,15 @@ public class PayBO {
 
     /**
      * 应用宝渠道
-     * @param roleId
      * @param order
      * @param extra
      * @return
      * @throws KairoException
      */
-    public AddYYBOrderResultVO addYYBOrder(long roleId, PayAddOrderVO order, String extra) throws KairoException{
+    public AddYYBOrderResultVO addYYBOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException{
         String orderId = null;
 
-        if (roleId <= 0 ){
+        if (sc.getRoleId() <= 0 ){
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
@@ -95,7 +95,7 @@ public class PayBO {
         // 检查是否存在此商品
         PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
         if(goods == null) {
-            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, roleId + "_" + goodId);
+            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
 
         int goodNumber = order.getGoodNumber();
@@ -135,10 +135,10 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_YYB_ADD_ORDER, "应用宝渠道参数[openkey]错误");
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(), roleId);
+        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(), sc.getRoleId());
 
         String[] datas = new String[16];
-        datas[0] = String.valueOf(roleId);
+        datas[0] = String.valueOf(sc.getRoleId());
         datas[1] = String.valueOf(goodId);
         datas[2] = String.valueOf(goodNumber);
         datas[3] = String.valueOf(channel);
@@ -201,16 +201,15 @@ public class PayBO {
 
     /**
      * 腾讯渠道
-     * @param roleId
      * @param order
      * @param extra
      * @return
      * @throws KairoException
      */
-    public AddTxOrderResultVO addTxOrder(long roleId, PayAddOrderVO order, String extra) throws KairoException{
+    public AddTxOrderResultVO addTxOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException{
         String orderId = null;
 
-        if (roleId <= 0 ){
+        if (sc.getRoleId() <= 0 ){
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
@@ -223,7 +222,7 @@ public class PayBO {
         // 检查是否存在此商品
         PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
         if(goods == null) {
-            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, roleId + "_" + goodId);
+            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
 
         int goodNumber = order.getGoodNumber();
@@ -259,10 +258,10 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_YYB_ADD_ORDER, "腾讯手Q渠道参数[openid]错误");
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),roleId);
+        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
 
         String[] datas = new String[16];
-        datas[0] = String.valueOf(roleId);
+        datas[0] = String.valueOf(sc.getRoleId());
         datas[1] = String.valueOf(goodId);
         datas[2] = String.valueOf(goodNumber);
         datas[3] = String.valueOf(channel);
@@ -333,16 +332,15 @@ public class PayBO {
 
     /**
      * 360渠道
-     * @param roleId
      * @param order
      * @param extra
      * @return
      * @throws KairoException
      */
-    public AddQihooOrderResultVO addQihooOrder(long roleId, PayAddOrderVO order, String extra) throws KairoException{
+    public AddQihooOrderResultVO addQihooOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException{
         String orderId = null;
 
-        if (roleId <= 0 ){
+        if (sc.getRoleId() <= 0 ){
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
@@ -355,7 +353,7 @@ public class PayBO {
         // 检查是否存在此商品
         PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(),order.getGameId());
         if(goods == null) {
-            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, roleId + "_" + goodId);
+            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
 
         int goodNumber = order.getGoodNumber();
@@ -372,10 +370,10 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),roleId);
+        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
 
         String[] datas = new String[11];
-        datas[0] = String.valueOf(roleId);
+        datas[0] = String.valueOf(sc.getRoleId());
         datas[1] = String.valueOf(goodId);
         datas[2] = String.valueOf(goodNumber);
         datas[3] = String.valueOf(channel);
@@ -434,16 +432,15 @@ public class PayBO {
 
     /**
      * vivo渠道
-     * @param roleId
      * @param order
      * @param extra
      * @return
      * @throws KairoException
      */
-    public AddVivoOrderResultVO addVivoOrder(long roleId, PayAddOrderVO order, String extra) throws KairoException{
+    public AddVivoOrderResultVO addVivoOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException{
         String orderId = null;
 
-        if (roleId <= 0 ){
+        if (sc.getRoleId() <= 0 ){
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
@@ -456,7 +453,7 @@ public class PayBO {
         // 检查是否存在此商品
         PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
         if(goods == null) {
-            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, roleId + "_" + goodId);
+            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
 
         int goodNumber = order.getGoodNumber();
@@ -473,10 +470,10 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),roleId);
+        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
 
         String[] datas = new String[12];
-        datas[0] = String.valueOf(roleId);
+        datas[0] = String.valueOf(sc.getRoleId());
         datas[1] = String.valueOf(goodId);
         datas[2] = String.valueOf(goodNumber);
         datas[3] = String.valueOf(channel);
@@ -532,16 +529,15 @@ public class PayBO {
 
     /**
      * 金立渠道
-     * @param roleId
      * @param order
      * @param extra
      * @return
      * @throws KairoException
      */
-    public AddJinliOrderResultVO addJinliOrder(long roleId, PayAddOrderVO order, String extra) throws KairoException{
+    public AddJinliOrderResultVO addJinliOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException{
         String orderId = null;
 
-        if (roleId <= 0 ){
+        if (sc.getRoleId() <= 0 ){
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
@@ -554,7 +550,7 @@ public class PayBO {
         // 检查是否存在此商品
         PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
         if(goods == null) {
-            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, roleId + "_" + goodId);
+            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
 
         int goodNumber = order.getGoodNumber();
@@ -571,10 +567,10 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),roleId);
+        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
 
         String[] datas = new String[12];
-        datas[0] = String.valueOf(roleId);
+        datas[0] = String.valueOf(sc.getRoleId());
         datas[1] = String.valueOf(goodId);
         datas[2] = String.valueOf(goodNumber);
         datas[3] = String.valueOf(channel);
@@ -627,20 +623,19 @@ public class PayBO {
 
     /**
      * 联想渠道
-     * @param roleId
      * @param order
      * @param extra
      * @return
      * @throws KairoException
      */
-    public AddLenovoOrderResultVO addLenovoOrder(long roleId, PayAddOrderVO order, String extra) throws KairoException{
+    public AddLenovoOrderResultVO addLenovoOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException{
         String orderId = null;
 
-        if (roleId <= 0 ){
+        if (sc.getRoleId() <= 0 ){
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),roleId);
+        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
 
         String goodId = order.getGoodId();
 
@@ -651,7 +646,7 @@ public class PayBO {
         // 检查是否存在此商品
         PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), palyerRole.getGameId());
         if(goods == null) {
-            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, roleId + "_" + goodId);
+            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
 
         int goodNumber = order.getGoodNumber();
@@ -678,7 +673,7 @@ public class PayBO {
         }
 
         String[] datas = new String[12];
-        datas[0] = String.valueOf(roleId);
+        datas[0] = String.valueOf(sc.getRoleId());
         datas[1] = String.valueOf(goodId);
         datas[2] = String.valueOf(goodNumber);
         datas[3] = String.valueOf(channel);
@@ -733,16 +728,15 @@ public class PayBO {
 
     /**
      * 添加支付订单
-     * @param roleId
      * @param order
      * @param extra
      * @return
      * @throws KairoException
      */
-    public AddOrderResultVO addOrder(long roleId, PayAddOrderVO order, String extra) throws KairoException {
+    public AddOrderResultVO addOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException {
         String orderId = null;
 
-        if (roleId <= 0 ){
+        if (sc.getRoleId() <= 0 ){
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
@@ -755,8 +749,8 @@ public class PayBO {
         // 检查是否存在此商品
         PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(),order.getGameId());
         if(goods == null) {
-            System.out.println(roleId + "_" + goodId+"_"+order.getChannel());
-            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, roleId + "_" + goodId);
+            System.out.println(sc.getRoleId() + "_" + goodId+"_"+order.getChannel());
+            throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
 
         int goodNumber = order.getGoodNumber();
@@ -773,12 +767,12 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),roleId);
+        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
 
         String[] datas = new String[12];
 
-        datas[0] = String.valueOf(roleId);
-        logger.error("datas[0]===================================>>>"+String.valueOf(roleId));
+        datas[0] = String.valueOf(sc.getRoleId());
+        logger.error("datas[0]===================================>>>"+String.valueOf(sc.getRoleId()));
 
         datas[1] = palyerRole.getRoleName();
         logger.error("datas[1]===================================>>>"+palyerRole.getRoleName());
@@ -1077,18 +1071,16 @@ public class PayBO {
 
     /**
      * 获取奖牌
-     * @param roleId
-     * @param gameId
      * @return
      * @throws RoleNotFoundException
      */
-    public PayLogVO getMedal(long roleId, String gameId) throws RoleNotFoundException {
+    public PayLogVO getMedal(ServiceContext sc) throws RoleNotFoundException {
         // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
         if(role == null) {
             throw new RoleNotFoundException();
         }
-        List<PlayerPayLog> payLogs = playerPayLogMapper.selectByPayLog(gameId,roleId);
+        List<PlayerPayLog> payLogs = playerPayLogMapper.selectByPayLog(sc.getGameId(),sc.getRoleId());
 
         int num = 0;
 
@@ -1117,25 +1109,23 @@ public class PayBO {
 
     /**
      * 是否购买单机商品
-     * @param roleId
-     * @param channelId
      * @param goodsName
      * @return
      * @throws NoSuchRoleException
      */
-    public String[] isPlayerBuyOfflineGoods(long roleId, String gameId, String channelId, String goodsName) throws NoSuchRoleException {
+    public String[] isPlayerBuyOfflineGoods(ServiceContext sc, String goodsName) throws NoSuchRoleException {
         PlayerPayLog payLog = new PlayerPayLog();
 
         // 用户信息
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
         if(role == null) {
             throw new NoSuchRoleException();
         }
 
         if(goodsName == null || goodsName.trim().length() <= 0){
-            payLog = playerPayLogMapper.selectByOpen(gameId,roleId);
+            payLog = playerPayLogMapper.selectByOpen(sc.getGameId(),sc.getRoleId());
         }else{
-            payLog = playerPayLogMapper.selectByGood(gameId,roleId,goodsName);
+            payLog = playerPayLogMapper.selectByGood(sc.getGameId(),sc.getRoleId(),goodsName);
         }
 
         int count = playerPayLogMapper.countByPlayerPayLog(payLog);
@@ -1151,7 +1141,7 @@ public class PayBO {
             // 商品是否打折
             PayGoods goods = null;
 
-            goods = payGoodsMapper.selectByGChannelId(OFFLINE_GOOGS_ID_1, channelId, role.getGameId());
+            goods = payGoodsMapper.selectByGChannelId(OFFLINE_GOOGS_ID_1, sc.getChannelId(), role.getGameId());
 
             if(goods != null) {
                 if(goods.getDiscountBegin() != null
@@ -1162,28 +1152,28 @@ public class PayBO {
                     ret[1] = "1";
                     // 打折的价格
                     ret[2] = goods.getRmb().toString();
-                    System.out.println("chann1elId=" +channelId +"|begin:"+goods.getDiscountBegin()+"|end:"+goods.getDiscountEnd());
+                    System.out.println("chann1elId=" +sc.getChannelId() +"|begin:"+goods.getDiscountBegin()+"|end:"+goods.getDiscountEnd());
                 }else{
                     PayGoods goods2 = null;
-                    goods = payGoodsMapper.selectByGChannelId(OFFLINE_GOOGS_ID_1, channelId, role.getGameId());
+                    goods = payGoodsMapper.selectByGChannelId(OFFLINE_GOOGS_ID_1, sc.getChannelId(), role.getGameId());
                     // 不打折价格
                     if(goods2 != null) {
                         // 打折的价格
                         ret[2] = goods2.getRmb().toString();
                     }
-                    System.out.println("chann2elId=" +channelId +"|begin:"+goods.getDiscountBegin()+"|end:"+goods.getDiscountEnd());
+                    System.out.println("chann2elId=" +sc.getChannelId() +"|begin:"+goods.getDiscountBegin()+"|end:"+goods.getDiscountEnd());
                 }
 
             }
         } else {
             // 商品是否打折
             PayGoods goods = null;
-            goods = payGoodsMapper.selectByGChannelId(OFFLINE_GOOGS_ID_1, channelId, role.getGameId());
+            goods = payGoodsMapper.selectByGChannelId(OFFLINE_GOOGS_ID_1, sc.getChannelId(), role.getGameId());
             if(goods != null) {
                 ret[1] = "1";
                 // 打折的价格
                 ret[2] = goods.getRmb().toString();
-                System.out.println("goodsName:" + goodsName + "chann1elId=" +channelId +"|begin:"+goods.getDiscountBegin()+"|end:"+goods.getDiscountEnd());
+                System.out.println("goodsName:" + goodsName + "chann1elId=" +sc.getChannelId() +"|begin:"+goods.getDiscountBegin()+"|end:"+goods.getDiscountEnd());
             }
         }
         return ret;
@@ -1191,11 +1181,10 @@ public class PayBO {
 
     /**
      * 支付通知
-     * @param roleId
      * @param notify
      * @throws NoSuchRoleException
      */
-    public int payNotify(long roleId, PayNotifyVO notify, String gameId) throws NoSuchRoleException{
+    public int payNotify(ServiceContext sc, PayNotifyVO notify) throws NoSuchRoleException{
         String orderId = notify.getOrderId();
 
         logger.error("payNotify->orderId:"+orderId+"");
@@ -1206,9 +1195,9 @@ public class PayBO {
         }
 
         // 玩家存在与否
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
         if(role == null) {
-            logger.error("======>payNotify->roleId<========:"+orderId+"|err=角色不存在异常");
+            logger.error("======>payNotify->sc.getRoleId()<========:"+orderId+"|err=角色不存在异常");
             throw new NoSuchRoleException();
         }
         int payStatus = notify.getPayStatus();
@@ -1217,10 +1206,10 @@ public class PayBO {
         // （注释） 到前端调用
         /*if (payStatus == PayStatusEnum.Success.getValue()){
             logger.error("this here -->addPayValue");
-            addPayValue(roleId, notify, gameId);
+            addPayValue(sc.getRoleId(), notify, gameId);
         }else{
             logger.error("this here -->addPayValue error");
-            SendNotifyVO(roleId, notify, 0, 0, notify.getVirtualAmount());
+            SendNotifyVO(sc.getRoleId(), notify, 0, 0, notify.getVirtualAmount());
         }*/
     }
 
