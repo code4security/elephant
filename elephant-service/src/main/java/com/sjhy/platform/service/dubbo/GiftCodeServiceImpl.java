@@ -7,6 +7,7 @@ import com.sjhy.platform.client.dto.exception.KairoException;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
 import com.sjhy.platform.client.service.GiftCodeService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.management.relation.RoleNotFoundException;
@@ -15,6 +16,7 @@ import java.util.LinkedHashMap;
 /**
  * @HJ
  */
+@Service(value = "GiftCodeService")
 public class GiftCodeServiceImpl implements GiftCodeService {
 
     @Resource

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
  * <p>修改时间：</p>
  * <p>修改描述：</p>
  **/
+@Service("AddYYBOrderGPProxy")
 public class AddYYBOrderGPProxy extends AbstractGamePayProxy<AddYYBOrderResultVO> {
 
 	private static Logger log = Logger.getLogger(AddYYBOrderGPProxy.class);

@@ -8,12 +8,14 @@ import com.sjhy.platform.client.dto.exception.NotExistAccountException;
 import com.sjhy.platform.client.dto.player.Player;
 import com.sjhy.platform.client.dto.vo.AccountVO;
 import com.sjhy.platform.client.service.PlayerService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 /**
  * @HJ
  */
+@Service(value = "PlayerService")
 public class PlayerServiceImpl implements PlayerService {
     @Resource
     private PlayerBO playerBO;

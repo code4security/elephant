@@ -32,6 +32,16 @@
 
     <!-- service implementation, as same as regular local bean -->
     <bean id="personService" class="com.sjhy.platform.service.dubbo.test.PersonServiceImpl"/>
+    <bean id="loginService" class="com.sjhy.platform.service.dubbo.LoginServiceImpl"/>
+    <bean id="gameService" class="com.sjhy.platform.service.dubbo.GameServiceImpl"/>
+    <bean id="giftCodeService" class="com.sjhy.platform.service.dubbo.GiftCodeServiceImpl"/>
+    <bean id="mailService" class="com.sjhy.platform.service.dubbo.MailServiceImpl"/>
+    <bean id="ossService" class="com.sjhy.platform.service.dubbo.OssServiceImpl"/>
+    <bean id="payService" class="com.sjhy.platform.service.dubbo.PayServiceImpl"/>
+    <bean id="playerService" class="com.sjhy.platform.service.dubbo.PlayerServiceImpl"/>
+    <bean id="roleService" class="com.sjhy.platform.service.dubbo.RoleServiceImpl"/>
+    <bean id="serverHistoryService" class="com.sjhy.platform.service.dubbo.ServerHistoryServiceImpl"/>
+    <bean id="verifySessionService" class="com.sjhy.platform.service.dubbo.VerifySessionServiceImpl"/>
 
     <!-- declare the service interface to be exported -->
     <dubbo:service interface="com.sjhy.platform.client.service.test.PersonService" ref="personService"/>

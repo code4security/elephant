@@ -10,6 +10,7 @@ import com.sjhy.platform.client.dto.vo.PayLogVO;
 import com.sjhy.platform.client.dto.vo.PayNotifyVO;
 import com.sjhy.platform.client.dto.vo.pay.*;
 import com.sjhy.platform.client.service.PayService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.management.relation.RoleNotFoundException;
@@ -17,6 +18,7 @@ import javax.management.relation.RoleNotFoundException;
 /**
  * @HJ
  */
+@Service(value = "PayService")
 public class PayServiceImpl implements PayService {
     @Resource
     private PayBO payBO;

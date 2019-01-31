@@ -113,7 +113,7 @@
     </update>
 
     <!-- 查询玩家渠道id -->
-    <select id="selectByChannelUserId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
+    <select id="selectByPlayerChannel" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
         select
         <include refid="Base_Column_List" />
         from player_channel

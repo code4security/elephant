@@ -12,6 +12,7 @@ import com.sjhy.platform.client.dto.utils.HttpUtil;
 import com.sjhy.platform.client.dto.utils.MD5Util;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
 /** 
  * <p>类说明:</p>
@@ -21,6 +22,7 @@ import org.json.JSONObject;
  * <p>修改时间：</p>
  * <p>修改描述：</p>
  **/
+@Service("AbstractGamePayProxy")
 public abstract class AbstractGamePayProxy<T> {
 	private static Logger log = Logger.getLogger(AbstractGamePayProxy.class);
 
@@ -40,7 +42,7 @@ public abstract class AbstractGamePayProxy<T> {
 		Properties serverConfig = GetBeanHelper.getServerConfig();
 		
 		gamePayURL = serverConfig.getProperty(AppConfig.GAME_PAY_URL);
-		key        = serverConfig.getProperty(AppConfig.GAME_PAY_KEY);
+		key = serverConfig.getProperty(AppConfig.GAME_PAY_KEY);
 		
 		String gameId   = serverConfig.getProperty(AppConfig.GAME_ID);
 		String serverId = serverConfig.getProperty(AppConfig.SERVER_ID);
@@ -55,8 +57,8 @@ public abstract class AbstractGamePayProxy<T> {
 		try {
 			DESUtil desUtil = new DESUtil(key);
 			
-			String action   = getAction();
-			String data     = getData(datas);
+			String action = getAction();
+			String data = getData(datas);
 			
 			log.info("key=============="+key);
 			log.info("action==========="+action);

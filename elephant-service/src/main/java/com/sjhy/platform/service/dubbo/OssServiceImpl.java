@@ -6,6 +6,7 @@ import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.exception.*;
 import com.sjhy.platform.client.dto.vo.AliOssBucketVO;
 import com.sjhy.platform.client.service.OssService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * @HJ
  */
+@Service(value = "OssService")
 public class OssServiceImpl implements OssService {
     @Resource
     private OssBO ossBO;

@@ -63,8 +63,6 @@ public class LoginBO {
     @Resource
     private ServerMapper serverMapper;
     @Resource
-    private RedisService redisService;
-    @Resource
     private GameMapper gameMapper;
     @Resource
     private PlayerRoleMapper playerRoleMapper;

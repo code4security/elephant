@@ -10,6 +10,7 @@ import com.sjhy.platform.client.dto.vo.LoginVO;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
 import com.sjhy.platform.client.service.LoginService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
@@ -17,6 +18,7 @@ import java.math.BigInteger;
 /**
  * @HJ
  */
+@Service(value = "LoginService")
 public class LoginServiceImpl implements LoginService {
 
     @Resource

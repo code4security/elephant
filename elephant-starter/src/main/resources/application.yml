@@ -23,8 +23,8 @@ spring:
         max-wait: -1s
 
 mybatis:
-  mapper-locations: classpath:com\sjhy\platform\persist\mysql\*.xml
-  type-aliases-package: com.sjhy.platform.client.dto
+  mapper-locations: classpath:com/sjhy/platform/persist/mysql/*/*.xml
+  type-aliases-package: com.sjhy.platform.client.dto.*
   configuration:
     cache-enabled: true
     lazy-loading-enabled: true

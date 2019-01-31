@@ -5,6 +5,7 @@ import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.exception.ChannelIDErrorException;
 import com.sjhy.platform.client.service.VerifySessionService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map;
 /**
  * @HJ
  */
+@Service(value = "VerifySessionService")
 public class VerifySessionServiceImpl implements VerifySessionService {
     @Resource
     private VerifySessionBO verifySessionBO;

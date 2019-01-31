@@ -17,8 +17,8 @@ public interface PlayerChannelMapper {
     int updateByPrimaryKey(PlayerChannel record);
 
     //查询玩家渠道id
-    PlayerChannel selectByChannelUserId(PlayerChannel record);
+    PlayerChannel selectByPlayerChannel(PlayerChannel record);
 
     // 查询渠道用户id
-    String selectByPlayerId(@Param("gameId") String gameId, @Param("channelId") String channelId, @Param("playerId") Long playerId);
+    String selectByChannelUserId(@Param("gameId") String gameId, @Param("channelId") String channelId, @Param("playerId") Long playerId);
 }

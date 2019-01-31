@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  * <p>修改时间：</p>
  * <p>修改描述：</p>
  **/
+@Service("AddLenovoOrderGPProxy")
 public class AddLenovoOrderGPProxy extends AbstractGamePayProxy<AddLenovoOrderResultVO> {
 
 	private static Logger log = Logger.getLogger(AddLenovoOrderGPProxy.class);

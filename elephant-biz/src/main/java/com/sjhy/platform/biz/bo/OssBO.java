@@ -27,6 +27,7 @@ import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerGameOssMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -35,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @HJ
  */
+@Service
 public class OssBO {
     private static Logger logger = Logger.getLogger(OssBO.class);
 

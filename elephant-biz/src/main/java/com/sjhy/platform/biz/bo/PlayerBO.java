@@ -69,7 +69,7 @@ public class PlayerBO {
             playChannel.setChannelId(sc.getChannelId());
             playChannel.setChannelUserId(sc.getChannelUserId());
 
-            PlayerChannel playerChannel = playerChannelMapper.selectByChannelUserId(playChannel);
+            PlayerChannel playerChannel = playerChannelMapper.selectByPlayerChannel(playChannel);
 
             if ( playerChannel != null ) {
                 Player play = new Player();

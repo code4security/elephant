@@ -17,6 +17,7 @@ import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.game.Server;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
+import com.sjhy.platform.client.dto.player.PlayerChannel;
 import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.client.dto.utils.HashKit;
 import com.sjhy.platform.client.dto.utils.MD5Util;
@@ -30,6 +31,7 @@ import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerChannelMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.management.relation.RoleNotFoundException;
@@ -37,13 +39,12 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 
+@Service
 public class PayBO {
     private static Logger logger = Logger.getLogger(PayBO.class);
 
     @Resource
     private PlayerRoleMapper playerRoleMapper;
-    @Resource
-    private GiftCodeBO giftCodeBO;
     @Resource
     private PlayerPayLogMapper playerPayLogMapper;
     @Resource
@@ -389,7 +390,7 @@ public class PayBO {
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByPlayerId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
@@ -489,7 +490,7 @@ public class PayBO {
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByPlayerId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
@@ -586,7 +587,7 @@ public class PayBO {
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByPlayerId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
@@ -689,7 +690,7 @@ public class PayBO {
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByPlayerId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
@@ -874,6 +875,23 @@ public class PayBO {
             addOrderResult.setCreateTime(createTime);
 
             setAnzhiPaySign(goods, orderId, palyerRole.getGameId()+"", order.getChannelId(), addOrderResult);
+        }else if(order.getChannelId().equals("2600")) {
+            addOrderResult.setGoodName(goods.getGoodsName());
+            addOrderResult.setGoodDic(goods.getGoodsDes());
+            addOrderResult.setIngot(goods.getCurrency().toString());
+
+            long createTime = System.currentTimeMillis();
+            addOrderResult.setCreateTime(createTime);
+
+            DecimalFormat df = new DecimalFormat("0.00");
+            df.setRoundingMode(RoundingMode.HALF_UP);
+            addOrderResult.setRmbPrice(df.format(goods.getRmb()));
+
+            String playM4399 = playerChannelMapper.selectByChannelUserId(palyerRole.getGameId(),palyerRole.getChannelId(),palyerRole.getPlayerId());
+            // String secret = "0c910709baf84bbebe94db215fff1097";
+            String secret = "a8d0b772a7c933b7949375de5104c09b";
+
+            setM4399PaySign(orderId,playM4399,server.getServerId(),secret,orderId,(int)createTime,null,0,addOrderResult);
         } else {
             GameChannelSetting gameChannelSetting = VerifySessionBO.getGameChannelSetting(palyerRole.getGameId()+"", order.getChannelId());
 
@@ -888,6 +906,26 @@ public class PayBO {
         addOrderResult.setRmbPrice(df.format(goods.getRmb()));
 
         return addOrderResult;
+    }
+
+    /**
+     * 4399 渠道签名
+     * @param orderid
+     * @param uid
+     * @param serverid
+     * @param secret
+     * @param mark
+     * @param time
+     * @param couponMark
+     * @param couponMonkey
+     * @param info
+     */
+    public void setM4399PaySign(String orderid, String uid, int serverid, String secret,String mark, int time, String couponMark,
+                                int couponMonkey, AddOrderResultVO info) {
+        String sign = MD5Util.me().md5Hex(orderid+uid+info.getRmbPrice()+info.getIngot()+serverid+secret
+                +mark+time+couponMark+couponMonkey);
+        System.out.println("=========sign============>" + sign);
+        info.setSign(sign);
     }
 
     /**

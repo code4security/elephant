@@ -4,12 +4,14 @@ import com.sjhy.platform.biz.bo.ServerHistoryBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.service.ServerHistoryService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 /**
  * @HJ
  */
+@Service(value = "ServerHistoryService")
 public class ServerHistoryServiceImpl implements ServerHistoryService {
 
     @Resource

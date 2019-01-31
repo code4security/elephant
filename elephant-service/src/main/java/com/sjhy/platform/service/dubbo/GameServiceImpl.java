@@ -5,12 +5,14 @@ import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.client.service.GameService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 /**
  * @HJ
  */
+@Service(value = "GameService")
 public class GameServiceImpl implements GameService {
 
     @Resource

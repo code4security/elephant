@@ -5,6 +5,7 @@ import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.test.Person;
 import com.sjhy.platform.client.service.test.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,7 +13,7 @@ import javax.annotation.Resource;
 /**
  * @author Liu Zheng
  */
-@Service(value = "personService")
+@Service(value="PersonService")
 public class PersonServiceImpl implements PersonService {
 
     @Resource

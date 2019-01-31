@@ -7,6 +7,7 @@ import com.sjhy.platform.client.dto.exception.MailItemErrorException;
 import com.sjhy.platform.client.dto.exception.MailNotBelongThisRoleException;
 import com.sjhy.platform.client.dto.exception.NoSuchRoleException;
 import com.sjhy.platform.client.service.MailService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 /**
  * @HJ
  */
+@Service(value = "MailService")
 public class MailServiceImpl implements MailService {
 
     @Resource

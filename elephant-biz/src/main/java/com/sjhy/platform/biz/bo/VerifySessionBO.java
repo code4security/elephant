@@ -8,11 +8,13 @@ import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.client.dto.utils.GetBeanHelper;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class VerifySessionBO {
     private static Logger logger = Logger.getLogger(VerifySessionBO.class);
     @Resource

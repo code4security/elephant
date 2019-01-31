@@ -7,12 +7,14 @@ import com.sjhy.platform.client.dto.exception.*;
 import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.service.RoleService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 /**
  * @HJ
  */
+@Service(value = "RoleService")
 public class RoleServiceImpl implements RoleService {
     @Resource
     private RoleBO roleBO;
