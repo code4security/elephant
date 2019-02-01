@@ -16,4 +16,6 @@ public interface RoleService {
 
     // 更新指定玩家的最后登录时间
     ResultDTO updateLastLoginTime(ServiceContext sc);
+
+    //
 }
