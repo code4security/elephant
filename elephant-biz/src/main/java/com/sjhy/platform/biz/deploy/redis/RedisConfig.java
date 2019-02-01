@@ -22,14 +22,12 @@ import java.lang.reflect.Method;
  * @HJ
  */
 @Configuration
-@EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
 
     /**
      * 生成key的策略
      * @return
      */
-    @Bean
     public KeyGenerator keyGenerator() {
         return new KeyGenerator() {
             @Override
@@ -56,7 +54,6 @@ public class RedisConfig extends CachingConfigurerSupport {
     /**
      * RedisTemplate配置
      */
-    @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory factory) {
         StringRedisTemplate template = new StringRedisTemplate(factory);
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);

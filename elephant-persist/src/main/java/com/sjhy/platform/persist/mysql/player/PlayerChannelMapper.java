@@ -2,7 +2,9 @@ package com.sjhy.platform.persist.mysql.player;
 
 import com.sjhy.platform.client.dto.player.PlayerChannel;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PlayerChannelMapper {
     int deleteByPrimaryKey(Integer id);
 

@@ -26,8 +26,10 @@ import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerChannelMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import javax.management.relation.RoleNotFoundException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -36,29 +38,29 @@ import java.util.*;
 @Service
 public class PayBO {
     private static Logger logger = Logger.getLogger(PayBO.class);
-
+    @Resource
     private PlayerRoleMapper playerRoleMapper;
-
+    @Resource
     private PlayerPayLogMapper playerPayLogMapper;
-
+    @Resource
     private PlayerChannelMapper playerChannelMapper;
-
+    @Resource
     private PayGoodsMapper payGoodsMapper;
-
+    @Resource
     private ServerMapper serverMapper;
-
+    @Autowired
     private AddYYBOrderGPProxy addYYBOrderGPProxy;
-
+    @Autowired
     private AddJinliOrderGPProxy addJinliOrderGPProxy;
-
+    @Autowired
     private AddLenovoOrderGPProxy addLenovoOrderGPProxy;
-
+    @Autowired
     private AddOrderGPProxy addOrderGPProxy;
-
+    @Autowired
     private AddQihooOrderGPProxy addQihooOrderGPProxy;
-
+    @Autowired
     private AddTxOrderGPProxy addTxOrderGPProxy;
-
+    @Autowired
     private AddVivoOrderGPProxy addVivoOrderGPProxy;
 
     private final String OFFLINE_GOOGS_ID_1 = "open_one_0";

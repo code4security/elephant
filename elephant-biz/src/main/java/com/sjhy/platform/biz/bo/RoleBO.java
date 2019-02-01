@@ -13,6 +13,7 @@ import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,13 +25,13 @@ import java.util.List;
 
 @Service
 public class RoleBO {
-
+    @Resource
     private PlayerRoleMapper playerRoleMapper;
-
+    @Resource
     private GameMapper gameMapper;
-
+    @Resource
     private PlayerMapper playerMapper;
-
+    @Autowired
     private ShieldingWordsUtil shieldingWordsUtil;
 
     public static String ServerID = "";

@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class VerifySessionBO {
     private static Logger logger = Logger.getLogger(VerifySessionBO.class);
-
+    @Resource
     private ChannelAndVersionMapper channelAndVersionMapper;
 
     private static Map<String, GameChannelSetting> C_Game_Channel_Setting = new HashMap<String, GameChannelSetting>();

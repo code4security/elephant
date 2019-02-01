@@ -51,17 +51,17 @@ public class LoginBO {
     private Properties serverConfig;
     @Resource
     private GiftCodeBO giftCodeBO;
-
+    @Resource
     private ChannelAndVersionMapper channelAndVersionMapper;
-
+    @Resource
     private PlayerMapper playerMapper;
     @Resource
     private ServerHistoryBO serverHistoryBO;
-
+    @Resource
     private PlayerLoginLogMapper playerLoginLogMapper;
-
+    @Resource
     private ServerMapper serverMapper;
-
+    @Resource
     private GameMapper gameMapper;
 
     private PlayerRoleMapper playerRoleMapper;

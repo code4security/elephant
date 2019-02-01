@@ -66,14 +66,13 @@ public class OssBO {
     private static Map<Long, ConcurrentHashMap<String, AliOssAccessKeyVO>> C_Player_Accesskey_Map = new ConcurrentHashMap<Long, ConcurrentHashMap<String, AliOssAccessKeyVO>>();
     // 以杭州为例
     private static final String ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com";
-
-
+    @Resource
     private PlayerGameOssMapper playerGameOssMapper;
-
+    @Resource
     private PlayerRoleMapper playerRoleMapper;
     @Resource
     private Properties serverConfig;
-
+    @Resource
     private GameMapper gameMapper;
 
     /**

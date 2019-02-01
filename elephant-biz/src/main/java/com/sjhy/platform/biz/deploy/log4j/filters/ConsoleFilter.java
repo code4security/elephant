@@ -36,8 +36,8 @@ public final class ConsoleFilter extends Filter
 	{
 		Object message = loggingEvent.getMessage();
 
-		if (((String) message).startsWith("[MESSAGE]") || ((String) message).startsWith("[ADMIN COMMAND]") || ((String) message).startsWith("[AUDIT]")
-				|| ((String) message).startsWith("[ITEM]") || ((String) message).startsWith("[UNKNOWN PACKET]"))
+		if ((String.valueOf(message)).startsWith("[MESSAGE]") || (String.valueOf(message)).startsWith("[ADMIN COMMAND]") || (String.valueOf(message)).startsWith("[AUDIT]")
+				|| (String.valueOf(message)).startsWith("[ITEM]") || (String.valueOf(message)).startsWith("[UNKNOWN PACKET]"))
 		{
 			return DENY;
 		}

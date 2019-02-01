@@ -30,17 +30,15 @@ import java.util.LinkedHashMap;
 @Service
 public class GiftCodeBO {
     private static final Logger logger = Logger.getLogger( GiftCodeBO.class );
-
+    @Resource
     private PlayerGiftLogMapper playerGiftLogMapper;
-
+    @Resource
     private GiftCodeMapper giftCodeMapper;
-
+    @Resource
     private GiftCodeListMapper giftCodeListMapper;
-
+    @Resource
     private PlayerRoleMapper playerRoleMapper;
     @Resource
-    private GiftCodeBO giftCodeBO;
-    
     private VirtualCurrencyMapper virtualCurrencyMapper;
 
     /**
@@ -258,7 +256,7 @@ public class GiftCodeBO {
         }
 
         // 判断兑换码是否已被使用
-        GiftCodeList giftCodeList = giftCodeBO.isValidRedeemCode(sc, redeemCode);
+        GiftCodeList giftCodeList = this.isValidRedeemCode(sc, redeemCode);
         if(giftCodeList == null){
             throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
         }
@@ -268,7 +266,7 @@ public class GiftCodeBO {
         }
 
         // 检查同一批次是否已使用过
-        if(giftCodeBO.isUseForRedeemLot(sc, giftCodeList.getId()) != null) {
+        if(this.isUseForRedeemLot(sc, giftCodeList.getId()) != null) {
             throw new KairoException(KairoErrorCode.ERROR_REDEEM_CODE);
         }
 
@@ -292,7 +290,7 @@ public class GiftCodeBO {
         }
 
         // 更新兑换码
-        giftCodeBO.redeemCode(sc, redeemCode, giftCodeList.getId());
+        this.redeemCode(sc, redeemCode, giftCodeList.getId());
 
         return goodsMap;
     }

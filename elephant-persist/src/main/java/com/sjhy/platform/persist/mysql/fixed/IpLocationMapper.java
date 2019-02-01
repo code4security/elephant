@@ -2,9 +2,10 @@ package com.sjhy.platform.persist.mysql.fixed;
 
 import com.sjhy.platform.client.dto.fixed.IpLocation;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+@Repository
 public interface IpLocationMapper {
     int deleteByPrimaryKey(Integer id);
 

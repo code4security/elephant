@@ -19,7 +19,7 @@
     </select>
 
     <!-- 查询所有违禁词 -->
-    <select id="selectByAll" resultType="com.sjhy.platform.client.dto.fixed.HarmonyWord">
+    <select id="selectByAll" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from harmony_word

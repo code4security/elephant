@@ -5,6 +5,7 @@ import com.sjhy.platform.client.dto.fixed.HarmonyWord;
 import java.util.List;
 
 public interface HarmonyWordMapper {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(HarmonyWord record);

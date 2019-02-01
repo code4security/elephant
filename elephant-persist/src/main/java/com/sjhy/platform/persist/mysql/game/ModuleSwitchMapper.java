@@ -1,7 +1,9 @@
 package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.ModuleSwitch;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ModuleSwitchMapper {
     int deleteByPrimaryKey(Integer id);
 

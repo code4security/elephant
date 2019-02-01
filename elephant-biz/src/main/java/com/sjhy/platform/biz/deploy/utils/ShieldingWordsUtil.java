@@ -6,9 +6,11 @@ import com.sjhy.platform.biz.deploy.exception.AdmiralNameIsTooLongException;
 import com.sjhy.platform.client.dto.fixed.HarmonyWord;
 import com.sjhy.platform.persist.mysql.fixed.HarmonyWordMapper;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.regex.Pattern;
 @Service("ShieldingWordsUtil")
 public class ShieldingWordsUtil {
 	private int admiralNameMaxLong = 14; // 舰队长名最大字节长度
+	@Resource
 	private HarmonyWordMapper harmonyWordMapper;
 	private Pattern pattern; // 用于校验用户名,正则表达式的编译表示形式。 
 	
