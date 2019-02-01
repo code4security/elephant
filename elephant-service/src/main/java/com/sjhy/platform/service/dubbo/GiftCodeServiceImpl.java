@@ -3,7 +3,7 @@ package com.sjhy.platform.service.dubbo;
 import com.sjhy.platform.biz.bo.GiftCodeBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.exception.KairoException;
+import com.sjhy.platform.biz.deploy.exception.KairoException;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
 import com.sjhy.platform.client.service.GiftCodeService;

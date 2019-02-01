@@ -1,10 +1,11 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.biz.deploy.utils.ShieldingWordsUtil;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.config.AppConfig;
-import com.sjhy.platform.client.dto.exception.*;
-import com.sjhy.platform.client.dto.utils.GetBeanHelper;
-import com.sjhy.platform.client.dto.utils.StringUtils;
+import com.sjhy.platform.biz.deploy.config.AppConfig;
+import com.sjhy.platform.biz.deploy.exception.*;
+import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
+import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.player.Player;
@@ -19,15 +20,18 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class RoleBO {
-    @Resource
+
     private PlayerRoleMapper playerRoleMapper;
-    @Resource
+
     private GameMapper gameMapper;
-    @Resource
+
     private PlayerMapper playerMapper;
+
+    private ShieldingWordsUtil shieldingWordsUtil;
 
     public static String ServerID = "";
 
@@ -135,5 +139,39 @@ public class RoleBO {
         }
         record.setLastLoginServer(StringUtils.getInt(ServerID));
         playerRoleMapper.updateByPrimaryKeySelective(record);
+    }
+
+    /**
+     * 验证玩家角色名是否重复
+     * @param admiralName
+     * @throws AdmiralNameIsNotNullableException
+     * @throws AdmiralNameIsTooLongException
+     * @throws AdmiralNameIncludeHarmonyException
+     * @throws AdmiralNameCoincideException
+     */
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
+    public void checkNewPlayerName(String admiralName,String gameId) throws AdmiralNameIsNotNullableException, AdmiralNameIsTooLongException, AdmiralNameIncludeHarmonyException, AdmiralNameCoincideException {
+        // 1.1.舰队长不允许重名
+        shieldingWordsUtil.checkAdmiralName(admiralName);
+
+        // 1.2.舰队长不允许重名
+        Long result = this.findByAdmiralName(admiralName,gameId);
+        if(result != null)
+            throw new AdmiralNameCoincideException();
+    }
+
+    /**
+     * 获取指定角色名的roleId,如果没有返回null
+     * @param roleName
+     * @return
+     */
+    public Long findByAdmiralName(String roleName,String gameId) {
+        List<PlayerRole> playerRoleList = playerRoleMapper.selectByRoleName(roleName,gameId);
+
+        if(playerRoleList.size() != 1){
+            return null;
+        }
+
+        return playerRoleList.get(0).getRoleId();
     }
 }

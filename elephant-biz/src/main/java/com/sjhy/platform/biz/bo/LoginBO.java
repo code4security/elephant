@@ -1,16 +1,15 @@
 package com.sjhy.platform.biz.bo;
 
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.config.AppConfig;
-import com.sjhy.platform.client.dto.config.KairoErrorCode;
+import com.sjhy.platform.biz.deploy.config.AppConfig;
+import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
 import com.sjhy.platform.client.dto.enumerate.ModuleEnum;
-import com.sjhy.platform.client.dto.exception.*;
-import com.sjhy.platform.client.dto.redis.RedisService;
+import com.sjhy.platform.biz.deploy.exception.*;
 import com.sjhy.platform.client.dto.srp.SRPAuthenticationFailedException;
 import com.sjhy.platform.client.dto.srp.SRPFactory;
 import com.sjhy.platform.client.dto.srp.SRPVerifier;
-import com.sjhy.platform.client.dto.utils.StringUtils;
-import com.sjhy.platform.client.dto.utils.UtilDate;
+import com.sjhy.platform.biz.deploy.utils.StringUtils;
+import com.sjhy.platform.biz.deploy.utils.UtilDate;
 import com.sjhy.platform.client.dto.vo.*;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
 import com.sjhy.platform.client.dto.game.Game;
@@ -52,23 +51,23 @@ public class LoginBO {
     private Properties serverConfig;
     @Resource
     private GiftCodeBO giftCodeBO;
-    @Resource
+
     private ChannelAndVersionMapper channelAndVersionMapper;
-    @Resource
+
     private PlayerMapper playerMapper;
     @Resource
     private ServerHistoryBO serverHistoryBO;
-    @Resource
+
     private PlayerLoginLogMapper playerLoginLogMapper;
-    @Resource
+
     private ServerMapper serverMapper;
-    @Resource
+
     private GameMapper gameMapper;
-    @Resource
+
     private PlayerRoleMapper playerRoleMapper;
     @Resource
     private RoleBO roleBO;
-    @Resource
+
     private PlayerBanListMapper playerBanListMapper;
     @Resource
     private GameBO gameBO;

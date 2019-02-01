@@ -1,11 +1,11 @@
 package com.sjhy.platform.biz.bo;
 
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.config.ProtocolKey;
-import com.sjhy.platform.client.dto.exception.AccountAlreadyBindingOtherException;
-import com.sjhy.platform.client.dto.exception.NotExistAccountException;
-import com.sjhy.platform.client.dto.utils.IPOperator;
-import com.sjhy.platform.client.dto.utils.MD5Util;
+import com.sjhy.platform.biz.deploy.config.ProtocolKey;
+import com.sjhy.platform.biz.deploy.exception.AccountAlreadyBindingOtherException;
+import com.sjhy.platform.biz.deploy.exception.NotExistAccountException;
+import com.sjhy.platform.biz.deploy.utils.IPOperator;
+import com.sjhy.platform.biz.deploy.utils.MD5Util;
 import com.sjhy.platform.client.dto.vo.AccountVO;
 import com.sjhy.platform.client.dto.game.ModuleSwitch;
 import com.sjhy.platform.client.dto.fixed.IpLocation;
@@ -34,15 +34,15 @@ import java.util.List;
 public class PlayerBO {
 
     private static final Logger logger = Logger.getLogger( LoginBO.class );
-    @Resource
+
     private PlayerChannelMapper playerChannelMapper;
-    @Resource
+
     private ChannelAndVersionMapper channelAndVersionMapper;
-    @Resource
+
     private PlayerMapper playerMapper;
-    @Resource
+
     private IpLocationMapper ipLocationMapper;
-    @Resource
+
     private ModuleSwitchMapper moduleSwitchMapper;
 
     /**

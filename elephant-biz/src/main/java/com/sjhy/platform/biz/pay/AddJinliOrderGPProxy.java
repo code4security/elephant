@@ -1,6 +1,6 @@
 package com.sjhy.platform.biz.pay;
 
-import com.sjhy.platform.client.dto.config.GamePayConfig;
+import com.sjhy.platform.biz.deploy.config.GamePayConfig;
 import com.sjhy.platform.client.dto.vo.pay.AddJinliOrderResultVO;
 import org.apache.log4j.Logger;
 import org.json.JSONException;

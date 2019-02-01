@@ -123,7 +123,7 @@
     </select>
 
     <!-- 查询渠道用户id -->
-    <select id="selectByChannelUserId" resultMap="java.lang.String" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
+    <select id="selectByChannelUserId" resultType="java.lang.String" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
         select
           channel_user_id
         from player_channel

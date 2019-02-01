@@ -17,7 +17,7 @@ import java.util.Calendar;
  */
 @Service
 public class ServerHistoryBO {
-	@Resource
+
     private ServerHistoryMapper serverHistoryMapper;
 	
 	/**

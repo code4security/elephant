@@ -9,7 +9,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="%p [%d{dd MMM HH:mm:ss,SSS}] %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.ConsoleFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.ConsoleFilter" />
 	</appender>
 
 	<!-- This appender prints all that is shown in console to file -->
@@ -20,7 +20,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="%p [%d{dd MMM yyyy HH:mm:ss,SSS}] %c:%L %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.ConsoleFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.ConsoleFilter" />
 	</appender>
 
 	<!-- This appender accepts only messages with exceptions and logs them to 
@@ -32,7 +32,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="%p [%d{dd MMM yyyy HH:mm:ss,SSS}] %c:%L %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.ThrowablePresentFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.ThrowablePresentFilter" />
 	</appender>
 
 	<!-- Chat Log -->
@@ -43,7 +43,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="[%d{dd MMM HH:mm:ss,SSS}] %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.ChatLogFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.ChatLogFilter" />
 	</appender>
 
 	<!-- GM Audit -->
@@ -54,7 +54,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="[%d{dd MMM HH:mm:ss,SSS}] %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.GmAuditFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.GmAuditFilter" />
 	</appender>
 
 	<!-- Audit -->
@@ -65,7 +65,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="[%d{dd MMM HH:mm:ss,SSS}] %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.AuditFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.AuditFilter" />
 	</appender>
 
 	<!-- Item -->
@@ -76,7 +76,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="[%d{dd MMM HH:mm:ss,SSS}] %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.ItemFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.ItemFilter" />
 	</appender>
 
 	<!-- Unknown Packets -->
@@ -87,7 +87,7 @@
 		<layout class="org.apache.log4j.EnhancedPatternLayout">
 			<param name="ConversionPattern" value="[%d{dd MMM HH:mm:ss,SSS}] %m%n" />
 		</layout>
-		<filter class="com.sjhy.platform.client.dto.log4j.filters.UnknownPacketsFilter" />
+		<filter class="com.sjhy.platform.biz.deploy.log4j.filters.UnknownPacketsFilter" />
 	</appender>
 	
 	<appender name="QueueRequestAppender" class="org.apache.log4j.DailyRollingFileAppender">
@@ -136,5 +136,5 @@
 	</root>
 	
 	<categoryFactory
-		class="com.sjhy.platform.client.dto.log4j.ThrowableAsMessageAwareFactory" />
+		class="com.sjhy.platform.biz.deploy.log4j.ThrowableAsMessageAwareFactory" />
 </log4j:configuration>

@@ -276,5 +276,12 @@
         where role_id = #{roleId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
+    <select id="selectByRoleName" resultType="com.sjhy.platform.client.dto.player.PlayerRole">
+        select
+        <include refid="Base_Column_List" />
+        from player_role
+        where role_name = #{roleName,jdbcType=VARCHAR}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

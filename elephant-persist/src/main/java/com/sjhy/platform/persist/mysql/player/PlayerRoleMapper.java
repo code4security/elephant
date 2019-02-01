@@ -3,6 +3,8 @@ package com.sjhy.platform.persist.mysql.player;
 import com.sjhy.platform.client.dto.player.PlayerRole;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface PlayerRoleMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -23,4 +25,7 @@ public interface PlayerRoleMapper {
 
     // 根据roleId查询玩家是否存在
     PlayerRole selectByRoleId(@Param("gameId") String gameId, @Param("roleId") Long roleId);
+
+    // 根据roleName查询玩家是否存在
+    List<PlayerRole> selectByRoleName(@Param("gameId") String gameId, @Param("roleName") String roleName);
 }

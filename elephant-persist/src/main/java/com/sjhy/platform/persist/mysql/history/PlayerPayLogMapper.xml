@@ -160,7 +160,7 @@
     </update>
 
     <!-- 查询玩家支付订单 -->
-    <select id="selectByPayLog" resultMap="java.util.List" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+    <select id="selectByPayLog" resultType="com.sjhy.platform.client.dto.history.PlayerPayLog" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
         select
         <include refid="Base_Column_List" />
         from player_pay_log

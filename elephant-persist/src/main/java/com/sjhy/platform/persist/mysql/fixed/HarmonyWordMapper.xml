@@ -18,6 +18,13 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
+    <!-- 查询所有违禁词 -->
+    <select id="selectByAll" resultType="com.sjhy.platform.client.dto.fixed.HarmonyWord">
+        select
+        <include refid="Base_Column_List" />
+        from harmony_word
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
         delete from harmony_word
         where id = #{id,jdbcType=INTEGER}
@@ -63,4 +70,5 @@
         set name = #{name,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
+
 </mapper>

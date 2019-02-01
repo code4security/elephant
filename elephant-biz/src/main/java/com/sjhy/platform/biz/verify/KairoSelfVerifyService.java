@@ -4,7 +4,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import com.sjhy.platform.client.dto.utils.HttpUtil;
+import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 

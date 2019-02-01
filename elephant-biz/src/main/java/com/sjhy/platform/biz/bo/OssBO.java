@@ -12,12 +12,12 @@ import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.config.AppConfig;
-import com.sjhy.platform.client.dto.config.KairoErrorCode;
-import com.sjhy.platform.client.dto.exception.*;
-import com.sjhy.platform.client.dto.utils.MD5Util;
-import com.sjhy.platform.client.dto.utils.StringUtils;
-import com.sjhy.platform.client.dto.utils.UtilDate;
+import com.sjhy.platform.biz.deploy.config.AppConfig;
+import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
+import com.sjhy.platform.biz.deploy.exception.*;
+import com.sjhy.platform.biz.deploy.utils.MD5Util;
+import com.sjhy.platform.biz.deploy.utils.StringUtils;
+import com.sjhy.platform.biz.deploy.utils.UtilDate;
 import com.sjhy.platform.client.dto.vo.AliOssAccessKeyVO;
 import com.sjhy.platform.client.dto.vo.AliOssBucketVO;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
@@ -67,13 +67,13 @@ public class OssBO {
     // 以杭州为例
     private static final String ENDPOINT = "http://oss-cn-hangzhou.aliyuncs.com";
 
-    @Resource
+
     private PlayerGameOssMapper playerGameOssMapper;
-    @Resource
+
     private PlayerRoleMapper playerRoleMapper;
     @Resource
     private Properties serverConfig;
-    @Resource
+
     private GameMapper gameMapper;
 
     /**

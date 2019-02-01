@@ -17,9 +17,9 @@ import java.util.Calendar;
 @Service
 public class GameBO {
     private static final Logger logger = Logger.getLogger(GameBO.class);
-    @Resource
+
     private PlayerRoleMapper playerRoleMapper;
-    @Resource
+
     private PlayerBanListMapper playerBanListMapper;
 
     /**

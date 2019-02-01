@@ -3,28 +3,23 @@ package com.sjhy.platform.biz.bo;
 import com.alibaba.fastjson.JSON;
 import com.sjhy.platform.biz.pay.*;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.config.AppConfig;
-import com.sjhy.platform.client.dto.config.GamePayConfig;
+import com.sjhy.platform.biz.deploy.config.AppConfig;
+import com.sjhy.platform.biz.deploy.config.GamePayConfig;
 import com.sjhy.platform.client.dto.enumerate.PayChannelEnum;
-import com.sjhy.platform.client.dto.enumerate.PayStatusEnum;
 import com.sjhy.platform.client.dto.enumerate.SubChannelEnum;
-import com.sjhy.platform.client.dto.exception.NoSuchRoleException;
-import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
-import com.sjhy.platform.client.dto.config.KairoErrorCode;
-import com.sjhy.platform.client.dto.exception.KairoException;
+import com.sjhy.platform.biz.deploy.exception.NoSuchRoleException;
+import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
+import com.sjhy.platform.biz.deploy.exception.KairoException;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.game.Server;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
-import com.sjhy.platform.client.dto.player.PlayerChannel;
-import com.sjhy.platform.client.dto.utils.GetBeanHelper;
-import com.sjhy.platform.client.dto.utils.HashKit;
-import com.sjhy.platform.client.dto.utils.MD5Util;
-import com.sjhy.platform.client.dto.utils.StringUtils;
+import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
+import com.sjhy.platform.biz.deploy.utils.HashKit;
+import com.sjhy.platform.biz.deploy.utils.MD5Util;
+import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.vo.*;
 import com.sjhy.platform.client.dto.vo.pay.*;
-import com.sjhy.platform.persist.mysql.fixed.VirtualCurrencyMapper;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
 import com.sjhy.platform.persist.mysql.game.ServerMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
@@ -33,7 +28,6 @@ import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.management.relation.RoleNotFoundException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -43,31 +37,28 @@ import java.util.*;
 public class PayBO {
     private static Logger logger = Logger.getLogger(PayBO.class);
 
-    @Resource
     private PlayerRoleMapper playerRoleMapper;
-    @Resource
+
     private PlayerPayLogMapper playerPayLogMapper;
-    @Resource
+
     private PlayerChannelMapper playerChannelMapper;
-    @Resource
-    private VirtualCurrencyMapper virtualCurrencyMapper;
-    @Resource
+
     private PayGoodsMapper payGoodsMapper;
-    @Resource
+
     private ServerMapper serverMapper;
-    @Resource
+
     private AddYYBOrderGPProxy addYYBOrderGPProxy;
-    @Resource
+
     private AddJinliOrderGPProxy addJinliOrderGPProxy;
-    @Resource
+
     private AddLenovoOrderGPProxy addLenovoOrderGPProxy;
-    @Resource
+
     private AddOrderGPProxy addOrderGPProxy;
-    @Resource
+
     private AddQihooOrderGPProxy addQihooOrderGPProxy;
-    @Resource
+
     private AddTxOrderGPProxy addTxOrderGPProxy;
-    @Resource
+
     private AddVivoOrderGPProxy addVivoOrderGPProxy;
 
     private final String OFFLINE_GOOGS_ID_1 = "open_one_0";

@@ -2,10 +2,10 @@ package com.sjhy.platform.biz.bo;
 
 import com.sjhy.platform.biz.verify.IVerifySession;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.exception.ChannelIDErrorException;
+import com.sjhy.platform.biz.deploy.exception.ChannelIDErrorException;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.client.dto.utils.GetBeanHelper;
+import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class VerifySessionBO {
     private static Logger logger = Logger.getLogger(VerifySessionBO.class);
-    @Resource
+
     private ChannelAndVersionMapper channelAndVersionMapper;
 
     private static Map<String, GameChannelSetting> C_Game_Channel_Setting = new HashMap<String, GameChannelSetting>();

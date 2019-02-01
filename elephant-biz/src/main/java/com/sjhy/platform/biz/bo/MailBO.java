@@ -2,9 +2,9 @@ package com.sjhy.platform.biz.bo;
 
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.enumerate.MailTypeEnum;
-import com.sjhy.platform.client.dto.exception.MailItemErrorException;
-import com.sjhy.platform.client.dto.exception.MailNotBelongThisRoleException;
-import com.sjhy.platform.client.dto.exception.NoSuchRoleException;
+import com.sjhy.platform.biz.deploy.exception.MailItemErrorException;
+import com.sjhy.platform.biz.deploy.exception.MailNotBelongThisRoleException;
+import com.sjhy.platform.biz.deploy.exception.NoSuchRoleException;
 import com.sjhy.platform.client.dto.vo.AddItemToPackVO;
 import com.sjhy.platform.client.dto.vo.MailVO;
 import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
@@ -15,9 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +25,9 @@ import java.util.List;
 @Service
 public class MailBO {
     private static final Logger logger = Logger.getLogger(MailBO.class);
-    @Resource
+
     private MailMapper mailMapper;
-    @Resource
+
     private PlayerRoleMapper playerRoleMapper;
 
     /**

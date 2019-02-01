@@ -11,7 +11,7 @@ import javax.annotation.Resource;
 
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.client.dto.utils.HttpUtil;
+import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.NameValuePair;

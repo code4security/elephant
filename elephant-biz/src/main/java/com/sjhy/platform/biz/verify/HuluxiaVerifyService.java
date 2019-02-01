@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.client.dto.utils.HttpUtil;
+import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 

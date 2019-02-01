@@ -2,7 +2,7 @@ package com.sjhy.platform.test;
 
 import com.sjhy.platform.biz.bo.LoginBO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.exception.*;
+import com.sjhy.platform.biz.deploy.exception.*;
 import com.sjhy.platform.client.dto.srp.SRPAuthenticationFailedException;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -162,7 +162,7 @@ public class SRPFactory
 	 * 
 	 * @param verifier
 	 *            The same verifier that was returned by {@link #makeVerifier(byte[])}
-	 * 
+	 *
 	 * @return the server session. Normally, this is passed directly to a new {@link SRPServerSessionRunner}
 	 */
 	public SRPServerSession newServerSession( SRPVerifier verifier )

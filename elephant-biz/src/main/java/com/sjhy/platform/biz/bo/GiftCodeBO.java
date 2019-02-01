@@ -1,11 +1,11 @@
 package com.sjhy.platform.biz.bo;
 
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.config.KairoErrorCode;
-import com.sjhy.platform.client.dto.exception.KairoException;
+import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
+import com.sjhy.platform.biz.deploy.exception.KairoException;
 import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
-import com.sjhy.platform.client.dto.utils.StringUtils;
-import com.sjhy.platform.client.dto.utils.UtilDate;
+import com.sjhy.platform.biz.deploy.utils.StringUtils;
+import com.sjhy.platform.biz.deploy.utils.UtilDate;
 import com.sjhy.platform.client.dto.fixed.GiftCode;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
@@ -30,17 +30,17 @@ import java.util.LinkedHashMap;
 @Service
 public class GiftCodeBO {
     private static final Logger logger = Logger.getLogger( GiftCodeBO.class );
-    @Resource
+
     private PlayerGiftLogMapper playerGiftLogMapper;
-    @Resource
+
     private GiftCodeMapper giftCodeMapper;
-    @Resource
+
     private GiftCodeListMapper giftCodeListMapper;
-    @Resource
+
     private PlayerRoleMapper playerRoleMapper;
     @Resource
     private GiftCodeBO giftCodeBO;
-    @Resource
+    
     private VirtualCurrencyMapper virtualCurrencyMapper;
 
     /**

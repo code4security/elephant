@@ -24,7 +24,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath:com/sjhy/platform/persist/mysql/*/*.xml
-  type-aliases-package: com.sjhy.platform.client.dto.*
+  type-aliases-package: com.sjhy.platform.client.dto.*.*
   configuration:
     cache-enabled: true
     lazy-loading-enabled: true

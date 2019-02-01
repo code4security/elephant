@@ -14,7 +14,7 @@
 
 	<!-- 商务逻辑处理BEAN,在类里加上 @Service("ApkInfoService") 的声明  -->
 	<context:component-scan base-package="com.sjhy.platform.biz" />
-	<context:component-scan base-package="com.sjhy.platform.client.dto.utils" />
+	<context:component-scan base-package="com.sjhy.platform.biz.deploy.utils" />
 	
 	<!-- 线程池,自带定时执行的线程池 -->
 	<!-- <bean id="threadPoolManager" class="com.kairo.commons.utils.ThreadPoolManager" scope="singleton" /> -->

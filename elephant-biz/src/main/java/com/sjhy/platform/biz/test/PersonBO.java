@@ -2,6 +2,7 @@ package com.sjhy.platform.biz.test;
 
 import com.sjhy.platform.client.dto.test.Person;
 import com.sjhy.platform.persist.mysql.test.PersonMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,7 +13,6 @@ import javax.annotation.Resource;
 @Service
 public class PersonBO {
 
-    @Resource
     private PersonMapper personMapper;
 
     public String test() {

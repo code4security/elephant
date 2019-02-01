@@ -242,7 +242,7 @@
     </update>
 
     <!-- 查询子渠道 -->
-    <select id="selectBySubId" resultMap="java.lang.Integer" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
+    <select id="selectBySubId" resultType="java.lang.Integer" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
         select
         sub_channel_id
         from game_channel_setting

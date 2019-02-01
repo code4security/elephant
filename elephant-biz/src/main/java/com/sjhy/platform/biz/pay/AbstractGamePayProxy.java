@@ -4,12 +4,12 @@ import java.util.Properties;
 
 //import javax.annotation.Resource;
 
-import com.sjhy.platform.client.dto.config.AppConfig;
-import com.sjhy.platform.client.dto.config.GamePayConfig;
-import com.sjhy.platform.client.dto.utils.DESUtil;
-import com.sjhy.platform.client.dto.utils.GetBeanHelper;
-import com.sjhy.platform.client.dto.utils.HttpUtil;
-import com.sjhy.platform.client.dto.utils.MD5Util;
+import com.sjhy.platform.biz.deploy.config.AppConfig;
+import com.sjhy.platform.biz.deploy.config.GamePayConfig;
+import com.sjhy.platform.biz.deploy.utils.DESUtil;
+import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
+import com.sjhy.platform.biz.deploy.utils.HttpUtil;
+import com.sjhy.platform.biz.deploy.utils.MD5Util;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
