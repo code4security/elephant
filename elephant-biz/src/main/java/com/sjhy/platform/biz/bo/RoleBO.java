@@ -151,12 +151,12 @@ public class RoleBO {
      * @throws AdmiralNameCoincideException
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public void checkNewPlayerName(String admiralName,String gameId) throws AdmiralNameIsNotNullableException, AdmiralNameIsTooLongException, AdmiralNameIncludeHarmonyException, AdmiralNameCoincideException {
+    public void checkNewPlayerName(ServiceContext sc, String admiralName) throws AdmiralNameIsNotNullableException, AdmiralNameIsTooLongException, AdmiralNameIncludeHarmonyException, AdmiralNameCoincideException {
         // 1.1.舰队长不允许重名
         shieldingWordsUtil.checkAdmiralName(admiralName);
 
         // 1.2.舰队长不允许重名
-        Long result = this.findByAdmiralName(admiralName,gameId);
+        Long result = this.findByAdmiralName(admiralName,sc.getGameId());
         if(result != null)
             throw new AdmiralNameCoincideException();
     }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * <p>类说明:</p>
  * <p>文件名： PayAddOrderVO.java</p>
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PayAddOrderVO {
+public class PayAddOrderVO implements Serializable {
 	private String goodId;
 	private int goodNumber;
 	private int channel;

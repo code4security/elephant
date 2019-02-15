@@ -1,7 +1,9 @@
 package com.sjhy.platform.biz.deploy.utils;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
@@ -14,6 +16,7 @@ import java.util.Properties;
  * @author SHACS
  *
  */
+@Component
 public class GetBeanHelper {
 	private static ApplicationContext applicationContext; // 保存spring工厂的引用
 	
@@ -28,8 +31,16 @@ public class GetBeanHelper {
 	public static <T> T getBean(Class<T> requiredType) throws BeansException {
 		return applicationContext.getBean(requiredType);
 	}
- 
-    public static Properties getServerConfig(){
+
+	public static Object getBean(String name) {
+		return getApplicationContext().getBean(name);
+	}
+
+	public static <T> T getBean(String name, Class<T> clazz) {
+		return getApplicationContext().getBean(name, clazz);
+	}
+
+	public static Properties getServerConfig(){
     	return (Properties)applicationContext.getBean("serverConfig");
     }
 

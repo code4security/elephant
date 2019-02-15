@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PayLogVO {
+public class PayLogVO implements Serializable {
 	private List<GoodsInfo> goodsInfo = new ArrayList<GoodsInfo>();
 	private Date adTime;
 	private Date vipTime;

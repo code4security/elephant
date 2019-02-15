@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * 登录成功之后的返回值
  * @author SHACS
@@ -12,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginVO {
+public class LoginVO implements Serializable {
 	private long playerId;
 	private int serverId;
 	private String versionNum;

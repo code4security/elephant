@@ -8,6 +8,7 @@ import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -72,13 +73,12 @@ public class VerifySessionBO {
 
     private String verify(String gameId, String channelId, String sessionId, String subChannelId, String verifyId) throws ChannelIDErrorException
     {
-
         ChannelAndVersion channelAndVersion = new ChannelAndVersion();
         channelAndVersion.setChannelId(channelId);
         channelAndVersion.setGameId(gameId);
         channelAndVersion = channelAndVersionMapper.verifyChannel(channelAndVersion);
 
-        IVerifySession verifySession = (IVerifySession)GetBeanHelper.getApplicationContext().getBean(channelId.toString());
+        IVerifySession verifySession = (IVerifySession)GetBeanHelper.getBean(channelId);
 
         // 验证渠道是否存在
         if (channelAndVersion == null){

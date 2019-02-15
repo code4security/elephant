@@ -62,4 +62,24 @@ public class RoleServiceImpl implements RoleService {
         roleBO.updateLastLoginTime(sc);
         return null;
     }
+
+    @Override
+    /**
+     * 验证玩家名字是否重复
+     */
+    public ResultDTO checkNewPlayerName(ServiceContext sc, String admiralName) {
+        try {
+            roleBO.checkNewPlayerName(sc,admiralName);
+        } catch (AdmiralNameIsNotNullableException e) {
+            e.printStackTrace();
+        } catch (AdmiralNameIsTooLongException e) {
+            e.printStackTrace();
+        } catch (AdmiralNameIncludeHarmonyException e) {
+            e.printStackTrace();
+        } catch (AdmiralNameCoincideException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

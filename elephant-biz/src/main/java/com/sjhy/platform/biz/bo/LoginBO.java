@@ -271,7 +271,7 @@ public class LoginBO {
 
         // 版本号相等则不需要升级,否则需要升级
         if(channelAndVersion.getVersionNum().trim().equals(versionNum.trim())/* || true */){
-            return new ChannelAndVersionVO();
+            return new ChannelAndVersionVO(true,false,"");
         }
 
         return new ChannelAndVersionVO(true,true, channelAndVersion.getVersionDownload()); // 暂时都是强制升级
