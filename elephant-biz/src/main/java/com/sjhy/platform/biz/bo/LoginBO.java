@@ -1,5 +1,9 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.biz.deploy.cache.ChannelUserMgr;
+import com.sjhy.platform.biz.deploy.cache.SessionCacheMgr;
+import com.sjhy.platform.biz.deploy.cache.redis.SessionKeyHMapCpt;
+import com.sjhy.platform.biz.deploy.redis.RedisServiceImpl;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.biz.deploy.config.AppConfig;
 import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
@@ -28,6 +32,7 @@ import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,32 +50,40 @@ import java.util.Properties;
 public class LoginBO {
 
     private static final Logger logger = Logger.getLogger( LoginBO.class );
-    @Resource
+    @Autowired
     private PlayerBO playerBO;
-    @Resource
+    @Autowired
     private Properties serverConfig;
-    @Resource
+    @Autowired
     private GiftCodeBO giftCodeBO;
-    @Resource
+    @Autowired
     private ChannelAndVersionMapper channelAndVersionMapper;
-    @Resource
+    @Autowired
     private PlayerMapper playerMapper;
-    @Resource
+    @Autowired
     private ServerHistoryBO serverHistoryBO;
-    @Resource
+    @Autowired
     private PlayerLoginLogMapper playerLoginLogMapper;
-    @Resource
+    @Autowired
     private ServerMapper serverMapper;
-    @Resource
+    @Autowired
     private GameMapper gameMapper;
-
+    @Autowired
     private PlayerRoleMapper playerRoleMapper;
-    @Resource
+    @Autowired
     private RoleBO roleBO;
-
+    @Autowired
     private PlayerBanListMapper playerBanListMapper;
-    @Resource
+    @Autowired
     private GameBO gameBO;
+    @Autowired
+    private RedisServiceImpl redis;
+
+    //缓存
+    @Autowired
+    private ChannelUserMgr channelUserMgr;
+    @Autowired
+    private SessionCacheMgr sessionCacheMgr;
 
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";
@@ -130,8 +143,10 @@ public class LoginBO {
         sessionVO.activationState = account.getActivationState();
 
         // 缓存（注释）
-        /*sessionCacheMgr.put(clientId, sessionVO);
-        channelUserMgr.put(channelUserID, gameId, account);*/
+        /*redis.put(clientId,sessionVO);
+        redis.put(sc.getChannelUserId(),Integer.parseInt(sc.getGameId()),account);*/
+        sessionCacheMgr.put(clientId, sessionVO);
+        channelUserMgr.put(sc.getChannelUserId(), Integer.parseInt(sc.getGameId()), account);
         
         // 构造结果
         result.getSrp6Info().setSalt( verifier.salt_s );
@@ -165,9 +180,15 @@ public class LoginBO {
         LoginSessionVO sessionVO = new LoginSessionVO();
 
         // 缓存（注释）
-        /* sessionVO = sessionCacheMgr.get( clientId );
+        /*sessionVO = (LoginSessionVO) redis.get(String.valueOf(clientId));
+        redis.remove(String.valueOf(clientId));
+        if (sessionVO == null){
+            throw new NotChallengeYetException();
+        }*/
+         sessionVO = sessionCacheMgr.get( clientId );
         sessionCacheMgr.remove( clientId );
-        if ( sessionVO == null ){ throw new NotChallengeYetException();}*/
+        if ( sessionVO == null ){ throw new NotChallengeYetException();}
+
         Game game = gameMapper.selectByGameId(sc.getGameId());
         if (game == null){
             throw new NotChallengeYetException();
@@ -213,7 +234,8 @@ public class LoginBO {
             playerBO.createPlayer(sc);
 
             //缓存（注释）
-            // channelUserMgr.update(sessionVO.CooperateId, playerId, gameId);
+            /*redis.update(sessionVO.channelUserId,playerId,Integer.parseInt(sc.getGameId()));*/
+            channelUserMgr.update(sessionVO.channelUserId, playerId, Integer.parseInt(sc.getGameId()));
         } else {
             playerId = sessionVO.playerId;
             // serverId = sessionVO.ServerId;
@@ -221,7 +243,7 @@ public class LoginBO {
 
         // 缓存（注释）
         // 保存到redis 存储的格式为键:playerId, 值:SessionKey
-        // SessionKeyHMapCpt.saveOrUpdate(playerId+"_"+gameId, sessionVO.Session.getSessionCommonValue().toString(16));
+        SessionKeyHMapCpt.saveOrUpdate(playerId+"_"+sc.getGameId(), sessionVO.Session.getSessionCommonValue().toString(16));
 
         // 构造结果
         RegularLoginVO result = new RegularLoginVO();

@@ -7,11 +7,12 @@ import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
-@Service("2600")
+@Service(value = "2600")
 public class M4399VerifyService implements IVerifySession{
 	private static final Logger logger = Logger.getLogger( M4399VerifyService.class );
 	
@@ -39,7 +40,7 @@ public class M4399VerifyService implements IVerifySession{
 		
 		HttpUtil httpUtil = new HttpUtil();
 		
-		String res = httpUtil.getRequest(checkUrl);
+		String res = httpUtil.getRequest(checkUrl,0);
 		if(StringUtils.isBlank(res)){
 			logger.error("M4399VerifyService|method=verify|error=m4399验证错误，res为空");
 			

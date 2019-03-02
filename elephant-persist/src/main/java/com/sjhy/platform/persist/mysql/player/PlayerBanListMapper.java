@@ -1,7 +1,9 @@
 package com.sjhy.platform.persist.mysql.player;
 
 import com.sjhy.platform.client.dto.player.PlayerBanList;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PlayerBanListMapper {
     int deleteByPrimaryKey(Integer id);
 

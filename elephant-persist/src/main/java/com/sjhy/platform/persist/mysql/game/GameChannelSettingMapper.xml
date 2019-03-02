@@ -260,4 +260,11 @@
         and sub_channel_id = #{subChannelId,jdbcType=INTEGER}
     </select>
 
+    <!-- 查询所有数据返回 -->
+    <select id="selectByAll" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.GameChannelSetting" >
+        select
+        <include refid="Base_Column_List" />
+        from game_channel_setting
+    </select>
+
 </mapper>

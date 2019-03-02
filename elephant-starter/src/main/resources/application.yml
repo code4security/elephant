@@ -12,9 +12,9 @@ spring:
     name: game
 
   redis:
-    host: 47.92.153.243
+    host: localhost
     password:
-    port: 7000
+    port: 6379
     jedis:
       pool:
         max-idle: 100

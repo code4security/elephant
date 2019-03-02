@@ -1,5 +1,7 @@
 package com.sjhy.platform.biz.verify;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Map;
 
 /** 
@@ -10,6 +12,7 @@ import java.util.Map;
  * <p>修改时间：</p>
  * <p>修改描述：</p>
  **/
+@Component
 public interface IVerifySession {
 
 	/**

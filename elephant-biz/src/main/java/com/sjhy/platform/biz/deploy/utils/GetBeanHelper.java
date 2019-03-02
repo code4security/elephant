@@ -1,8 +1,10 @@
 package com.sjhy.platform.biz.deploy.utils;
 
+import com.sjhy.platform.biz.verify.IVerifySession;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Properties;
@@ -43,5 +45,9 @@ public class GetBeanHelper {
 	public static Properties getServerConfig(){
     	return (Properties)applicationContext.getBean("serverConfig");
     }
+
+    public static IVerifySession getChannelVerify(String channelId){
+		return (IVerifySession)applicationContext.getBean(channelId);
+	}
 
 }

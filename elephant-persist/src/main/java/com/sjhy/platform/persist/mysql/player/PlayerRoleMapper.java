@@ -2,9 +2,11 @@ package com.sjhy.platform.persist.mysql.player;
 
 import com.sjhy.platform.client.dto.player.PlayerRole;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface PlayerRoleMapper {
     int deleteByPrimaryKey(Integer id);
 

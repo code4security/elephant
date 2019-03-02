@@ -7,6 +7,7 @@ import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.log4j.Logger;
 
 import javax.net.ssl.*;
@@ -171,6 +172,27 @@ public class HttpUtil {
 		client.getParams().setParameter("http.protocol.content-charset", "UTF-8");
 		GetMethod get = new GetMethod(requestURL);
 		try {
+			client.executeMethod(get);
+			return get.getResponseBodyAsString();
+		} catch (HttpException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			get.releaseConnection();
+		}
+		return null;
+	}
+
+	//4399使用
+	public String getRequest(String requestURL,int zero) {
+		HttpClient client = new HttpClient();
+		client.getParams().setParameter("http.connection.timeout", HTTP_TIMEOUT);
+		client.getParams().setParameter("http.protocol.content-charset", "UTF-8");
+		GetMethod get = null;
+		try {
+			get = new GetMethod(URIUtil.encodePathQuery(requestURL,"utf-8"));
+			System.out.println(get.getPath());
 			client.executeMethod(get);
 			return get.getResponseBodyAsString();
 		} catch (HttpException e) {
