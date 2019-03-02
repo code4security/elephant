@@ -2,7 +2,11 @@ package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.PayGoods;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
+@Repository
 public interface PayGoodsMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -18,4 +22,7 @@ public interface PayGoodsMapper {
 
     // 根据渠道id 查询商品
     PayGoods selectByGChannelId(@Param("goodsName") String goodsName, @Param("channelId") String channelId, @Param("gameId") String gameId);
+
+    // 根据游戏id查询所有商品
+    List<PayGoods> selectByGoods(@Param("channelId") String channelId, @Param("gameId") String gameId);
 }

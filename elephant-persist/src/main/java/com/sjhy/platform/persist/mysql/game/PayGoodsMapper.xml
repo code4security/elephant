@@ -13,15 +13,16 @@
         <result column="goods_des" property="goodsDes" jdbcType="VARCHAR" />
         <result column="discount_begin" property="discountBegin" jdbcType="TIMESTAMP" />
         <result column="discount_end" property="discountEnd" jdbcType="TIMESTAMP" />
+        <result column="type" property="type" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, name_cn, goods_name, channel_id, game_id, currency, rmb, goods_des, discount_begin,
-        discount_end
+        id, name_cn, goods_name, channel_id, game_id, currency, rmb, goods_des, discount_begin, 
+        discount_end, type
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-        select
+        select 
         <include refid="Base_Column_List" />
         from pay_goods
         where id = #{id,jdbcType=INTEGER}
@@ -33,14 +34,14 @@
     </delete>
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
-        insert into pay_goods (id, name_cn, goods_name,
-            channel_id, game_id, currency,
-            rmb, goods_des, discount_begin,
-            discount_end)
-        values (#{id,jdbcType=INTEGER}, #{nameCn,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR},
-            #{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=VARCHAR}, #{currency,jdbcType=INTEGER},
-            #{rmb,jdbcType=DOUBLE}, #{goodsDes,jdbcType=VARCHAR}, #{discountBegin,jdbcType=TIMESTAMP},
-            #{discountEnd,jdbcType=TIMESTAMP})
+        insert into pay_goods (id, name_cn, goods_name, 
+            channel_id, game_id, currency, 
+            rmb, goods_des, discount_begin, 
+            discount_end, type)
+        values (#{id,jdbcType=INTEGER}, #{nameCn,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
+            #{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=VARCHAR}, #{currency,jdbcType=INTEGER}, 
+            #{rmb,jdbcType=DOUBLE}, #{goodsDes,jdbcType=VARCHAR}, #{discountBegin,jdbcType=TIMESTAMP}, 
+            #{discountEnd,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
@@ -76,6 +77,9 @@
             <if test="discountEnd != null" >
                 discount_end,
             </if>
+            <if test="type != null" >
+                type,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -107,6 +111,9 @@
             </if>
             <if test="discountEnd != null" >
                 #{discountEnd,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -141,6 +148,9 @@
             <if test="discountEnd != null" >
                 discount_end = #{discountEnd,jdbcType=TIMESTAMP},
             </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -155,7 +165,8 @@
             rmb = #{rmb,jdbcType=DOUBLE},
             goods_des = #{goodsDes,jdbcType=VARCHAR},
             discount_begin = #{discountBegin,jdbcType=TIMESTAMP},
-            discount_end = #{discountEnd,jdbcType=TIMESTAMP}
+            discount_end = #{discountEnd,jdbcType=TIMESTAMP},
+            type = #{type,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -169,4 +180,12 @@
         and goods_name = #{goodsName,jdbcType=VARCHAR}
     </select>
 
+    <!-- 根据渠道id 查询商品 -->
+    <select id="selectByGoods" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
+        select
+        <include refid="Base_Column_List" />
+        from pay_goods
+        where channel_id = #{channelId,jdbcType=VARCHAR}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
 </mapper>

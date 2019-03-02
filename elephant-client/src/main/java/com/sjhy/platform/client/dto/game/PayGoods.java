@@ -68,4 +68,9 @@ public class PayGoods {
      * 折扣结束时间
      */
     private Date discountEnd;
+
+    /**
+     * 商品类型
+     */
+    private Integer type;
 }
