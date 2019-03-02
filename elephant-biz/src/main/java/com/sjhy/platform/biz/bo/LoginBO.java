@@ -1,8 +1,5 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.deploy.cache.ChannelUserMgr;
-import com.sjhy.platform.biz.deploy.cache.SessionCacheMgr;
-import com.sjhy.platform.biz.deploy.cache.redis.SessionKeyHMapCpt;
 import com.sjhy.platform.biz.deploy.redis.RedisServiceImpl;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.biz.deploy.config.AppConfig;
@@ -79,12 +76,6 @@ public class LoginBO {
     @Autowired
     private RedisServiceImpl redis;
 
-    //缓存
-    @Autowired
-    private ChannelUserMgr channelUserMgr;
-    @Autowired
-    private SessionCacheMgr sessionCacheMgr;
-
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";
 
@@ -145,8 +136,6 @@ public class LoginBO {
         // 缓存（注释）
         /*redis.put(clientId,sessionVO);
         redis.put(sc.getChannelUserId(),Integer.parseInt(sc.getGameId()),account);*/
-        sessionCacheMgr.put(clientId, sessionVO);
-        channelUserMgr.put(sc.getChannelUserId(), Integer.parseInt(sc.getGameId()), account);
         
         // 构造结果
         result.getSrp6Info().setSalt( verifier.salt_s );
@@ -185,8 +174,6 @@ public class LoginBO {
         if (sessionVO == null){
             throw new NotChallengeYetException();
         }*/
-         sessionVO = sessionCacheMgr.get( clientId );
-        sessionCacheMgr.remove( clientId );
         if ( sessionVO == null ){ throw new NotChallengeYetException();}
 
         Game game = gameMapper.selectByGameId(sc.getGameId());
@@ -235,7 +222,6 @@ public class LoginBO {
 
             //缓存（注释）
             /*redis.update(sessionVO.channelUserId,playerId,Integer.parseInt(sc.getGameId()));*/
-            channelUserMgr.update(sessionVO.channelUserId, playerId, Integer.parseInt(sc.getGameId()));
         } else {
             playerId = sessionVO.playerId;
             // serverId = sessionVO.ServerId;
@@ -243,7 +229,6 @@ public class LoginBO {
 
         // 缓存（注释）
         // 保存到redis 存储的格式为键:playerId, 值:SessionKey
-        SessionKeyHMapCpt.saveOrUpdate(playerId+"_"+sc.getGameId(), sessionVO.Session.getSessionCommonValue().toString(16));
 
         // 构造结果
         RegularLoginVO result = new RegularLoginVO();
