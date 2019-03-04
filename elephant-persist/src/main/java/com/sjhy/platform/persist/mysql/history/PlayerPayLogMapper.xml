@@ -13,11 +13,12 @@
         <result column="currency_get" property="currencyGet" jdbcType="INTEGER" />
         <result column="currency_get_extra" property="currencyGetExtra" jdbcType="INTEGER" />
         <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <result column="status" property="status" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="Base_Column_List" >
         id, role_id, game_id, channel_id, goods_name, create_time, rmb, currency_get, currency_get_extra, 
-        order_id
+        order_id, status
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -36,11 +37,11 @@
         insert into player_pay_log (id, role_id, game_id, 
             channel_id, goods_name, create_time, 
             rmb, currency_get, currency_get_extra, 
-            order_id)
+            order_id, status)
         values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR}, 
             #{channelId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
             #{rmb,jdbcType=REAL}, #{currencyGet,jdbcType=INTEGER}, #{currencyGetExtra,jdbcType=INTEGER}, 
-            #{orderId,jdbcType=VARCHAR})
+            #{orderId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
@@ -76,6 +77,9 @@
             <if test="orderId != null" >
                 order_id,
             </if>
+            <if test="status != null" >
+                status,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -107,6 +111,9 @@
             </if>
             <if test="orderId != null" >
                 #{orderId,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -141,6 +148,9 @@
             <if test="orderId != null" >
                 order_id = #{orderId,jdbcType=VARCHAR},
             </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -155,11 +165,11 @@
             rmb = #{rmb,jdbcType=REAL},
             currency_get = #{currencyGet,jdbcType=INTEGER},
             currency_get_extra = #{currencyGetExtra,jdbcType=INTEGER},
-            order_id = #{orderId,jdbcType=VARCHAR}
+            order_id = #{orderId,jdbcType=VARCHAR},
+            status = #{status,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
-    <!-- 查询玩家支付订单 -->
     <select id="selectByPayLog" resultType="com.sjhy.platform.client.dto.history.PlayerPayLog" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
         select
         <include refid="Base_Column_List" />
@@ -191,5 +201,4 @@
     <select id="countByPlayerPayLog" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" resultType="java.lang.Integer">
         select count(*) from player_pay_log
     </select>
-
 </mapper>

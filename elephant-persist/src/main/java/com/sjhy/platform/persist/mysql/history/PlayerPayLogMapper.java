@@ -22,7 +22,7 @@ public interface PlayerPayLogMapper {
     List<PlayerPayLog> selectByPayLog(@Param("gameId") String gameId, @Param("roleId") Long roleId);
 
     // 查询玩家买过解锁内容
-    PlayerPayLog selectByOpen(@Param("gameId") String gameId,@Param("roleId") Long roleId);
+    PlayerPayLog selectByOpen(@Param("gameId") String gameId, @Param("roleId") Long roleId);
 
     // 查询玩家是否购买过商品
     PlayerPayLog selectByGood(@Param("gameId") String gameId, @Param("roleId") Long roleId, @Param("goodsName") String goodsName);

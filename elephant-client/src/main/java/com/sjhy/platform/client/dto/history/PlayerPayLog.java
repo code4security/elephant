@@ -68,4 +68,9 @@ public class PlayerPayLog {
      * 订单号
      */
     private String orderId;
+
+    /**
+     * 支付状态
+     */
+    private Integer status;
 }
