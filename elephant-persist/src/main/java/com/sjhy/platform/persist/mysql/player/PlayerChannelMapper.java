@@ -23,4 +23,7 @@ public interface PlayerChannelMapper {
 
     // 查询渠道用户id
     String selectByChannelUserId(@Param("gameId") String gameId, @Param("channelId") String channelId, @Param("playerId") Long playerId);
+
+    // 查询最大iosId
+    Long selectByMaxIosId(PlayerChannel record);
 }

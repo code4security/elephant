@@ -46,4 +46,9 @@ public class PlayerChannel {
      * 玩家id
      */
     private Long playerId;
+
+    /**
+     * ios玩家id,等同于playerId和roleId
+     */
+    private Long iosId;
 }

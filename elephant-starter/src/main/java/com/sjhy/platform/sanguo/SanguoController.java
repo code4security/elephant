@@ -3,7 +3,11 @@ package com.sjhy.platform.sanguo;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.game.PayGoods;
+import com.sjhy.platform.client.dto.player.Player;
+import com.sjhy.platform.client.dto.player.PlayerChannel;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
+import com.sjhy.platform.persist.mysql.player.PlayerChannelMapper;
+import com.sjhy.platform.persist.mysql.player.PlayerMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +26,10 @@ public class SanguoController {
 
     @Autowired
     private PayGoodsMapper payGoodsMapper;
+    @Autowired
+    private PlayerChannelMapper playerChannelMapper;
+    @Autowired
+    private PlayerMapper playerMapper;
 
     /**
      * 获取全部商品
@@ -30,8 +38,7 @@ public class SanguoController {
      * @return
      */
     @RequestMapping(value = "/merchandises", method = RequestMethod.GET)
-    public ResultDTO<List<PayGoods>> getMerchandises(@RequestParam String gameId,
-                                                     @RequestParam String channelId) {
+    public ResultDTO<List<PayGoods>> getMerchandises(@RequestParam String gameId, @RequestParam String channelId) {
 
         if(StringUtils.isEmpty(gameId) || StringUtils.isEmpty(channelId)){
             return ResultDTO.getSuccessResult(null);
@@ -49,15 +56,22 @@ public class SanguoController {
      * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ResultDTO<Integer> login(@RequestParam String gameId,
-                                    @RequestParam String channelId,
-                                    @RequestParam String userId){
-        if(StringUtils.isEmpty(gameId) || StringUtils.isEmpty(channelId)){
-            return ResultDTO.getSuccessResult(0);
+    public String login(@RequestParam String gameId, @RequestParam String channelId, @RequestParam String userId){
+
+        PlayerChannel playerChannel = null;
+        // 判断传入的参数是否为空
+        if(StringUtils.isEmpty(gameId) || StringUtils.isEmpty(channelId) || StringUtils.isEmpty(userId)){
+            return "10002";
         }
-
-        return null;
-
+        //查询数据库是否存在userid
+        playerChannel = playerChannelMapper.selectByPlayerChannel(new PlayerChannel(0,gameId,channelId,0,userId,0L,0L));
+        if (playerChannel == null){// 查询数据库不存在该玩家，创建新角色
+            Long count = (playerChannelMapper.selectByMaxIosId(new PlayerChannel()))+1;// 创建iosId
+            playerChannelMapper.insert(new PlayerChannel(null,gameId,channelId,0,userId,0L,count));
+            // 更新playerChannel内参数
+            playerChannel = playerChannelMapper.selectByPlayerChannel(new PlayerChannel(0,gameId,channelId,0,userId,0L,0L));
+        }
+        return "10000@"+playerChannel.getIosId();
     }
 
 }

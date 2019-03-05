@@ -9,10 +9,11 @@
         <result column="sub_channel" property="subChannel" jdbcType="INTEGER" />
         <result column="channel_user_id" property="channelUserId" jdbcType="VARCHAR" />
         <result column="player_id" property="playerId" jdbcType="BIGINT" />
+        <result column="ios_id" property="iosId" jdbcType="BIGINT" />
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, game_id, channel_id, sub_channel, channel_user_id, player_id
+        id, game_id, channel_id, sub_channel, channel_user_id, player_id, ios_id
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -29,11 +30,11 @@
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
         insert into player_channel (id, game_id, channel_id, 
-            sub_channel, channel_user_id, player_id
-            )
+            sub_channel, channel_user_id, player_id, 
+            ios_id)
         values (#{id,jdbcType=INTEGER}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
-            #{subChannel,jdbcType=INTEGER}, #{channelUserId,jdbcType=VARCHAR}, #{playerId,jdbcType=BIGINT}
-            )
+            #{subChannel,jdbcType=INTEGER}, #{channelUserId,jdbcType=VARCHAR}, #{playerId,jdbcType=BIGINT}, 
+            #{iosId,jdbcType=BIGINT})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
@@ -57,6 +58,9 @@
             <if test="playerId != null" >
                 player_id,
             </if>
+            <if test="iosId != null" >
+                ios_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -76,6 +80,9 @@
             </if>
             <if test="playerId != null" >
                 #{playerId,jdbcType=BIGINT},
+            </if>
+            <if test="iosId != null" >
+                #{iosId,jdbcType=BIGINT},
             </if>
         </trim>
     </insert>
@@ -98,6 +105,9 @@
             <if test="playerId != null" >
                 player_id = #{playerId,jdbcType=BIGINT},
             </if>
+            <if test="iosId != null" >
+                ios_id = #{iosId,jdbcType=BIGINT},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -108,7 +118,8 @@
             channel_id = #{channelId,jdbcType=VARCHAR},
             sub_channel = #{subChannel,jdbcType=INTEGER},
             channel_user_id = #{channelUserId,jdbcType=VARCHAR},
-            player_id = #{playerId,jdbcType=BIGINT}
+            player_id = #{playerId,jdbcType=BIGINT},
+            ios_id = #{iosId,jdbcType=BIGINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -132,4 +143,10 @@
         and player_id = #{playerId,jdbcType=BIGINT}
     </select>
 
+    <!-- 查询最大iosId -->
+    <select id="selectByMaxIosId" resultType="java.lang.Long" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
+        select
+          max (ios_id)
+        from player_channel
+    </select>
 </mapper>

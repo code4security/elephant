@@ -73,4 +73,9 @@ public class PlayerPayLog {
      * 支付状态
      */
     private Integer status;
+
+    /**
+     * ios购买凭证
+     */
+    private String iosReceipt;
 }

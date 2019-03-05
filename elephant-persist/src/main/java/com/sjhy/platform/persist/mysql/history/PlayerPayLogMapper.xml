@@ -14,11 +14,12 @@
         <result column="currency_get_extra" property="currencyGetExtra" jdbcType="INTEGER" />
         <result column="order_id" property="orderId" jdbcType="VARCHAR" />
         <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="ios_receipt" property="iosReceipt" jdbcType="LONGVARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List" >
         id, role_id, game_id, channel_id, goods_name, create_time, rmb, currency_get, currency_get_extra, 
-        order_id, status
+        order_id, status, ios_receipt
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -37,11 +38,13 @@
         insert into player_pay_log (id, role_id, game_id, 
             channel_id, goods_name, create_time, 
             rmb, currency_get, currency_get_extra, 
-            order_id, status)
+            order_id, status, ios_receipt
+            )
         values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR}, 
             #{channelId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
             #{rmb,jdbcType=REAL}, #{currencyGet,jdbcType=INTEGER}, #{currencyGetExtra,jdbcType=INTEGER}, 
-            #{orderId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER})
+            #{orderId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{iosReceipt,jdbcType=LONGVARCHAR}
+            )
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
@@ -80,6 +83,9 @@
             <if test="status != null" >
                 status,
             </if>
+            <if test="iosReceipt != null" >
+                ios_receipt,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -114,6 +120,9 @@
             </if>
             <if test="status != null" >
                 #{status,jdbcType=INTEGER},
+            </if>
+            <if test="iosReceipt != null" >
+                #{iosReceipt,jdbcType=LONGVARCHAR},
             </if>
         </trim>
     </insert>
@@ -151,6 +160,9 @@
             <if test="status != null" >
                 status = #{status,jdbcType=INTEGER},
             </if>
+            <if test="iosReceipt != null" >
+                ios_receipt = #{iosReceipt,jdbcType=LONGVARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -166,10 +178,12 @@
             currency_get = #{currencyGet,jdbcType=INTEGER},
             currency_get_extra = #{currencyGetExtra,jdbcType=INTEGER},
             order_id = #{orderId,jdbcType=VARCHAR},
-            status = #{status,jdbcType=INTEGER}
+            status = #{status,jdbcType=INTEGER},
+            ios_receipt = #{iosReceipt,jdbcType=LONGVARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <!--查询玩家支付订单-->
     <select id="selectByPayLog" resultType="com.sjhy.platform.client.dto.history.PlayerPayLog" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
         select
         <include refid="Base_Column_List" />
@@ -198,7 +212,18 @@
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
 
+    <!-- 查询所有数量 -->
     <select id="countByPlayerPayLog" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" resultType="java.lang.Integer">
         select count(*) from player_pay_log
+    </select>
+
+    <!-- ios查询玩家订单 -->
+    <select id="selectByIosPayLog" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_pay_log
+        where goods_name = #{goodsName,jdbcType=VARCHAR}
+        and role_id = #{roleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
 </mapper>

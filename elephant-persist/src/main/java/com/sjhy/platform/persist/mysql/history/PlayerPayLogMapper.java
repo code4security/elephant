@@ -2,9 +2,11 @@ package com.sjhy.platform.persist.mysql.history;
 
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface PlayerPayLogMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -29,4 +31,7 @@ public interface PlayerPayLogMapper {
 
     // 查询所有数量
     int countByPlayerPayLog(PlayerPayLog record);
+
+    // ios查询玩家订单
+    PlayerPayLog selectByIosPayLog(@Param("gameId") String gameId, @Param("roleId") Long roleId, @Param("goodsName") String goodsName);
 }
