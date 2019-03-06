@@ -13,13 +13,14 @@
         <result column="currency_get" property="currencyGet" jdbcType="INTEGER" />
         <result column="currency_get_extra" property="currencyGetExtra" jdbcType="INTEGER" />
         <result column="order_id" property="orderId" jdbcType="VARCHAR" />
-        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
+        <result column="ios_status" property="iosStatus" jdbcType="VARCHAR" />
         <result column="ios_receipt" property="iosReceipt" jdbcType="LONGVARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List" >
         id, role_id, game_id, channel_id, goods_name, create_time, rmb, currency_get, currency_get_extra, 
-        order_id, status, ios_receipt
+        order_id, pay_status, ios_status, ios_receipt
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -38,13 +39,13 @@
         insert into player_pay_log (id, role_id, game_id, 
             channel_id, goods_name, create_time, 
             rmb, currency_get, currency_get_extra, 
-            order_id, status, ios_receipt
-            )
+            order_id, pay_status, ios_status, 
+            ios_receipt)
         values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR}, 
             #{channelId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
             #{rmb,jdbcType=REAL}, #{currencyGet,jdbcType=INTEGER}, #{currencyGetExtra,jdbcType=INTEGER}, 
-            #{orderId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{iosReceipt,jdbcType=LONGVARCHAR}
-            )
+            #{orderId,jdbcType=VARCHAR}, #{payStatus,jdbcType=INTEGER}, #{iosStatus,jdbcType=VARCHAR}, 
+            #{iosReceipt,jdbcType=LONGVARCHAR})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
@@ -80,8 +81,11 @@
             <if test="orderId != null" >
                 order_id,
             </if>
-            <if test="status != null" >
-                status,
+            <if test="payStatus != null" >
+                pay_status,
+            </if>
+            <if test="iosStatus != null" >
+                ios_status,
             </if>
             <if test="iosReceipt != null" >
                 ios_receipt,
@@ -118,8 +122,11 @@
             <if test="orderId != null" >
                 #{orderId,jdbcType=VARCHAR},
             </if>
-            <if test="status != null" >
-                #{status,jdbcType=INTEGER},
+            <if test="payStatus != null" >
+                #{payStatus,jdbcType=INTEGER},
+            </if>
+            <if test="iosStatus != null" >
+                #{iosStatus,jdbcType=VARCHAR},
             </if>
             <if test="iosReceipt != null" >
                 #{iosReceipt,jdbcType=LONGVARCHAR},
@@ -157,8 +164,11 @@
             <if test="orderId != null" >
                 order_id = #{orderId,jdbcType=VARCHAR},
             </if>
-            <if test="status != null" >
-                status = #{status,jdbcType=INTEGER},
+            <if test="payStatus != null" >
+                pay_status = #{payStatus,jdbcType=INTEGER},
+            </if>
+            <if test="iosStatus != null" >
+                ios_status = #{iosStatus,jdbcType=VARCHAR},
             </if>
             <if test="iosReceipt != null" >
                 ios_receipt = #{iosReceipt,jdbcType=LONGVARCHAR},
@@ -178,7 +188,8 @@
             currency_get = #{currencyGet,jdbcType=INTEGER},
             currency_get_extra = #{currencyGetExtra,jdbcType=INTEGER},
             order_id = #{orderId,jdbcType=VARCHAR},
-            status = #{status,jdbcType=INTEGER},
+            pay_status = #{payStatus,jdbcType=INTEGER},
+            ios_status = #{iosStatus,jdbcType=VARCHAR},
             ios_receipt = #{iosReceipt,jdbcType=LONGVARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -222,7 +233,7 @@
         select
         <include refid="Base_Column_List" />
         from player_pay_log
-        where goods_name = #{goodsName,jdbcType=VARCHAR}
+        where order_id = #{orderId,jdbcType=VARCHAR}
         and role_id = #{roleId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>

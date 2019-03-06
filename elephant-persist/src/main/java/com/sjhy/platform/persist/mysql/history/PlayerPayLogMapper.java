@@ -33,5 +33,5 @@ public interface PlayerPayLogMapper {
     int countByPlayerPayLog(PlayerPayLog record);
 
     // ios查询玩家订单
-    PlayerPayLog selectByIosPayLog(@Param("gameId") String gameId, @Param("roleId") Long roleId, @Param("goodsName") String goodsName);
+    PlayerPayLog selectByIosPayLog(@Param("gameId") String gameId, @Param("roleId") Long roleId, @Param("orderId") String orderId);
 }

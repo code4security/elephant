@@ -145,8 +145,6 @@
 
     <!-- 查询最大iosId -->
     <select id="selectByMaxIosId" resultType="java.lang.Long" parameterType="com.sjhy.platform.client.dto.player.PlayerChannel" >
-        select
-          max (ios_id)
-        from player_channel
+        SELECT MAX(ios_id) FROM player_channel;
     </select>
 </mapper>

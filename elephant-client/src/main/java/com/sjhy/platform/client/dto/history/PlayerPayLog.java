@@ -72,7 +72,12 @@ public class PlayerPayLog {
     /**
      * 支付状态
      */
-    private Integer status;
+    private Integer payStatus;
+
+    /**
+     * ios返回状态值
+     */
+    private String iosStatus;
 
     /**
      * ios购买凭证

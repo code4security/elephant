@@ -15,15 +15,15 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import com.sjhy.platform.client.dto.common.ResultDTO;
+import com.sjhy.platform.biz.deploy.config.IosCode;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
 import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,89 +61,98 @@ public class IapController {
      * @param product_id 商品名称
      * @param transaction_id 订单号
      */
-    @RequestMapping("/setIapCertificate")
+    @RequestMapping(value = "/setIapCertificate",method = RequestMethod.POST)
     public String setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
-                                               @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/){
-        if(StringUtils.isEmpty(String.valueOf(iosId)) || StringUtils.isEmpty(receipt) || StringUtils.isEmpty(product_id) || StringUtils.isEmpty(transaction_id)){
-            return null;
+                                               @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/) {
+        //验证传参是否为空
+        if (StringUtils.isEmpty(String.valueOf(iosId)) || StringUtils.isEmpty(receipt) || StringUtils.isEmpty(product_id)
+                || StringUtils.isEmpty(transaction_id) || StringUtils.isEmpty(gameId) || StringUtils.isEmpty(channelId)) {
+            return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
         }
 
-        PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,product_id);
+        PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
         String res = null;
-        if (payLog != null){
-            switch (payLog.getStatus()){
-                case 3:
-                    res = "客户端访问ios支付失败";
-                    break;
-                case 4:
-                    res = "ok";
-                    break;
-                case 5:
-                    res = "成功";
-                    break;
-                case 6:
-                    res = "苹果支付反馈服务器订单失败";
-                    break;
-                default:
-                    res = "未知错误";
-            }
-            if (!res.equalsIgnoreCase("ok")){
-                return res;
+        // 判断订单是否存在，如果状态值不为4则返回
+        if (payLog != null) {
+            if (payLog.getPayStatus() != 4){
+                res = IosCode.ERROR_FAILURE.getErrorCode();
             }
         }
 
+        // 如果未查询到该订单，则插入数据库
         if (res == null){
             playerPayLogMapper.insert(new PlayerPayLog(null,iosId,gameId,channelId,product_id,new Date(),
-                    0.0f,null,null,transaction_id,1,receipt));
+                    0.0f,null,null,transaction_id,4,null,receipt));
         }
-
-        // 更新支付信息数据
-        payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,product_id);
+        // 更新查询支付信息数据
+        payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
 
         // 判断是否为沙箱环境
-        String url = null;
-        url = false == true? certificateUrl:certificateUrlTest;
 
+        String url = null;
+        boolean bol = false;
+        int status = -1;
+
+        url = certificateUrl;
         final String certificateCode = receipt;
-        if(StringUtils.isNotEmpty(certificateCode)){
-            playerPayLogMapper.updateByPrimaryKeySelective(new PlayerPayLog(payLog.getId(),null,null,null,null,
-                    null,null,null,null,null,4,null));
-            String receipt_data = sendHttpsCoon(url, certificateCode);// 获取结果
-            // 解析最外层json
-            JSONObject job = JSONObject.parseObject(receipt_data);
-            // 解析result层json  receipt和status
-            JSONObject jobResult = JSONObject.parseObject("result");
-            if (jobResult.get("status").equals("0")){
-                // 解析receipt层json
-                JSONObject jobReceipt = JSONObject.parseObject("receipt");
-                // 判断是否存在in_app，不存在表示作弊
-                if (StringUtils.isNotEmpty(jobReceipt.getString("in_app"))){
-                    JSONObject jobIn = JSONObject.parseObject(String.valueOf(jobReceipt));
-                    // 遍历in_app
-                    for (int i=1;i<jobIn.size();i++){
-                        // 判断商品id和订单号是否相同
-                        if (jobIn.get("transaction_id").equals(transaction_id) && jobIn.get("product_id ").equals(product_id)){
-                            playerPayLogMapper.updateByPrimaryKeySelective(new PlayerPayLog(payLog.getId(),null,null,null,null,
-                                    null,null,null,null,null,5,null));
-                            return "10001@"+product_id;
+
+        int j = 0;
+        try {
+            while (j < 2) {
+                j++;
+                // 发送请求
+                String receipt_data = sendHttpsCoon(url, certificateCode);
+                System.out.println("=============[][][1][][]" + receipt_data);
+                // 解析最外层json
+                JSONObject job = JSONObject.parseObject(receipt_data);
+                // 获取状态值并进行判断
+                status = (int) job.get("status");
+                if (status == 0) {
+                    // 解析receipt层json
+                    JSONObject jobReceipt = job.getJSONObject("receipt");
+                    // 判断是否存在in_app
+                    if (StringUtils.isNotEmpty(String.valueOf(jobReceipt.getJSONObject("in_app")))) {
+                        JSONObject jobIn = JSONObject.parseObject(String.valueOf(jobReceipt));
+                        // 遍历in_app
+                        for (int i = 1; i < jobIn.size(); i++) {
+                            // 判断商品id和订单号是否相同
+                            if (jobIn.get("transaction_id").equals(transaction_id) && jobIn.get("product_id ").equals(product_id)) {
+                                bol = true;
+                                break;
+                            }
                         }
+                    } else {
+                        status = 30000;// 没有in_app数值
                     }
+                }else if (status == 21007){
+                    url = certificateUrlTest;
+                    continue;
                 }
+                break;
+            }
+            // 判断是否成功
+            if (bol == true){
+                updatePlayerPayLogStatus(payLog.getId(),5,null);
+                return IosCode.OK.getErrorCode() + "@" + product_id;
             }else {
-                if (jobResult.get("status") != null) {
-                    int status = (int) jobResult.get("status");
-                    playerPayLogMapper.updateByPrimaryKeySelective(new PlayerPayLog(payLog.getId(), null, null, null, null,
-                            null, null, null, null, null, status, null));
-                }else {
-                    playerPayLogMapper.updateByPrimaryKeySelective(new PlayerPayLog(payLog.getId(), null, null, null, null,
-                            null, null, null, null, null, 6, null));
-                }
-                return "10006";
+                updatePlayerPayLogStatus(payLog.getId(),6,String.valueOf(status));
+                return IosCode.ERROR_FAILURE.getErrorCode();
             }
 
-            return "10004";
+        }catch (Exception e){
+            return IosCode.ERROR_UNKNOWN.getErrorCode();
         }
-        return "10002";
+    }
+
+    /**
+     * 修改支付订单表订单状态
+     * @param id
+     * @param payStatus
+     * @param iosStatus
+     */
+    public void updatePlayerPayLogStatus(int id, int payStatus, String iosStatus){
+        playerPayLogMapper.updateByPrimaryKeySelective(new PlayerPayLog(id, null, null, null, null,
+                null, null, null, null, null, payStatus, iosStatus, null));
     }
 
     /**
