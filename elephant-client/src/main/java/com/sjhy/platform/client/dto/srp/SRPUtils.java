@@ -19,7 +19,7 @@ import java.security.SecureRandom;
 public class SRPUtils
 {
 
-	// private static final Logger logger = Logger.getLogger( SRPUtils.class );
+	// private static final Logger logger = LoggerFactory.getLogger( SRPUtils.class );
 
 	/**
 	 * Validates the given constants. Throws {@link IllegalArgumentException} if the values are not valid.

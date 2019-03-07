@@ -8,14 +8,14 @@ import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("2400")
 public class CoolpadVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( CoolpadVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( CoolpadVerifyService.class );
 	
 	@Override
 	public String verify(String channelId, String token, Map<String, Object> extraParams) {

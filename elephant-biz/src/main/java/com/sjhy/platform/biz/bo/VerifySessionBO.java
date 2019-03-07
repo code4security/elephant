@@ -9,21 +9,20 @@ import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 
 import com.sjhy.platform.persist.mysql.game.GameChannelSettingMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class VerifySessionBO {
-    private static Logger logger = Logger.getLogger(VerifySessionBO.class);
+    private static final Logger logger = LoggerFactory.getLogger(VerifySessionBO.class);
     @Autowired
     private ChannelAndVersionMapper channelAndVersionMapper;
     @Autowired

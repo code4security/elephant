@@ -7,14 +7,14 @@ import javax.annotation.Resource;
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("3500")
 public class HuluxiaVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( HuluxiaVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( HuluxiaVerifyService.class );
 	
 	private static final String url = "http://api.user.huluxia.com/account/token/verify/2.0";
 	

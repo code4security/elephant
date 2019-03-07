@@ -15,14 +15,14 @@ import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.Base64Utils;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("1800")
 public class JinliVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( JinliVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( JinliVerifyService.class );
 	
 	private static String port = "443";
 	private static String verify_url = "https://id.gionee.com:"+port+"/account/verify.do";

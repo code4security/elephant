@@ -2,9 +2,10 @@ package com.sjhy.platform.biz.pay;
 
 import com.sjhy.platform.biz.deploy.config.GamePayConfig;
 import com.sjhy.platform.client.dto.vo.pay.AddJinliOrderResultVO;
-import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /** 
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service("AddJinliOrderGPProxy")
 public class AddJinliOrderGPProxy extends AbstractGamePayProxy<AddJinliOrderResultVO> {
 
-	private static Logger log = Logger.getLogger(AddJinliOrderGPProxy.class);
+	private static final Logger log = LoggerFactory.getLogger(AddJinliOrderGPProxy.class);
 	
 	@Override
 	public String getAction() {

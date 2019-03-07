@@ -26,7 +26,8 @@ import com.sjhy.platform.client.dto.player.PlayerGameOss;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerGameOssMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -38,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class OssBO {
-    private static Logger logger = Logger.getLogger(OssBO.class);
+    private static final Logger logger = LoggerFactory.getLogger(OssBO.class);
 
     // 目前只有"cn-hangzhou"这个region可用, 不要使用填写其他region的值
     private static final String REGION_CN_HANGZHOU = "cn-hangzhou";

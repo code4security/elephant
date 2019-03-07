@@ -10,14 +10,14 @@ import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HashKit;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("1400")
 public class MiVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( MiVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( MiVerifyService.class );
 
 	public static final String OAUTH_CONSUMER_KEY = "oauthConsumerKey";
 	public static final String OAUTH_TOKEN = "oauthToken";

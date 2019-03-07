@@ -1,6 +1,5 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.deploy.redis.RedisServiceImpl;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.biz.deploy.config.AppConfig;
 import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
@@ -28,13 +27,13 @@ import com.sjhy.platform.persist.mysql.history.PlayerLoginLogMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
@@ -46,7 +45,7 @@ import java.util.Properties;
 @Service
 public class LoginBO {
 
-    private static final Logger logger = Logger.getLogger( LoginBO.class );
+    private static final Logger logger = LoggerFactory.getLogger( LoginBO.class );
     @Autowired
     private PlayerBO playerBO;
     @Autowired
@@ -73,8 +72,6 @@ public class LoginBO {
     private PlayerBanListMapper playerBanListMapper;
     @Autowired
     private GameBO gameBO;
-    @Autowired
-    private RedisServiceImpl redis;
 
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";

@@ -6,7 +6,7 @@ import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSON;
 
 @Service(value = "2600")
 public class M4399VerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( M4399VerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( M4399VerifyService.class );
 	
 	@Override
 	public String verify(String channelId, String token, Map<String, Object> extraParams) {

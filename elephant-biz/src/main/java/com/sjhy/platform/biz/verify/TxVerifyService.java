@@ -12,7 +12,7 @@ import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.MD5Util;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -24,7 +24,7 @@ import com.alibaba.fastjson.JSON;
  */
 @Service("1110")
 public class TxVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( TxVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( TxVerifyService.class );
 	
 	// 手Q验证接口
 	private static final String QQ_DEBUG_YSDK_CHECK_TOKEN = "http://msdktest.qq.com/auth/verify_login?timestamp=_timestamp_&appid=_appid_&sig=_sig_&openid=_openid_&encode=_encode_";

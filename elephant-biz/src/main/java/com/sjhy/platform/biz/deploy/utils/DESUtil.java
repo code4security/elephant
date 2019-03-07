@@ -1,7 +1,8 @@
 package com.sjhy.platform.biz.deploy.utils;
 
-import org.apache.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.*;
 import javax.crypto.spec.DESKeySpec;
@@ -13,7 +14,7 @@ import java.security.SecureRandom;
  * 类说明:
  **/
 public class DESUtil {
-	private static final Logger logger = Logger.getLogger(DESUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(DESUtil.class);
 	private Cipher ecipher;
 	private Cipher dcipher;
 

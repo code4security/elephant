@@ -25,7 +25,8 @@ import com.sjhy.platform.persist.mysql.game.ServerMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerChannelMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ import java.util.*;
 
 @Service
 public class PayBO {
-    private static Logger logger = Logger.getLogger(PayBO.class);
+    private static final Logger logger = LoggerFactory.getLogger(PayBO.class);
     @Resource
     private PlayerRoleMapper playerRoleMapper;
     @Resource

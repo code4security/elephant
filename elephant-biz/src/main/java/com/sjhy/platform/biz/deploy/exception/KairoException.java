@@ -2,13 +2,14 @@ package com.sjhy.platform.biz.deploy.exception;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 
 public class KairoException extends Exception {
-	private static final Logger log = Logger.getLogger(KairoException.class);
+	private static final Logger log = LoggerFactory.getLogger(KairoException.class);
 	private static final long serialVersionUID = 1L;
 	private KairoErrorCode kairoErrorCode = KairoErrorCode.OK;
 	public KairoException(KairoErrorCode kairoErrorCode) {

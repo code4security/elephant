@@ -10,7 +10,7 @@ import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.MD5Util;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -19,7 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 @Service("1700")
 public class UCVerifyService implements IVerifySession{
 
-	private static Logger logger = Logger.getLogger(UCVerifyService.class);
+	private static Logger logger = LoggerFactory.getLogger(UCVerifyService.class);
 	
 	@SuppressWarnings("rawtypes")
 	@Override

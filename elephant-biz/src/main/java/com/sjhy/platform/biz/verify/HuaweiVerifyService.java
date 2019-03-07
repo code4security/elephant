@@ -15,14 +15,14 @@ import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HashKit;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("2300")
 public class HuaweiVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( HuaweiVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( HuaweiVerifyService.class );
 	
 	private final static String LOGIN_URL = " https://gss-cn.game.hicloud.com/gameservice/api/gbClientApi";
 

@@ -7,12 +7,12 @@ import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.biz.deploy.utils.XmlUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service("1600")
 public class LenovoVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( LenovoVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( LenovoVerifyService.class );
 
 	@Override
 	public String verify(String channelId, String token, Map<String, Object> extraParams) {

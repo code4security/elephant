@@ -17,7 +17,7 @@ import java.math.BigInteger;
 public class SRPServerSession
 {
 
-	// private static final Logger logger = Logger.getLogger( SRPServerSession.class );
+	// private static final Logger logger = LoggerFactory.getLogger( SRPServerSession.class );
 
 	/**
 	 * @param constants

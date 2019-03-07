@@ -10,8 +10,9 @@ import com.sjhy.platform.biz.deploy.utils.DESUtil;
 import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.MD5Util;
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /** 
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service("AbstractGamePayProxy")
 public abstract class AbstractGamePayProxy<T> {
-	private static Logger log = Logger.getLogger(AbstractGamePayProxy.class);
+	private static final Logger log = LoggerFactory.getLogger(AbstractGamePayProxy.class);
 
 	private MD5Util md5Util=new MD5Util();
 	

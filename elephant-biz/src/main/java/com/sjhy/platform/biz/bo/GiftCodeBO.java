@@ -15,7 +15,8 @@ import com.sjhy.platform.persist.mysql.fixed.VirtualCurrencyMapper;
 import com.sjhy.platform.persist.mysql.game.GiftCodeListMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerGiftLogMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,7 +30,7 @@ import java.util.LinkedHashMap;
  */
 @Service
 public class GiftCodeBO {
-    private static final Logger logger = Logger.getLogger( GiftCodeBO.class );
+    private static final Logger logger = LoggerFactory.getLogger( GiftCodeBO.class );
     @Resource
     private PlayerGiftLogMapper playerGiftLogMapper;
     @Resource

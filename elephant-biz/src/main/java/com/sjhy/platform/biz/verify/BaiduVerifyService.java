@@ -10,14 +10,14 @@ import com.sjhy.platform.biz.deploy.utils.Base64Utils;
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.MD5Util;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("1500")
 public class BaiduVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( BaiduVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( BaiduVerifyService.class );
 	
 	@Override
 	public String verify(String channelId, String token, Map<String, Object> extraParams) {

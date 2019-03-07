@@ -8,7 +8,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.util.URIUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -25,7 +26,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 
 public class HttpUtil {
-	private static Logger log = Logger.getLogger(HttpUtil.class);
+	private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
 	
 	private static final int HTTP_TIMEOUT = 10000;
 	

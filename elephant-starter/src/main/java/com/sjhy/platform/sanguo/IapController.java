@@ -16,9 +16,15 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.sjhy.platform.biz.deploy.config.IosCode;
+import com.sjhy.platform.biz.deploy.redis.RedisService;
+import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
+import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
+import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,9 +36,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/iap")
 public class IapController {
+    private static final Logger logger = LoggerFactory.getLogger(IapController.class);
 
     @Autowired
     private PlayerPayLogMapper playerPayLogMapper;
+    @Autowired
+    private GameMapper gameMapper;
 
     //购买凭证验证地址
     private static final String certificateUrl = "https://buy.itunes.apple.com/verifyReceipt";
@@ -65,11 +74,12 @@ public class IapController {
     public String setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
                                                @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/) {
         //验证传参是否为空
-        if (StringUtils.isEmpty(String.valueOf(iosId)) || StringUtils.isEmpty(receipt) || StringUtils.isEmpty(product_id)
-                || StringUtils.isEmpty(transaction_id) || StringUtils.isEmpty(gameId) || StringUtils.isEmpty(channelId)) {
+        if (StringUtils.isEmpty(String.valueOf(iosId)) && StringUtils.isEmpty(receipt) && StringUtils.isEmpty(product_id)
+                && StringUtils.isEmpty(transaction_id) && DbVerifyUtils.isGameId(gameId) && DbVerifyUtils.isChannelId(channelId,gameId)) {
             return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
         }
 
+        // 查询订单
         PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
         String res = null;
         // 判断订单是否存在，如果状态值不为4则返回
@@ -87,11 +97,12 @@ public class IapController {
         // 更新查询支付信息数据
         payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
 
-        // 判断是否为沙箱环境
+        // 查询游戏包名
+        String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
 
-        String url = null;
-        boolean bol = false;
-        int status = -1;
+        String url = null;    // 苹果服务器地址
+        boolean bol = false; // 返回参数判断
+        int status = -1;      // 苹果返回支付状态
 
         url = certificateUrl;
         final String certificateCode = receipt;
@@ -110,8 +121,8 @@ public class IapController {
                 if (status == 0) {
                     // 解析receipt层json
                     JSONObject jobReceipt = job.getJSONObject("receipt");
-                    // 判断是否存在in_app
-                    if (StringUtils.isNotEmpty(String.valueOf(jobReceipt.getJSONObject("in_app")))) {
+                    // 判断是否存在in_app和游戏包名是否一致
+                    if (StringUtils.isNotEmpty(String.valueOf(jobReceipt.getJSONObject("in_app"))) && gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid")))) {
                         JSONObject jobIn = JSONObject.parseObject(String.valueOf(jobReceipt));
                         // 遍历in_app
                         for (int i = 1; i < jobIn.size(); i++) {
@@ -156,13 +167,24 @@ public class IapController {
     }
 
     /**
+     * 写入日志
+     * @param iosId
+     * @param gameId
+     * @param channelId
+     * @param msg
+     */
+    @RequestMapping(value = "/writeLog", method = RequestMethod.POST)
+    public void writeLog(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId, @RequestParam String msg){
+        logger.info("{time："+new Date()+";gameId："+gameId+";channelId："+channelId+";roleId："+iosId+";msg："+msg+";}");
+    }
+
+    /**
      * 发送请求
      * @param url
      * @param code
      * @return
      */
-    private String sendHttpsCoon(@RequestParam String url,
-                                 @RequestParam String code){
+    private String sendHttpsCoon(@RequestParam String url, @RequestParam String code){
         if(url.isEmpty()){
             return null;
         }

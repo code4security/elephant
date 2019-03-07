@@ -1,22 +1,24 @@
 package com.sjhy.platform.sanguo;
 
 import com.sjhy.platform.biz.deploy.config.IosCode;
+import com.sjhy.platform.biz.deploy.redis.RedisService;
+import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.game.PayGoods;
-import com.sjhy.platform.client.dto.player.Player;
-import com.sjhy.platform.client.dto.player.PlayerChannel;
 import com.sjhy.platform.client.dto.player.PlayerIos;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerChannelMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerIosMapper;
-import com.sjhy.platform.persist.mysql.player.PlayerMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,11 +29,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/sanguo")
 public class SanguoController {
+    private static final Logger logger = LoggerFactory.getLogger(SanguoController.class);
 
     @Autowired
-    private PayGoodsMapper payGoodsMapper;
+    private RedisService redis;
     @Autowired
-    private PlayerChannelMapper playerChannelMapper;
+    private PayGoodsMapper payGoodsMapper;
     @Autowired
     private PlayerIosMapper playerIosMapper;
 
@@ -43,12 +46,19 @@ public class SanguoController {
      */
     @RequestMapping(value = "/merchandises", method = RequestMethod.POST)
     public ResultDTO<List<PayGoods>> getMerchandises(@RequestParam String gameId, @RequestParam String channelId) {
+        List<PayGoods> goodsList = new ArrayList<>();
 
-        if(StringUtils.isEmpty(gameId) || StringUtils.isEmpty(channelId)){
-            return ResultDTO.getSuccessResult(null);
+        goodsList = (List<PayGoods>) redis.get("goods");
+        if (goodsList != null){
+            return ResultDTO.getSuccessResult(goodsList);
         }
 
-        List<PayGoods> goodsList = payGoodsMapper.selectByGoods(channelId,gameId);
+        if(DbVerifyUtils.isGameId(gameId) && DbVerifyUtils.isChannelId(channelId,gameId)){
+            return ResultDTO.getSuccessResult(goodsList);
+        }
+
+        goodsList = payGoodsMapper.selectByGoods(channelId,gameId);
+        redis.set("goods",goodsList);
         return ResultDTO.getSuccessResult(goodsList);
     }
 
@@ -64,8 +74,8 @@ public class SanguoController {
 
         PlayerIos playerIos = null;
         // 判断传入的参数是否为空
-        if(StringUtils.isEmpty(gameId) || StringUtils.isEmpty(channelId) || StringUtils.isEmpty(userId)){
-            return IosCode.ERROR_UNKNOWN.getErrorCode();
+        if(DbVerifyUtils.isGameId(gameId) && DbVerifyUtils.isChannelId(channelId,gameId) && StringUtils.isEmpty(userId)){
+            return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
         }
         //查询数据库是否存在userid
         playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null));

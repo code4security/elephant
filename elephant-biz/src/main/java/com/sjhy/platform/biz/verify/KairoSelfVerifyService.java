@@ -5,7 +5,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -13,7 +13,7 @@ import com.alibaba.fastjson.JSON;
 @Service("1000")
 public class KairoSelfVerifyService implements IVerifySession{
 
-	private static Logger logger = Logger.getLogger(KairoSelfVerifyService.class);
+	private static Logger logger = LoggerFactory.getLogger(KairoSelfVerifyService.class);
 	
 	@SuppressWarnings("rawtypes")
 	@Override

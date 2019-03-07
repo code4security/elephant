@@ -11,7 +11,8 @@ import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.game.Mail;
 import com.sjhy.platform.persist.mysql.game.MailMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @Service
 public class MailBO {
-    private static final Logger logger = Logger.getLogger(MailBO.class);
+    private static final Logger logger = LoggerFactory.getLogger(MailBO.class);
     @Resource
     private MailMapper mailMapper;
     @Resource

@@ -12,7 +12,7 @@ import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import com.sjhy.platform.biz.deploy.utils.MD5Util;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.persist.mysql.game.GameChannelSettingMapper;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -26,7 +26,7 @@ import javax.annotation.Resource;
  */
 @Service("1100")
 public class YybVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( YybVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( YybVerifyService.class );
 
 	@Resource
 	private GameChannelSettingMapper gameChannelSettingMapper;

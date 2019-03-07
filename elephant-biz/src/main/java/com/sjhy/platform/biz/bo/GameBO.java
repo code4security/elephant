@@ -5,8 +5,8 @@ import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ import java.util.Calendar;
  */
 @Service
 public class GameBO {
-    private static final Logger logger = Logger.getLogger(GameBO.class);
+    private static final Logger logger = LoggerFactory.getLogger(GameBO.class);
     @Resource
     private PlayerRoleMapper playerRoleMapper;
     @Resource

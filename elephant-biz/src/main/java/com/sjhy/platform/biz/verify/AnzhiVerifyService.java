@@ -6,14 +6,15 @@ import java.util.Map;
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.biz.deploy.utils.*;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("1900")
 public class AnzhiVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( AnzhiVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( AnzhiVerifyService.class );
 	
 	@Override
 	public String verify(String channelId, String token, Map<String, Object> extraParams) {
@@ -82,7 +83,7 @@ public class AnzhiVerifyService implements IVerifySession{
 					logger.error("AnzhiVerifyService|method=verify|error="+e.getMessage());
 				}
 			}else{
-				logger.error("AnzhiVerifyService|method=verify|error="+result==null?"result null":result);
+				logger.error("AnzhiVerifyService|method=verify|error="+result==null?"result null": String.valueOf(result));
 			}
 		}
 		

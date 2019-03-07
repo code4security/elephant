@@ -15,14 +15,14 @@ import com.sjhy.platform.biz.deploy.utils.HttpUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.ConnectTimeoutException;
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 
 @Service("2900")
 public class BiliVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( BiliVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( BiliVerifyService.class );
 	
 	private static final String url       = "http://pnew.biligame.net/api/server/session.verify";
 	private static final String retry_url = "http://pserver.bilibiligame.net/api/server/session.verify";

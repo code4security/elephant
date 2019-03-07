@@ -6,12 +6,12 @@ import javax.annotation.Resource;
 
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger; import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service("2200")
 public class YyhVerifyService implements IVerifySession{
-	private static final Logger logger = Logger.getLogger( YyhVerifyService.class );
+	private static final Logger logger = LoggerFactory.getLogger( YyhVerifyService.class );
 	
 	@Override
 	public String verify(String channelId, String token, Map<String, Object> extraParams) {
