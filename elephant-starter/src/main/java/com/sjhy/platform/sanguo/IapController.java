@@ -16,7 +16,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.sjhy.platform.biz.deploy.config.IosCode;
-import com.sjhy.platform.biz.deploy.redis.RedisService;
+import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
@@ -74,8 +74,8 @@ public class IapController {
     public String setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
                                                @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/) {
         //验证传参是否为空
-        if (StringUtils.isEmpty(String.valueOf(iosId)) && StringUtils.isEmpty(receipt) && StringUtils.isEmpty(product_id)
-                && StringUtils.isEmpty(transaction_id) && DbVerifyUtils.isGameId(gameId) && DbVerifyUtils.isChannelId(channelId,gameId)) {
+        if (StringUtils.isNotEmpty(String.valueOf(iosId)) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id)
+                && StringUtils.isNotEmpty(transaction_id) && DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId)) {
             return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
         }
 
@@ -98,7 +98,7 @@ public class IapController {
         payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
 
         // 查询游戏包名
-        String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
+        // String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
 
         String url = null;    // 苹果服务器地址
         boolean bol = false; // 返回参数判断
@@ -119,8 +119,9 @@ public class IapController {
                 // 获取状态值并进行判断
                 status = (int) job.get("status");
                 if (status == 0) {
+                    bol = true;
                     // 解析receipt层json
-                    JSONObject jobReceipt = job.getJSONObject("receipt");
+                    /*JSONObject jobReceipt = job.getJSONObject("receipt");
                     // 判断是否存在in_app和游戏包名是否一致
                     if (StringUtils.isNotEmpty(String.valueOf(jobReceipt.getJSONObject("in_app"))) && gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid")))) {
                         JSONObject jobIn = JSONObject.parseObject(String.valueOf(jobReceipt));
@@ -134,7 +135,7 @@ public class IapController {
                         }
                     } else {
                         status = 30000;// 没有in_app数值
-                    }
+                    }*/
                 }else if (status == 21007){
                     url = certificateUrlTest;
                     continue;
@@ -174,8 +175,9 @@ public class IapController {
      * @param msg
      */
     @RequestMapping(value = "/writeLog", method = RequestMethod.POST)
-    public void writeLog(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId, @RequestParam String msg){
+    public String writeLog(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId, @RequestParam String msg){
         logger.info("{time："+new Date()+";gameId："+gameId+";channelId："+channelId+";roleId："+iosId+";msg："+msg+";}");
+        return IosCode.OK.getErrorCode();
     }
 
     /**

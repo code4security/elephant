@@ -6,6 +6,7 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
+    # url: jdbc:mysql://localhost.:3306/game?useUnicode=true&characterEncoding=utf-8
     url: jdbc:mysql://47.92.153.243:3306/game?useUnicode=true&characterEncoding=utf-8
     username: root
     password: mv2H)jMs9AFO-gCD
@@ -14,13 +15,15 @@ spring:
   redis:
     host: localhost
     password:
-    port: 6379
+    port: 7000
     jedis:
       pool:
         max-idle: 100
-        min-idle: 1
+        min-idle: 0
         max-active: 1000
         max-wait: -1s
+    database: 0
+    timeout: 1000ms
 
 mybatis:
   mapper-locations: classpath:com/sjhy/platform/persist/mysql/**/*.xml

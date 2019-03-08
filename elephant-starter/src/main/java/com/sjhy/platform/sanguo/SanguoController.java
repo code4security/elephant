@@ -1,14 +1,13 @@
 package com.sjhy.platform.sanguo;
 
 import com.sjhy.platform.biz.deploy.config.IosCode;
-import com.sjhy.platform.biz.deploy.redis.RedisService;
+import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.player.PlayerIos;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
-import com.sjhy.platform.persist.mysql.player.PlayerChannelMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerIosMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public class SanguoController {
     private static final Logger logger = LoggerFactory.getLogger(SanguoController.class);
 
     @Autowired
-    private RedisService redis;
+    private RedisUtil redis;
     @Autowired
     private PayGoodsMapper payGoodsMapper;
     @Autowired
@@ -48,17 +47,18 @@ public class SanguoController {
     public ResultDTO<List<PayGoods>> getMerchandises(@RequestParam String gameId, @RequestParam String channelId) {
         List<PayGoods> goodsList = new ArrayList<>();
 
+        if(DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId)){
+            return ResultDTO.getSuccessResult(goodsList);
+        }
+
         goodsList = (List<PayGoods>) redis.get("goods");
         if (goodsList != null){
             return ResultDTO.getSuccessResult(goodsList);
         }
 
-        if(DbVerifyUtils.isGameId(gameId) && DbVerifyUtils.isChannelId(channelId,gameId)){
-            return ResultDTO.getSuccessResult(goodsList);
-        }
-
         goodsList = payGoodsMapper.selectByGoods(channelId,gameId);
         redis.set("goods",goodsList);
+
         return ResultDTO.getSuccessResult(goodsList);
     }
 
@@ -74,7 +74,7 @@ public class SanguoController {
 
         PlayerIos playerIos = null;
         // 判断传入的参数是否为空
-        if(DbVerifyUtils.isGameId(gameId) && DbVerifyUtils.isChannelId(channelId,gameId) && StringUtils.isEmpty(userId)){
+        if(DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId) && StringUtils.isNotEmpty(userId)){
             return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
         }
         //查询数据库是否存在userid
@@ -84,7 +84,7 @@ public class SanguoController {
             // 更新playerChannel内参数
             playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null));
         }else {
-            playerIosMapper.updateByPrimaryKeySelective(new PlayerIos(null,null,null,null,null,new Date()));
+            playerIosMapper.updateByPrimaryKeySelective(new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date()));
         }
         return IosCode.OK.getErrorCode()+"@"+playerIos.getIosId();
     }

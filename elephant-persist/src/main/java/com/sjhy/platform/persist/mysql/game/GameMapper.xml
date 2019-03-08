@@ -104,6 +104,6 @@
         select
         <include refid="Base_Column_List" />
         from game
-        where game_id = #{gameId,jdbcType=INTEGER}
+        where game_id = #{gameId,jdbcType=VARCHAR}
     </select>
 </mapper>
