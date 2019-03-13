@@ -12,10 +12,7 @@ import com.sjhy.platform.persist.mysql.player.PlayerIosMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,22 +40,23 @@ public class SanguoController {
      * @param channelId
      * @return
      */
-    @RequestMapping(value = "/merchandises", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/merchandises", method = RequestMethod.POST)*/
+    @PostMapping(value = "/merchandises")
     public ResultDTO<List<PayGoods>> getMerchandises(@RequestParam String gameId, @RequestParam String channelId) {
         List<PayGoods> goodsList = new ArrayList<>();
 
         if(DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId)){
+
+            goodsList = (List<PayGoods>) redis.get("goods");
+            if (goodsList != null){
+                return ResultDTO.getSuccessResult(goodsList);
+            }
+
+            goodsList = payGoodsMapper.selectByGoods(channelId,gameId);
+            redis.set("goods",goodsList);
+
             return ResultDTO.getSuccessResult(goodsList);
         }
-
-        goodsList = (List<PayGoods>) redis.get("goods");
-        if (goodsList != null){
-            return ResultDTO.getSuccessResult(goodsList);
-        }
-
-        goodsList = payGoodsMapper.selectByGoods(channelId,gameId);
-        redis.set("goods",goodsList);
-
         return ResultDTO.getSuccessResult(goodsList);
     }
 
@@ -71,7 +69,6 @@ public class SanguoController {
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@RequestParam String gameId, @RequestParam String channelId, @RequestParam String userId){
-
         PlayerIos playerIos = null;
         // 判断传入的参数是否为空
         if(DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId) && StringUtils.isNotEmpty(userId)){
@@ -87,6 +84,15 @@ public class SanguoController {
             playerIosMapper.updateByPrimaryKeySelective(new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date()));
         }
         return IosCode.OK.getErrorCode()+"@"+playerIos.getIosId();
+    }
+
+    @RequestMapping(value = "/ban", method = RequestMethod.POST)
+    public String ban(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId){
+        PlayerIos playerIos = playerIosMapper.selectByPrimaryKey(iosId);
+        if (DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId) && StringUtils.isNotEmpty(String.valueOf(playerIos))){
+            return IosCode.OK.getErrorCode();
+        }
+        return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
     }
 
 }

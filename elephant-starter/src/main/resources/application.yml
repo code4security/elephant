@@ -1,5 +1,8 @@
 server:
-  port: 8080
+  port: 8443
+  ssl:
+      key-store: classpath:1880511_server.shijunhuyu.com.pfx
+      key-store-password: KbM4QRIo
 
 spring:
   profiles:
