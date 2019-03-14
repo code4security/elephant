@@ -41,7 +41,7 @@ public class IapController {
     @Autowired
     private PlayerPayLogMapper playerPayLogMapper;
     @Autowired
-    private GameMapper gameMapper;
+    private DbVerifyUtils dbVerify;
 
     //购买凭证验证地址
     private static final String certificateUrl = "https://buy.itunes.apple.com/verifyReceipt";
@@ -75,52 +75,50 @@ public class IapController {
                                                @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/) {
         //验证传参是否为空
         if (StringUtils.isNotEmpty(String.valueOf(iosId)) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id)
-                && StringUtils.isNotEmpty(transaction_id) && DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId)) {
-            return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
-        }
+                && StringUtils.isNotEmpty(transaction_id) && dbVerify.isHasGame(gameId) && dbVerify.isHasChannel(channelId,gameId)) {
 
-        // 查询订单
-        PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
-        String res = null;
-        // 判断订单是否存在，如果状态值不为4则返回
-        if (payLog != null) {
-            if (payLog.getPayStatus() != 4){
-                res = IosCode.ERROR_FAILURE.getErrorCode();
+            // 查询订单
+            PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
+            String res = null;
+            // 判断订单是否存在，如果状态值不为4则返回
+            if (payLog != null) {
+                if (payLog.getPayStatus() != 4){
+                    res = IosCode.ERROR_FAILURE.getErrorCode();
+                }
             }
-        }
 
-        // 如果未查询到该订单，则插入数据库
-        if (res == null){
-            playerPayLogMapper.insert(new PlayerPayLog(null,iosId,gameId,channelId,product_id,new Date(),
-                    0.0f,null,null,transaction_id,4,null,receipt));
-        }
-        // 更新查询支付信息数据
-        payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
+            // 如果未查询到该订单，则插入数据库
+            if (res == null){
+                playerPayLogMapper.insert(new PlayerPayLog(null,iosId,gameId,channelId,product_id,new Date(),
+                        0.0f,null,null,transaction_id,4,null,receipt));
+            }
+            // 更新查询支付信息数据
+            payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
 
-        // 查询游戏包名
-        // String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
+            // 查询游戏包名
+            // String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
 
-        String url = null;    // 苹果服务器地址
-        boolean bol = false; // 返回参数判断
-        int status = -1;      // 苹果返回支付状态
+            String url = null;    // 苹果服务器地址
+            boolean bol = false; // 返回参数判断
+            int status = -1;      // 苹果返回支付状态
 
-        url = certificateUrl;
-        final String certificateCode = receipt;
+            url = certificateUrl;
+            final String certificateCode = receipt;
 
-        int j = 0;
-        try {
-            while (j < 2) {
-                j++;
-                // 发送请求
-                String receipt_data = sendHttpsCoon(url, certificateCode);
-                System.out.println("=============[][][1][][]" + receipt_data);
-                // 解析最外层json
-                JSONObject job = JSONObject.parseObject(receipt_data);
-                // 获取状态值并进行判断
-                status = (int) job.get("status");
-                if (status == 0) {
-                    bol = true;
-                    // 解析receipt层json
+            int j = 0;
+            try {
+                while (j < 2) {
+                    j++;
+                    // 发送请求
+                    String receipt_data = sendHttpsCoon(url, certificateCode);
+                    System.out.println("=============[][][1][][]" + receipt_data);
+                    // 解析最外层json
+                    JSONObject job = JSONObject.parseObject(receipt_data);
+                    // 获取状态值并进行判断
+                    status = (int) job.get("status");
+                    if (status == 0) {
+                        bol = true;
+                        // 解析receipt层json
                     /*JSONObject jobReceipt = job.getJSONObject("receipt");
                     // 判断是否存在in_app和游戏包名是否一致
                     if (StringUtils.isNotEmpty(String.valueOf(jobReceipt.getJSONObject("in_app"))) && gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid")))) {
@@ -136,24 +134,26 @@ public class IapController {
                     } else {
                         status = 30000;// 没有in_app数值
                     }*/
-                }else if (status == 21007){
-                    url = certificateUrlTest;
-                    continue;
+                    }else if (status == 21007){
+                        url = certificateUrlTest;
+                        continue;
+                    }
+                    break;
                 }
-                break;
-            }
-            // 判断是否成功
-            if (bol == true){
-                updatePlayerPayLogStatus(payLog.getId(),5,null);
-                return IosCode.OK.getErrorCode() + "@" + product_id;
-            }else {
-                updatePlayerPayLogStatus(payLog.getId(),6,String.valueOf(status));
-                return IosCode.ERROR_FAILURE.getErrorCode();
-            }
+                // 判断是否成功
+                if (bol == true){
+                    updatePlayerPayLogStatus(payLog.getId(),5,null);
+                    return IosCode.OK.getErrorCode() + "@" + product_id;
+                }else {
+                    updatePlayerPayLogStatus(payLog.getId(),6,String.valueOf(status));
+                    return IosCode.ERROR_FAILURE.getErrorCode();
+                }
 
-        }catch (Exception e){
-            return IosCode.ERROR_UNKNOWN.getErrorCode();
+            }catch (Exception e){
+                return IosCode.ERROR_UNKNOWN.getErrorCode();
+            }
         }
+        return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
     }
 
     /**

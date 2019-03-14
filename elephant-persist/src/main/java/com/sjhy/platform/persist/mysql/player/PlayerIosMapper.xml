@@ -121,4 +121,14 @@
         and channel_id = #{channelId,jdbcType=VARCHAR}
         and client_id = #{clientId,jdbcType=VARCHAR}
     </select>
+
+    <!-- 查询玩家是否存在 -->
+    <select id="selectByGameId" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from player_ios
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and channel_id = #{channelId,jdbcType=VARCHAR}
+        and ios_id = #{iosId,jdbcType=BIGINT}
+    </select>
 </mapper>

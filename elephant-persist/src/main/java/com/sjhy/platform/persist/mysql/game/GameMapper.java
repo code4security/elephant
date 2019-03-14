@@ -1,6 +1,7 @@
 package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.Game;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,5 +19,5 @@ public interface GameMapper {
     int updateByPrimaryKey(Game record);
 
     //查询游戏id
-    Game selectByGameId(String gameId);
+    Game selectByGameId(@Param("gameId") String gameId);
 }

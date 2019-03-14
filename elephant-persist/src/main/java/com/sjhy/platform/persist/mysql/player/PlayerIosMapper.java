@@ -20,4 +20,7 @@ public interface PlayerIosMapper {
 
     // 查询玩家是否存在
     PlayerIos selectByClientId(PlayerIos record);
+
+    // 查询玩家是否存在
+    PlayerIos selectByGameId(PlayerIos record);
 }

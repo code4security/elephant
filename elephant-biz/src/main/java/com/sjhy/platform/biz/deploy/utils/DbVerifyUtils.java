@@ -6,30 +6,26 @@ import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.annotation.Resource;
 
+@Component
 public class DbVerifyUtils {
 
     @Autowired
-    private static GameMapper gameMapper;
+    private GameMapper gameMapper;
     @Autowired
-    private static ChannelAndVersionMapper channelAndVersionMapper;
+    private ChannelAndVersionMapper channelAndVersionMapper;
     @Autowired
-    private static RedisUtil redis;
+    private RedisUtil redis;
 
     /**
      * 验证gameId是否存在数据库
      * @param gameId
      * @return
      */
-    public static final boolean isHasGameId(String gameId){
+    public boolean isHasGame(String gameId){
         try {
             Game game = gameMapper.selectByGameId(gameId);
             if (game != null){
@@ -49,7 +45,7 @@ public class DbVerifyUtils {
      * @param gameId
      * @return
      */
-    public static final boolean isHasChannelId(String channelId,String gameId){
+    public boolean isHasChannel(String channelId,String gameId){
         try {
             ChannelAndVersion channelAndVersion =
                     channelAndVersionMapper.verifyChannel(new ChannelAndVersion(null,channelId,gameId,null,null,null,null));

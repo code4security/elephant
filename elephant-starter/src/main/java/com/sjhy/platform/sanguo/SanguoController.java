@@ -5,9 +5,15 @@ import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
+import com.sjhy.platform.client.dto.game.Game;
+import com.sjhy.platform.client.dto.game.GameNotify;
 import com.sjhy.platform.client.dto.game.PayGoods;
+import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.client.dto.player.PlayerIos;
+import com.sjhy.platform.persist.mysql.game.GameMapper;
+import com.sjhy.platform.persist.mysql.game.GameNotifyMapper;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
+import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerIosMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +39,12 @@ public class SanguoController {
     private PayGoodsMapper payGoodsMapper;
     @Autowired
     private PlayerIosMapper playerIosMapper;
+    @Autowired
+    private PlayerBanListMapper banListMapper;
+    @Autowired
+    private DbVerifyUtils dbVerify;
+    @Autowired
+    private GameNotifyMapper gameNotifyMapper;
 
     /**
      * 获取全部商品
@@ -43,17 +55,19 @@ public class SanguoController {
     /*@RequestMapping(value = "/merchandises", method = RequestMethod.POST)*/
     @PostMapping(value = "/merchandises")
     public ResultDTO<List<PayGoods>> getMerchandises(@RequestParam String gameId, @RequestParam String channelId) {
+        // 初始化商品列表
         List<PayGoods> goodsList = new ArrayList<>();
+        // 验证客户端参数
+        if(dbVerify.isHasGame(gameId) && dbVerify.isHasChannel(channelId,gameId)){
 
-        if(DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId)){
+            String key = gameId+"_"+channelId;
 
-            goodsList = (List<PayGoods>) redis.get("goods");
+            goodsList = (List<PayGoods>) redis.get(key);
             if (goodsList != null){
                 return ResultDTO.getSuccessResult(goodsList);
             }
-
             goodsList = payGoodsMapper.selectByGoods(channelId,gameId);
-            redis.set("goods",goodsList);
+            redis.set(key,goodsList);
 
             return ResultDTO.getSuccessResult(goodsList);
         }
@@ -71,28 +85,65 @@ public class SanguoController {
     public String login(@RequestParam String gameId, @RequestParam String channelId, @RequestParam String userId){
         PlayerIos playerIos = null;
         // 判断传入的参数是否为空
-        if(DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId) && StringUtils.isNotEmpty(userId)){
-            return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
-        }
-        //查询数据库是否存在userid
-        playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null));
-        if (playerIos == null){// 查询数据库不存在该玩家，创建新角色
-            playerIosMapper.insert(new PlayerIos(null,gameId,channelId,userId,new Date(),new Date()));
-            // 更新playerChannel内参数
+        if(dbVerify.isHasGame(gameId) && dbVerify.isHasChannel(channelId,gameId) && StringUtils.isNotEmpty(userId)){
+            //查询数据库是否存在userid
             playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null));
-        }else {
-            playerIosMapper.updateByPrimaryKeySelective(new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date()));
-        }
-        return IosCode.OK.getErrorCode()+"@"+playerIos.getIosId();
-    }
-
-    @RequestMapping(value = "/ban", method = RequestMethod.POST)
-    public String ban(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId){
-        PlayerIos playerIos = playerIosMapper.selectByPrimaryKey(iosId);
-        if (DbVerifyUtils.isHasGameId(gameId) && DbVerifyUtils.isHasChannelId(channelId,gameId) && StringUtils.isNotEmpty(String.valueOf(playerIos))){
-            return IosCode.OK.getErrorCode();
+            if (playerIos == null){
+                // 查询数据库不存在该玩家，创建新角色
+                playerIosMapper.insert(new PlayerIos(null,gameId,channelId,userId,new Date(),new Date()));
+                // 更新playerIos参数
+                playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null));
+            }else {
+                playerIosMapper.updateByPrimaryKeySelective(new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date()));
+            }
+            return IosCode.OK.getErrorCode()+"@"+playerIos.getIosId();
         }
         return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
+
+    }
+
+    /**
+     * 查询玩家是否被封禁
+     * @param iosId
+     * @param gameId
+     * @param channelId
+     * @return
+     */
+    @RequestMapping(value = "/ban", method = RequestMethod.POST)
+    public String ban(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId){
+        PlayerIos playerIos = playerIosMapper.selectByGameId(new PlayerIos(iosId,gameId,channelId,null,null,null));
+        if (playerIos != null){
+            PlayerBanList playerBanList = banListMapper.selectByBan(new PlayerBanList(null,gameId,channelId,iosId,null,null,null));
+            if (playerBanList == null || playerBanList.getIsBan() == false){
+                return IosCode.OK.getErrorCode()+"@"+iosId;
+            }else {
+                return IosCode.ERROR_BAN.getErrorCode()+"@"+iosId;
+            }
+        }
+        return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
+    }
+
+    /**
+     * 获取公告
+     * @return
+     */
+    @PostMapping("/bulletin")
+    public String getBulletin(@RequestParam String gameId){
+        if (dbVerify.isHasGame(gameId)){
+            GameNotify gameNotify = gameNotifyMapper.selectLatestNotify(gameId);
+            if (gameNotify == null){
+                return IosCode.OK.getErrorCode()+"@暂无公告";
+            }
+            logger.info("发送公告=====【】【】【】======"+gameNotify.getContent());
+            return IosCode.OK.getErrorCode()+"@"+gameNotify.getContent();
+        }else {
+            return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
+        }
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return "ok";
     }
 
 }
