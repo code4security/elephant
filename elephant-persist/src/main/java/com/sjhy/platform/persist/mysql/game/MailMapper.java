@@ -2,9 +2,11 @@ package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.Mail;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface MailMapper {
     int deleteByPrimaryKey(Integer id);
 

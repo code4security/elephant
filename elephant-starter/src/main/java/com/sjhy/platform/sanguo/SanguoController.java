@@ -5,13 +5,15 @@ import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
-import com.sjhy.platform.client.dto.game.Game;
+import com.sjhy.platform.client.dto.game.GameContent;
 import com.sjhy.platform.client.dto.game.GameNotify;
+import com.sjhy.platform.client.dto.game.Mail;
 import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.client.dto.player.PlayerIos;
-import com.sjhy.platform.persist.mysql.game.GameMapper;
+import com.sjhy.platform.persist.mysql.game.GameContentMapper;
 import com.sjhy.platform.persist.mysql.game.GameNotifyMapper;
+import com.sjhy.platform.persist.mysql.game.MailMapper;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerIosMapper;
@@ -45,6 +47,10 @@ public class SanguoController {
     private DbVerifyUtils dbVerify;
     @Autowired
     private GameNotifyMapper gameNotifyMapper;
+    @Autowired
+    private MailMapper mailMapper;
+    @Autowired
+    private GameContentMapper gameContentMapper;
 
     /**
      * 获取全部商品
@@ -87,14 +93,20 @@ public class SanguoController {
         // 判断传入的参数是否为空
         if(dbVerify.isHasGame(gameId) && dbVerify.isHasChannel(channelId,gameId) && StringUtils.isNotEmpty(userId)){
             //查询数据库是否存在userid
-            playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null));
+            playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null,null,null));
             if (playerIos == null){
                 // 查询数据库不存在该玩家，创建新角色
-                playerIosMapper.insert(new PlayerIos(null,gameId,channelId,userId,new Date(),new Date()));
+                playerIosMapper.insert(new PlayerIos(null,gameId,channelId,userId,new Date(),new Date(),null,null));
                 // 更新playerIos参数
-                playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null));
+                playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null,null,null));
             }else {
-                playerIosMapper.updateByPrimaryKeySelective(new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date()));
+                // 判断玩家是否被封禁
+                if (ban(playerIos.getIosId(),gameId,channelId)){
+                    // 返回true表示没有被封
+                    playerIosMapper.updateByPrimaryKeySelective(new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date(),null,null));
+                }else {
+                    return IosCode.ERROR_BAN.getErrorCode()+"@"+playerIos.getIosId();
+                }
             }
             return IosCode.OK.getErrorCode()+"@"+playerIos.getIosId();
         }
@@ -109,18 +121,16 @@ public class SanguoController {
      * @param channelId
      * @return
      */
-    @RequestMapping(value = "/ban", method = RequestMethod.POST)
-    public String ban(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId){
-        PlayerIos playerIos = playerIosMapper.selectByGameId(new PlayerIos(iosId,gameId,channelId,null,null,null));
-        if (playerIos != null){
+    public Boolean ban(Long iosId, String gameId, String channelId){
+        if (dbVerify.isHasIos(iosId,gameId,channelId)){
             PlayerBanList playerBanList = banListMapper.selectByBan(new PlayerBanList(null,gameId,channelId,iosId,null,null,null));
             if (playerBanList == null || playerBanList.getIsBan() == false){
-                return IosCode.OK.getErrorCode()+"@"+iosId;
+                return true;
             }else {
-                return IosCode.ERROR_BAN.getErrorCode()+"@"+iosId;
+                return false;
             }
         }
-        return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
+        return false;
     }
 
     /**
@@ -136,6 +146,56 @@ public class SanguoController {
             }
             logger.info("发送公告=====【】【】【】======"+gameNotify.getContent());
             return IosCode.OK.getErrorCode()+"@"+gameNotify.getContent();
+        }else {
+            return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
+        }
+    }
+
+    /**
+     * 获取奖励,使用邮件发送机制
+     * @param iosId
+     * @param gameId
+     * @param channelId
+     * @return
+     */
+    @PostMapping("/gift")
+    public ResultDTO<List<Mail>> getGift(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId){
+        if (dbVerify.isHasIos(iosId,gameId,channelId)){
+            return null;
+        }else {
+            Mail mail = new Mail();
+            mail.setRecvRoleId(iosId);
+            mail.setGameId(gameId);
+            mail.setChannelId(channelId);
+            List<Mail> mailList = mailMapper.selectByRoleId(mail,0,30);
+            return ResultDTO.getSuccessResult(mailList);
+        }
+    }
+
+    /**
+     * 获取奖牌
+     * @param iosId
+     * @param gameId
+     * @param channelId
+     * @param lastMedal
+     * @param rmbMedal
+     * @param freeMadel
+     * @param spendMedal
+     * @param totleMedal
+     * @return
+     */
+    @PostMapping("/medal")
+    public String updateMedal(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId,
+                              @RequestParam int lastMedal, @RequestParam int rmbMedal, @RequestParam int freeMadel, @RequestParam int spendMedal, @RequestParam int totleMedal){
+        if (dbVerify.isHasIos(iosId,gameId,channelId)){
+            GameContent content = new GameContent(null,iosId,gameId,channelId,lastMedal,rmbMedal,freeMadel,spendMedal,totleMedal);
+            GameContent gameContent = gameContentMapper.selectByRole(content);
+            if (gameContent != null){
+                gameContentMapper.updateByPrimaryKeySelective(new GameContent(gameContent.getId(),iosId,gameId,channelId,lastMedal,rmbMedal,freeMadel,spendMedal,totleMedal));
+            }else {
+                gameContentMapper.insertSelective(content);
+            }
+            return IosCode.OK.getErrorCode()+"@"+iosId;
         }else {
             return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
         }

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.GameContentMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.GameContent" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="last_medal" property="lastMedal" jdbcType="INTEGER" />
+        <result column="rmb_medal" property="rmbMedal" jdbcType="INTEGER" />
+        <result column="free_medal" property="freeMedal" jdbcType="INTEGER" />
+        <result column="spend_medal" property="spendMedal" jdbcType="INTEGER" />
+        <result column="total_medal" property="totalMedal" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, role_id, game_id, channel_id, last_medal, rmb_medal, free_medal, spend_medal,
+        total_medal
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from game_content
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from game_content
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.GameContent" >
+        insert into game_content (id, role_id, game_id,
+            channel_id, last_medal, rmb_medal,
+            free_medal, spend_medal, total_medal
+            )
+        values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR},
+            #{channelId,jdbcType=VARCHAR}, #{lastMedal,jdbcType=INTEGER}, #{rmbMedal,jdbcType=INTEGER},
+            #{freeMedal,jdbcType=INTEGER}, #{spendMedal,jdbcType=INTEGER}, #{totalMedal,jdbcType=INTEGER}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.GameContent" >
+        insert into game_content
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="lastMedal != null" >
+                last_medal,
+            </if>
+            <if test="rmbMedal != null" >
+                rmb_medal,
+            </if>
+            <if test="freeMedal != null" >
+                free_medal,
+            </if>
+            <if test="spendMedal != null" >
+                spend_medal,
+            </if>
+            <if test="totalMedal != null" >
+                total_medal,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null" >
+                #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastMedal != null" >
+                #{lastMedal,jdbcType=INTEGER},
+            </if>
+            <if test="rmbMedal != null" >
+                #{rmbMedal,jdbcType=INTEGER},
+            </if>
+            <if test="freeMedal != null" >
+                #{freeMedal,jdbcType=INTEGER},
+            </if>
+            <if test="spendMedal != null" >
+                #{spendMedal,jdbcType=INTEGER},
+            </if>
+            <if test="totalMedal != null" >
+                #{totalMedal,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.GameContent" >
+        update game_content
+        <set >
+            <if test="roleId != null" >
+                role_id = #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="lastMedal != null" >
+                last_medal = #{lastMedal,jdbcType=INTEGER},
+            </if>
+            <if test="rmbMedal != null" >
+                rmb_medal = #{rmbMedal,jdbcType=INTEGER},
+            </if>
+            <if test="freeMedal != null" >
+                free_medal = #{freeMedal,jdbcType=INTEGER},
+            </if>
+            <if test="spendMedal != null" >
+                spend_medal = #{spendMedal,jdbcType=INTEGER},
+            </if>
+            <if test="totalMedal != null" >
+                total_medal = #{totalMedal,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.GameContent" >
+        update game_content
+        set role_id = #{roleId,jdbcType=BIGINT},
+            game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            last_medal = #{lastMedal,jdbcType=INTEGER},
+            rmb_medal = #{rmbMedal,jdbcType=INTEGER},
+            free_medal = #{freeMedal,jdbcType=INTEGER},
+            spend_medal = #{spendMedal,jdbcType=INTEGER},
+            total_medal = #{totalMedal,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 查询玩家奖牌记录 -->
+    <select id="selectByRole" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.GameContent" >
+        select
+        <include refid="Base_Column_List" />
+        from game_content
+        where role_id = #{roleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        and channel_id = #{channelId,jdbcType=VARCHAR}
+    </select>
+</mapper>

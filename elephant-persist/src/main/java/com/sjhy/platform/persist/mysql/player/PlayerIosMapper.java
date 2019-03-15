@@ -1,7 +1,6 @@
 package com.sjhy.platform.persist.mysql.player;
 
 import com.sjhy.platform.client.dto.player.PlayerIos;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository

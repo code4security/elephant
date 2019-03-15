@@ -48,4 +48,14 @@ public class PlayerIos {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 月卡创建时间
+     */
+    private Date monthlyCard;
+
+    /**
+     * 月卡到期时间，为null永久
+     */
+    private Date endTime;
 }

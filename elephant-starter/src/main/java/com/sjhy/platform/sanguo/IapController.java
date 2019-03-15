@@ -74,8 +74,7 @@ public class IapController {
     public String setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
                                                @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/) {
         //验证传参是否为空
-        if (StringUtils.isNotEmpty(String.valueOf(iosId)) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id)
-                && StringUtils.isNotEmpty(transaction_id) && dbVerify.isHasGame(gameId) && dbVerify.isHasChannel(channelId,gameId)) {
+        if (dbVerify.isHasIos(iosId,gameId,channelId) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id) && StringUtils.isNotEmpty(transaction_id)) {
 
             // 查询订单
             PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
@@ -119,21 +118,21 @@ public class IapController {
                     if (status == 0) {
                         bol = true;
                         // 解析receipt层json
-                    /*JSONObject jobReceipt = job.getJSONObject("receipt");
-                    // 判断是否存在in_app和游戏包名是否一致
-                    if (StringUtils.isNotEmpty(String.valueOf(jobReceipt.getJSONObject("in_app"))) && gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid")))) {
-                        JSONObject jobIn = JSONObject.parseObject(String.valueOf(jobReceipt));
-                        // 遍历in_app
-                        for (int i = 1; i < jobIn.size(); i++) {
-                            // 判断商品id和订单号是否相同
-                            if (jobIn.get("transaction_id").equals(transaction_id) && jobIn.get("product_id ").equals(product_id)) {
-                                bol = true;
-                                break;
+                        /*JSONObject jobReceipt = job.getJSONObject("receipt");
+                        // 判断是否存在in_app和游戏包名是否一致
+                        if (StringUtils.isNotEmpty(String.valueOf(jobReceipt.getJSONObject("in_app"))) && gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid")))) {
+                            JSONObject jobIn = JSONObject.parseObject(String.valueOf(jobReceipt));
+                            // 遍历in_app
+                            for (int i = 1; i < jobIn.size(); i++) {
+                                // 判断商品id和订单号是否相同
+                                if (jobIn.get("transaction_id").equals(transaction_id) && jobIn.get("product_id ").equals(product_id)) {
+                                    bol = true;
+                                    break;
+                                }
                             }
-                        }
-                    } else {
-                        status = 30000;// 没有in_app数值
-                    }*/
+                        } else {
+                            status = 30000;// 没有in_app数值
+                        }*/
                     }else if (status == 21007){
                         url = certificateUrlTest;
                         continue;
