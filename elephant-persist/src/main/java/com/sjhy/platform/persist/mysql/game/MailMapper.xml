@@ -14,7 +14,7 @@
         <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
         <result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
         <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
-        <result column="status" property="status" jdbcType="BIT" />
+        <result column="status" property="status" jdbcType="SMALLINT" />
     </resultMap>
 
     <sql id="Base_Column_List" >
@@ -43,7 +43,7 @@
         values (#{id,jdbcType=INTEGER}, #{sendRoleId,jdbcType=BIGINT}, #{recvRoleId,jdbcType=BIGINT}, 
             #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, 
             #{title,jdbcType=VARCHAR}, #{context,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, 
-            #{goodsNum,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=BIT}
+            #{goodsNum,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}
             )
     </insert>
 
@@ -122,7 +122,7 @@
                 #{sendTime,jdbcType=TIMESTAMP},
             </if>
             <if test="status != null" >
-                #{status,jdbcType=BIT},
+                #{status,jdbcType=SMALLINT},
             </if>
         </trim>
     </insert>
@@ -161,7 +161,7 @@
                 send_time = #{sendTime,jdbcType=TIMESTAMP},
             </if>
             <if test="status != null" >
-                status = #{status,jdbcType=BIT},
+                status = #{status,jdbcType=SMALLINT},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
@@ -179,7 +179,7 @@
             goods_id = #{goodsId,jdbcType=INTEGER},
             goods_num = #{goodsNum,jdbcType=INTEGER},
             send_time = #{sendTime,jdbcType=TIMESTAMP},
-            status = #{status,jdbcType=BIT}
+            status = #{status,jdbcType=SMALLINT}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -195,7 +195,7 @@
     <!-- 查询角色所有未领取邮件 -->
     <select id="selcetByRoleMail" parameterType="com.sjhy.platform.client.dto.game.Mail" resultType="java.lang.Integer">
         select
-        <include refid="Base_Column_List" />
+            count (*)
         from mail
         where recv_role_id = #{recvRoleId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}
@@ -203,7 +203,7 @@
     </select>
 
     <!-- 查询邮件列表 -->
-    <select id="selectByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByRoleId" parameterType="com.sjhy.platform.client.dto.game.Mail" resultMap="BaseResultMap">
         SELECT
             <include refid="Base_Column_List" />
         FROM
@@ -211,7 +211,7 @@
         WHERE
             recv_role_id = #{recvRoleId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}
-        AND status = 0
+        /*and status &lt; 3*/
         ORDER BY
             send_time DESC
         LIMIT #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}

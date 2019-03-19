@@ -18,9 +18,10 @@ import javax.net.ssl.X509TrustManager;
 import com.sjhy.platform.biz.deploy.config.IosCode;
 import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
-import com.sjhy.platform.client.dto.game.Game;
+import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
-import com.sjhy.platform.persist.mysql.game.GameMapper;
+import com.sjhy.platform.persist.mysql.game.GameContentMapper;
+import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -42,6 +43,10 @@ public class IapController {
     private PlayerPayLogMapper playerPayLogMapper;
     @Autowired
     private DbVerifyUtils dbVerify;
+    @Autowired
+    private PayGoodsMapper payGoodsMapper;
+    @Autowired
+    private GameContentMapper gameContentMapper;
 
     //购买凭证验证地址
     private static final String certificateUrl = "https://buy.itunes.apple.com/verifyReceipt";
@@ -154,6 +159,24 @@ public class IapController {
         }
         return IosCode.ERROR_CLIENT_VALUE.getErrorCode();
     }
+
+    /**
+     * 验证商品
+     * @param goodsName
+     * @param channelId
+     * @param gameId
+     * @return
+     */
+    /*public Boolean verifyGoods(String goodsName, String channelId, String gameId){
+        PayGoods payGoods = payGoodsMapper.selectByGChannelId(goodsName,channelId,gameId);
+        String good = "money";
+        if (payGoods != null){
+            Boolean status = goodsName.contains(good);
+            if (status){
+
+            }
+        }
+    }*/
 
     /**
      * 修改支付订单表订单状态

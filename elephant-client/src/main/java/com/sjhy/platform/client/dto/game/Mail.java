@@ -77,5 +77,5 @@ public class Mail {
     /**
      * 邮件状态（未领，已领）
      */
-    private Boolean status;
+    private Short status;
 }

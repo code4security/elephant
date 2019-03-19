@@ -43,7 +43,7 @@ public class MailBO {
         deleteMail.setId(mailId);
         deleteMail.setGameId(sc.getGameId());
         deleteMail.setRecvRoleId(sc.getRoleId());
-        deleteMail.setStatus(true);
+        deleteMail.setStatus((short) 3);
 
         mailMapper.updateByPrimaryKeySelective(deleteMail);
     }
@@ -71,7 +71,7 @@ public class MailBO {
         if(mail == null){
             logger.error("This mail["+mailId+"] is not exist");
             return goods;
-        }else if(mail.getStatus()) {
+        }else if(mail.getStatus()>2) {
             throw new MailItemErrorException("该邮件已被领取");
         }
 
@@ -142,7 +142,7 @@ public class MailBO {
         Mail mails = new Mail();
         mails.setGameId(sc.getGameId());
         mails.setRecvRoleId(sc.getRoleId());
-        List<Mail> roleMailList = mailMapper.selectByRoleId(mails, from, 30);
+        List<Mail> roleMailList = mailMapper.selectByRoleId(sc.getRoleId(), sc.getGameId(), from, 30);
 
         List<MailVO> roleMailVOList = new ArrayList<MailVO>();
         for (Mail mail : roleMailList) {

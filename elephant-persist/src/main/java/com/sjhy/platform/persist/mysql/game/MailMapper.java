@@ -27,5 +27,5 @@ public interface MailMapper {
     int selcetByRoleMail(Mail record);
 
     // 查询邮件列表
-    List<Mail> selectByRoleId(Mail record, @Param("from")int from, @Param("to")int to);
+    List<Mail> selectByRoleId(@Param("recvRoleId") Long recvRoleId, @Param("gameId") String gameId, @Param("from")int from, @Param("to")int to);
 }

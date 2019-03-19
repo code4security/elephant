@@ -10,8 +10,6 @@ import com.sjhy.platform.persist.mysql.player.PlayerIosMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-
 @Component
 public class DbVerifyUtils {
 
@@ -31,8 +29,14 @@ public class DbVerifyUtils {
      */
     public boolean isHasGame(String gameId){
         try {
-            Game game = gameMapper.selectByGameId(gameId);
+            Game game = (Game) redis.get(gameId);
             if (game != null){
+                return true;
+            }
+            game = gameMapper.selectByGameId(gameId);
+            if (game != null){
+                redis.set(gameId,game);
+                redis.expire(gameId,30);
                 return true;
             }else {
                 return false;
@@ -51,9 +55,15 @@ public class DbVerifyUtils {
      */
     public boolean isHasChannel(String channelId,String gameId){
         try {
-            ChannelAndVersion channelAndVersion =
-                    channelAndVersionMapper.verifyChannel(new ChannelAndVersion(null,channelId,gameId,null,null,null,null));
+            ChannelAndVersion channelAndVersion = (ChannelAndVersion) redis.get(channelId);
             if (channelAndVersion != null){
+                return true;
+            }
+            channelAndVersion = channelAndVersionMapper.verifyChannel
+                            (new ChannelAndVersion(null,channelId,gameId,null,null,null,null));
+            if (channelAndVersion != null){
+                redis.set(channelId,channelAndVersion);
+                redis.expire(channelId,30);
                 return true;
             }else {
                 return false;
@@ -72,7 +82,8 @@ public class DbVerifyUtils {
      */
     public boolean isHasIos(Long iosId, String gameId, String channelId) {
         try {
-            PlayerIos playerIos = playerIosMapper.selectByGameId(new PlayerIos(iosId,gameId,channelId,null,null,null,null,null));
+            PlayerIos playerIos = playerIosMapper.selectByGameId
+                    (new PlayerIos(iosId,gameId,channelId,null,null,null,null,null,null));
             if (playerIos != null){
                 return true;
             }else {

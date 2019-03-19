@@ -24,6 +24,6 @@ public class MailVO implements Serializable {
 	private Date sendTime;
 	private int goodId = -1;
 	private int goodNum = -1;
-	private boolean status;
+	private short status;
 	private String admiralAvatar;
 }

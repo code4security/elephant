@@ -58,4 +58,9 @@ public class PlayerIos {
      * 月卡到期时间，为null永久
      */
     private Date endTime;
+
+    /**
+     * 去广告创建时间
+     */
+    private Date adTime;
 }
