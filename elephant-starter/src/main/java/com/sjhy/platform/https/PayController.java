@@ -11,6 +11,7 @@ import com.sjhy.platform.client.dto.game.GameContent;
 import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
 import com.sjhy.platform.client.dto.player.PlayerIos;
+import com.sjhy.platform.client.dto.vo.newGame.ResultVo;
 import com.sjhy.platform.persist.mysql.game.GameContentMapper;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerPayLogMapper;
@@ -35,6 +36,8 @@ import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/pay")
@@ -51,6 +54,8 @@ public class PayController {
     private GameContentMapper gameContentMapper;
     @Autowired
     private PlayerIosMapper playerIosMapper;
+    @Autowired
+    private ResultVo resultVo;
 
     //购买凭证验证地址
     private static final String certificateUrl = "https://buy.itunes.apple.com/verifyReceipt";
@@ -80,49 +85,52 @@ public class PayController {
      * @param transaction_id 订单号
      */
     @RequestMapping(value = "/ios",method = RequestMethod.POST)
-    public ResultDTO<String> setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
+    public ResultDTO<ResultVo> setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
                                               @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/) {
         //验证传参是否为空
         if (dbVerify.isHasIos(iosId,gameId,channelId) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id) && StringUtils.isNotEmpty(transaction_id)) {
 
+            // 验证商品
+            PayGoods payGoods = payGoodsMapper.selectByGChannelId(product_id,channelId,gameId);
+            if (payGoods == null){
+                return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(),IosCode.ERROR_CLIENT_VALUE.getDesc(),"购买商品不存在");
+            }
             // 查询订单
             PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
-            String res = null;
             // 判断订单是否存在，如果状态值不为4则返回
             if (payLog != null && payLog.getPayStatus() != 4) {
-                    res = IosCode.ERROR_FAILURE.getErrorCode();
-            }
-
-            // 如果未查询到该订单，则插入数据库
-            if (res == null){
+                   return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(),IosCode.ERROR_FAILURE.getDesc(),"订单已存在");
+            }else if (payLog == null){
+                // 如果未查询到该订单，则插入数据库
                 playerPayLogMapper.insert(new PlayerPayLog(null,iosId,gameId,channelId,product_id,new Date(),
                         0.0f,null,null,transaction_id,4,null,receipt));
+                // 更新查询支付信息数据
+                payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
             }
-            // 更新查询支付信息数据
-            payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
-
             // 查询游戏包名
             // String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
 
+            // 初始化
             String url = certificateUrl;    // 苹果服务器地址
             boolean bol = false; // 返回参数判断
             int status = -1;      // 苹果返回支付状态
             final String certificateCode = receipt;     // 购买凭证
 
+            // 处理请求，循环2次判断，如果返回ios状态值为21007，使用测试地址再次连接
             int j = 0;
             try {
                 while (j < 2) {
                     j++;
                     // 发送请求
                     String receipt_data = sendHttpsCoon(url, certificateCode);
-                    System.out.println("=============[][][1][][]" + receipt_data);
+                    logger.info("=============[][][1][][]" + receipt_data);
                     // 解析最外层json
                     JSONObject job = JSONObject.parseObject(receipt_data);
                     // 获取状态值并进行判断
                     status = (int) job.get("status");
                     if (status == 0) {
                         // 验证商品
-                        bol = verifyGoods(iosId,gameId,channelId,product_id);
+                        bol = verifyGoods(iosId,gameId,channelId,payGoods);
                         // 解析receipt层json
                         /*JSONObject jobReceipt = job.getJSONObject("receipt");
                         // 判断是否存在in_app和游戏包名是否一致
@@ -148,8 +156,15 @@ public class PayController {
                 // 判断是否成功
                 if (bol == true){
                     // 修改支付状态，成功
-                    updatePlayerPayLogStatus(payLog.getId(),5,null);
-                    return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),product_id);
+                    updatePlayerPayLogStatus(payLog.getId(),5,String.valueOf(status));
+                    // 解析物品
+                    String[] prop = payGoods.getProp().split("&");
+                    Map<String,String> propMap = new HashMap<>();
+                    for (int k=0;k<prop.length;k++){
+                        String[] props = prop[k].split("#");
+                        propMap.put(props[0],props[1]);
+                    }
+                    return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),resultVo.getPayProp(product_id,propMap));
                 }else {
                     // 修改支付状态，失败
                     updatePlayerPayLogStatus(payLog.getId(),6,String.valueOf(status));
@@ -176,43 +191,39 @@ public class PayController {
     }
 
     /**
-     * 验证商品
+     * 验证商品,物品格式：物品id1#物品数量&物品id2#物品数量
      * @param iosId
-     * @param goodsName
-     * @param channelId
      * @param gameId
+     * @param channelId
+     * @param payGoods
      * @return
      */
-    private Boolean verifyGoods(Long iosId, String goodsName, String channelId, String gameId){
-        PayGoods payGoods = payGoodsMapper.selectByGChannelId(goodsName,channelId,gameId);
-        // 判断商品不为空
-        if (payGoods != null){
-
+    private Boolean verifyGoods(Long iosId, String gameId, String channelId, PayGoods payGoods){
+        try {
             // 初始化参数
             String initprop = payGoods.getProp();   // 所有物品
-            String good = null;     // 物品名称
-            String num = null;      // 物品数量
-
             // 获取商品类型
-            switch (payGoods.getType()){
+            switch (payGoods.getType()) {
                 case 1: // 奖牌
-                    String[] prop = initprop.split("_");
-                    updateGold(iosId,gameId,channelId,prop[1]);
+                    String[] prop = initprop.split("#");
+                    updateGold(iosId, gameId, channelId, prop[1]);
                     break;
                 case 2: // 去广告
                     playerIosMapper.updateByPrimaryKeySelective
-                            (new PlayerIos(iosId,null,null,null,null,null,null,null,new Date()));
+                            (new PlayerIos(iosId, null, null, null, null, null, null, null, new Date()));
                     break;
                 case 3: // 月卡
                     playerIosMapper.updateByPrimaryKeySelective
-                            (new PlayerIos(iosId,null,null,null,null,null,new Date(),null,null));
+                            (new PlayerIos(iosId, null, null, null, null, null, new Date(), null, null));
                     break;
                 default:
-                    break;
+                    return true;
             }
             return true;
+        }catch (Exception e){
+            logger.info("==========[][][2][][]验证商品失败:"+e.getMessage());
+            return false;
         }
-        return false;
     }
 
     /**
@@ -231,9 +242,9 @@ public class PayController {
         // 查询
         gameContent = gameContentMapper.selectByRole(gameContent);
         // 赋值
-        gameContent.setLastMedal(Integer.valueOf(gameContent.getLastMedal()+rmbMedal));
-        gameContent.setRmbMedal(Integer.valueOf(gameContent.getRmbMedal()+rmbMedal));
-        gameContent.setTotalMedal(Integer.valueOf(gameContent.getTotalMedal()+rmbMedal));
+        gameContent.setLastMedal(Integer.valueOf(gameContent.getLastMedal()+Integer.valueOf(rmbMedal)));
+        gameContent.setRmbMedal(Integer.valueOf(gameContent.getRmbMedal()+Integer.valueOf(rmbMedal)));
+        gameContent.setTotalMedal(Integer.valueOf(gameContent.getTotalMedal()+Integer.valueOf(rmbMedal)));
         // 修改
         gameContentMapper.updateByPrimaryKeySelective(gameContent);
     }

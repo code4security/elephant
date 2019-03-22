@@ -2,6 +2,9 @@ package com.sjhy.platform.biz.deploy.config;
 
 /**
  * ios三国游戏返回状态码
+ * 4：添加订单，因意外情况为执行完成代码
+ * 5：支付成功
+ * 6：代码执行完成，和苹果服务器沟通失败
  */
 
 public enum IosCode {
