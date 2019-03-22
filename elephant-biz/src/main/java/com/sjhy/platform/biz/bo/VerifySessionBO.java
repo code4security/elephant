@@ -106,10 +106,10 @@ public class VerifySessionBO {
         if (channelId==null){
             return null;
         }
-        IVerifySession verifySession = (IVerifySession) context.getBean(channelId);
 
+        IVerifySession verifySession = (IVerifySession)GetBeanHelper.getApplicationContext().getBean(channelId);
         if (verifySession == null){
-            verifySession = (IVerifySession)GetBeanHelper.getBean("1000");
+            verifySession = (IVerifySession)GetBeanHelper.getApplicationContext().getBean("1000");
         }
 
         // 验证渠道是否存在
