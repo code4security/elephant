@@ -1,4 +1,5 @@
 server:
+#  port: 8080
   port: 443
   ssl:
       key-store: classpath:1880511_server.shijunhuyu.com.pfx
@@ -15,8 +16,6 @@ spring:
     password: root
     # password: mv2H)jMs9AFO-gCD
     name: game
-  cache:
-    type: redis
 
   redis:
     host: localhost

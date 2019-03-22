@@ -46,9 +46,9 @@ public class PayGoods implements Serializable {
     private String gameId;
 
     /**
-     * 虚拟货币
+     * 物品
      */
-    private Integer currency;
+    private String prop;
 
     /**
      * 人民币

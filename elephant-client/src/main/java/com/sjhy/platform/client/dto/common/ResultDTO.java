@@ -14,7 +14,7 @@ public class ResultDTO<T> implements Serializable {
     protected String key;
     protected String innerMsg;  // 内部错误信息
     protected String msg;   // 暴露客户端错误信息
-    protected T result;
+    protected T result;  // 详细信息
 
     protected ResultDTO() {
     }
@@ -33,6 +33,10 @@ public class ResultDTO<T> implements Serializable {
 
     public static <T> ResultDTO<T> getSuccessResult(T result) {
         return new ResultDTO<T>(true, result, null, null, null);
+    }
+
+    public static <T> ResultDTO<T> getSuccessResult(String code, T result) {
+        return new ResultDTO<T>(true, result, code, null, null);
     }
 
     public static <T> ResultDTO<T> getFailureResult(String key, String innerMsg, String msg) {

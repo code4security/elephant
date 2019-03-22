@@ -854,7 +854,8 @@ public class PayBO {
         } else if(order.getChannelId().equals("2900")) {
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
-            addOrderResult.setIngot(goods.getCurrency().toString());
+            String[] good = goods.getProp().split("_");
+            addOrderResult.setIngot(good[1]);
             long createTime = System.currentTimeMillis();
 
             addOrderResult.setCreateTime(createTime);
@@ -863,7 +864,8 @@ public class PayBO {
         } else if(order.getChannelId().equals("1900")) {
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
-            addOrderResult.setIngot(goods.getCurrency().toString());
+            String[] good = goods.getProp().split("_");
+            addOrderResult.setIngot(good[1]);
             long createTime = System.currentTimeMillis();
 
             addOrderResult.setCreateTime(createTime);
@@ -872,7 +874,8 @@ public class PayBO {
         }else if(order.getChannelId().equals("2600")) {
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
-            addOrderResult.setIngot(goods.getCurrency().toString());
+            String[] good = goods.getProp().split("_");
+            addOrderResult.setIngot(good[1]);
 
             long createTime = System.currentTimeMillis();
             addOrderResult.setCreateTime(createTime);
@@ -1027,8 +1030,8 @@ public class PayBO {
         df.setRoundingMode(RoundingMode.HALF_UP);
 
         StringBuilder builder = new StringBuilder();
-
-        builder.append(goods.getCurrency().toString());
+        String[] good = goods.getProp().split("_");
+        builder.append(good[1]);
         //builder.append(df.format(goods.getRmb()));
         builder.append(goods.getRmb().intValue());
         builder.append(info.getNotifyUrl());

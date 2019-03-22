@@ -8,7 +8,7 @@
         <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="game_id" property="gameId" jdbcType="VARCHAR" />
-        <result column="currency" property="currency" jdbcType="INTEGER" />
+        <result column="prop" property="prop" jdbcType="VARCHAR" />
         <result column="rmb" property="rmb" jdbcType="DOUBLE" />
         <result column="goods_des" property="goodsDes" jdbcType="VARCHAR" />
         <result column="discount_begin" property="discountBegin" jdbcType="TIMESTAMP" />
@@ -17,7 +17,7 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, name_cn, goods_name, channel_id, game_id, currency, rmb, goods_des, discount_begin, 
+        id, name_cn, goods_name, channel_id, game_id, prop, rmb, goods_des, discount_begin, 
         discount_end, type
     </sql>
 
@@ -35,11 +35,11 @@
 
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.PayGoods" >
         insert into pay_goods (id, name_cn, goods_name, 
-            channel_id, game_id, currency, 
+            channel_id, game_id, prop, 
             rmb, goods_des, discount_begin, 
             discount_end, type)
         values (#{id,jdbcType=INTEGER}, #{nameCn,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, 
-            #{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=VARCHAR}, #{currency,jdbcType=INTEGER}, 
+            #{channelId,jdbcType=VARCHAR}, #{gameId,jdbcType=VARCHAR}, #{prop,jdbcType=VARCHAR}, 
             #{rmb,jdbcType=DOUBLE}, #{goodsDes,jdbcType=VARCHAR}, #{discountBegin,jdbcType=TIMESTAMP}, 
             #{discountEnd,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER})
     </insert>
@@ -62,8 +62,8 @@
             <if test="gameId != null" >
                 game_id,
             </if>
-            <if test="currency != null" >
-                currency,
+            <if test="prop != null" >
+                prop,
             </if>
             <if test="rmb != null" >
                 rmb,
@@ -97,8 +97,8 @@
             <if test="gameId != null" >
                 #{gameId,jdbcType=VARCHAR},
             </if>
-            <if test="currency != null" >
-                #{currency,jdbcType=INTEGER},
+            <if test="prop != null" >
+                #{prop,jdbcType=VARCHAR},
             </if>
             <if test="rmb != null" >
                 #{rmb,jdbcType=DOUBLE},
@@ -133,8 +133,8 @@
             <if test="gameId != null" >
                 game_id = #{gameId,jdbcType=VARCHAR},
             </if>
-            <if test="currency != null" >
-                currency = #{currency,jdbcType=INTEGER},
+            <if test="prop != null" >
+                prop = #{prop,jdbcType=VARCHAR},
             </if>
             <if test="rmb != null" >
                 rmb = #{rmb,jdbcType=DOUBLE},
@@ -161,7 +161,7 @@
             goods_name = #{goodsName,jdbcType=VARCHAR},
             channel_id = #{channelId,jdbcType=VARCHAR},
             game_id = #{gameId,jdbcType=VARCHAR},
-            currency = #{currency,jdbcType=INTEGER},
+            prop = #{prop,jdbcType=VARCHAR},
             rmb = #{rmb,jdbcType=DOUBLE},
             goods_des = #{goodsDes,jdbcType=VARCHAR},
             discount_begin = #{discountBegin,jdbcType=TIMESTAMP},

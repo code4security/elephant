@@ -23,6 +23,6 @@ public class RedisTest {
     }
 
     public static void main(String[] args) {
-        System.out.println(new Date());
+        System.out.println(System.currentTimeMillis());
     }
 }
