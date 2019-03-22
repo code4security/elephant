@@ -1,5 +1,7 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.biz.deploy.redis.RedisServiceImpl;
+import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.biz.deploy.config.AppConfig;
 import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
@@ -20,6 +22,7 @@ import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.client.dto.vo.AccountVO;
 import com.sjhy.platform.client.dto.vo.LoginSessionVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.game.ServerMapper;
@@ -34,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.Calendar;
 import java.util.Date;
@@ -72,10 +76,14 @@ public class LoginBO {
     private PlayerBanListMapper playerBanListMapper;
     @Autowired
     private GameBO gameBO;
+    @Autowired
+    private RedisUtil redis;
+    @Resource
+    private RedisServiceImpl redisService;
 
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";
-
+    private static final String REGION = "sessionkey";
 
     /**
      * 第一次握手
@@ -130,7 +138,9 @@ public class LoginBO {
         // 玩家激活状况
         sessionVO.activationState = account.getActivationState();
 
-        // 缓存（注释）
+        // 缓存
+        redis.set(String.valueOf(clientId),sessionVO);
+        redisService.put(sc.getChannelUserId(),Integer.valueOf(sc.getGameId()),account);
         /*redis.put(clientId,sessionVO);
         redis.put(sc.getChannelUserId(),Integer.parseInt(sc.getGameId()),account);*/
         
@@ -138,8 +148,9 @@ public class LoginBO {
         result.getSrp6Info().setSalt( verifier.salt_s );
         result.getSrp6Info().setB( sessionVO.Session.getPublicKey_B() );
 
-        // 埋点(注释)
+        // 埋点
         // logBO.setMdEventLog(deviceUniqueID, account.getChUserId(), account.getId().toString(), account.getChannelId(), gameId, "loginsessionone_server");
+        logger.info(deviceUniqueId, account.getChUserId(), account.getPlayerId().toString(), account.getChannelId(), sc.getGameId(), "loginsessionone_server");
 
         // 返回结果
         return result;
@@ -165,12 +176,9 @@ public class LoginBO {
         // 获取加密验证session
         LoginSessionVO sessionVO = new LoginSessionVO();
 
-        // 缓存（注释）
-        /*sessionVO = (LoginSessionVO) redis.get(String.valueOf(clientId));
-        redis.remove(String.valueOf(clientId));
-        if (sessionVO == null){
-            throw new NotChallengeYetException();
-        }*/
+        // 缓存
+        sessionVO = (LoginSessionVO) redis.get(String.valueOf(clientId));
+        redis.del(String.valueOf(clientId));
         if ( sessionVO == null ){ throw new NotChallengeYetException();}
 
         Game game = gameMapper.selectByGameId(sc.getGameId());
@@ -217,15 +225,17 @@ public class LoginBO {
 
             playerBO.createPlayer(sc);
 
-            //缓存（注释）
+            // 缓存
+            redisService.update(sessionVO.channelUserId,playerId,Integer.valueOf(sc.getGameId()));
             /*redis.update(sessionVO.channelUserId,playerId,Integer.parseInt(sc.getGameId()));*/
         } else {
             playerId = sessionVO.playerId;
             // serverId = sessionVO.ServerId;
         }
 
-        // 缓存（注释）
+        // 缓存
         // 保存到redis 存储的格式为键:playerId, 值:SessionKey
+        redis.hset(REGION,sc.getPlayerId()+"_"+sc.getGameId(),sessionVO.Session.getSessionCommonValue().toString(16),3600);
 
         // 构造结果
         RegularLoginVO result = new RegularLoginVO();
@@ -245,13 +255,12 @@ public class LoginBO {
         }
 
         // 埋点(注释)
-        /*AccountVO account = channelUserMgr.get(sessionVO.CooperateId +"_"+ gameId);
-        if(account == null) {
-            logBO.setMdEventLog("", sessionVO.CooperateId, playerId+"", "", gameId, "loginsessiontwo_server");
-        }else{
-            logBO.setMdEventLog(account.getDeviceUniquelyCode(), account.getChUserId(), playerId+"", account.getChannelId(), gameId, "loginsessiontwo_server");
-        }*/
-
+        AccountVO account = (AccountVO) redis.get(sessionVO.channelUserId+"_"+sc.getGameId());
+        if (account == null){
+            logger.info("", sessionVO.channelUserId, playerId+"", "", sc.getGameId(), "loginsessiontwo_server");
+        }else {
+            logger.info(account.getDeviceUniquelyCode(), account.getChUserId(), playerId+"", account.getChannelId(), sc.getGameId(), "loginsessiontwo_server");
+        }
         return result;
     }
 
@@ -296,12 +305,12 @@ public class LoginBO {
     public LoginVO confirmServer(ServiceContext sc, String ip, String activationCode)  throws FreezeTheAccountException, NotChallengeYetException, NotExistAccountException, IpIsNotInWhiteListException, ActivationCodeIsNotRightException
     {
         logger.error("LoginService|======================>confirmServer");
-        // 缓存（注释）
+        // 缓存
         // 从redis中根据playerId获取sessionkey，如果sessionkey不存在的话报为经过srp6验证的过程
-        /*String sessionKey = SessionKeyHMapCpt.getSessionKey(playerId + "_" + gameId);
+        String sessionKey = (String) redis.hget(REGION,sc.getPlayerId()+"_"+sc.getGameId());
         if ( (sessionKey == null) || ("".equals(sessionKey)) ) {
             throw new NotChallengeYetException();
-        }*/
+        }
 
         // 查找player表看用户是否存在
         Player players = new Player();
@@ -357,7 +366,7 @@ public class LoginBO {
         Server server = serverMapper.selectByServer(servers);
 
         // 埋点（注释）
-        //logService.saveLoginLog(channelId, channelUserMgr.getChUserId(playerId, gameId), playerId+"", gameId, ip);
+        logger.info(sc.getChannelId(), redisService.getChUserId(sc.getPlayerId(), Integer.valueOf(sc.getGameId())), sc.getPlayerId()+"", sc.getGameId(), ip);
 
         return new LoginVO(player.getPlayerId(),player.getServerId(),server.getVersionNum());
     }
@@ -382,9 +391,9 @@ public class LoginBO {
 
         // 缓存（注释）
         // 1.验证用户的 sessionKey
-        /* String redisSessionKey = SessionKeyHMapCpt.getSessionKey(userId + "_" + gameId);
+        String redisSessionKey = (String) redis.hget(REGION,sc.getPlayerId()+"_"+sc.getGameId());
         if(redisSessionKey == null){throw new PleaseLoginAgainException();}
-        gameServerChannelHandler.setPacketCrypt( new PacketCrypt(redisSessionKey) );*/
+        /* gameServerChannelHandler.setPacketCrypt( new PacketCrypt(redisSessionKey) );*/
 
         // 2.判断是否已经成功初始化用户信息
         PlayerRoleVO playerRoleVo = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(sc.getGameId(),sc.getPlayerId());
@@ -404,11 +413,10 @@ public class LoginBO {
         }
         // 3.更新登录时间
         roleBO.updateLastLoginTime(sc);
-        // 缓存（注释）
-        // playerRoleService.removeInCache(playerRoleVO.getRoleId());
-        // 5.埋点（注释）
+        // 缓存
+        redis.del(String.valueOf(playerRoleVo.getRoleId()),playerRoleVo.getGameId());
+        // 5.埋点
         // logService.setRoleLoginLog(playerRoleVO);
-        // 6.发送封测奖励
         return playerRoleVo;
     }
 }

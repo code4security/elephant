@@ -77,8 +77,8 @@ public class VerifySessionBO {
             channelUserId = verify(sc.getGameId(), sc.getChannelId(), sessionId, subChannelId, verifyId);
             ret.put("cuid", channelUserId);
         }
-        // 缓存（注释）
-        //logService.setMdEventLog(deviceUniqueID, userId, "", channelId, gameId, "reqlogin_server");
+        // 日志
+        logger.info(deviceUniqueID, sc.getPlayerId(), "", sc.getChannelId(), sc.getGameId(), "reqlogin_server");
         return ret;
     }
 

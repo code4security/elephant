@@ -9,7 +9,7 @@ import com.sjhy.platform.biz.deploy.utils.UtilDate;
 import com.sjhy.platform.client.dto.fixed.GiftCode;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
-import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.persist.mysql.fixed.GiftCodeMapper;
 import com.sjhy.platform.persist.mysql.fixed.VirtualCurrencyMapper;
 import com.sjhy.platform.persist.mysql.game.GiftCodeListMapper;

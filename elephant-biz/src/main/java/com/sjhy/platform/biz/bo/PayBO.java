@@ -19,6 +19,7 @@ import com.sjhy.platform.biz.deploy.utils.HashKit;
 import com.sjhy.platform.biz.deploy.utils.MD5Util;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.vo.*;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.vo.pay.*;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
 import com.sjhy.platform.persist.mysql.game.ServerMapper;

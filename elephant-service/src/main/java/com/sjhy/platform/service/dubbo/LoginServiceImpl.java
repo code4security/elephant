@@ -7,8 +7,8 @@ import com.sjhy.platform.biz.deploy.exception.*;
 import com.sjhy.platform.client.dto.srp.SRPAuthenticationFailedException;
 import com.sjhy.platform.client.dto.vo.ChannelAndVersionVO;
 import com.sjhy.platform.client.dto.vo.LoginVO;
-import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.client.service.LoginService;
 import org.springframework.stereotype.Service;
 

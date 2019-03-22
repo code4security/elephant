@@ -1,15 +1,17 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.biz.deploy.redis.RedisServiceImpl;
 import com.sjhy.platform.biz.deploy.utils.ShieldingWordsUtil;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.biz.deploy.config.AppConfig;
 import com.sjhy.platform.biz.deploy.exception.*;
 import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
 import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.player.Player;
 import com.sjhy.platform.client.dto.player.PlayerRole;
+import com.sjhy.platform.client.dto.vo.AccountVO;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
@@ -33,6 +35,8 @@ public class RoleBO {
     private PlayerMapper playerMapper;
     @Autowired
     private ShieldingWordsUtil shieldingWordsUtil;
+    @Resource
+    private RedisServiceImpl redisService;
 
     public static String ServerID = "";
 
@@ -61,15 +65,15 @@ public class RoleBO {
         if(sc.getPlayerId() <= 0 || sc.getGameId() == null){
             throw new NoSuchRoleException();
         }
-        // 缓存（注释）
+        // 缓存
         // 1.1验证gameId是否正确
-        Game game = gameMapper.selectByGameId(sc.getGameId());
+        Game game = redisService.getGameDicById(sc.getGameId());
         if (game == null){
             throw new GameIdIsNotExsitsException();
         }
         // 1.2.玩家如果已经存在则直接返回错误信息
-        PlayerRole playerRole = playerRoleMapper.selectByPlayerId(sc.getGameId(),sc.getPlayerId());
-        if(playerRole != null){
+        PlayerRoleVO playerRoleVo = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(sc.getGameId(),sc.getPlayerId());
+        if(playerRoleVo != null){
             throw new AlreadyExistsPlayerRoleException();
         }
         // 2.创建玩家角色信息
@@ -78,11 +82,11 @@ public class RoleBO {
         if(role == null || role.getRoleId() == null){
             throw new CreateRoleException();
         }
-        // 缓存（注释）
-        // playerRoleVO = playerRoleService.getByPrimaryKey(role.getRoleId());
+        // 缓存
+        playerRoleVo = redisService.get(role.getRoleId(),role.getGameId());
         // 埋点(注释)
         // logService.setRoleBuildLog(playerRoleVO);
-        return (PlayerRoleVO) role;
+        return playerRoleVo;
     }
 
     /**
@@ -113,12 +117,12 @@ public class RoleBO {
 
         role.setRoleId(Long.valueOf((playerRoleMapper.countByRole(role)+1)));
 
-        // 缓存（注释）
-        Player players = new Player();
-        players.setPlayerId(sc.getPlayerId());
-        Player player = playerMapper.selectByPlayerId(players);
-        if (player != null){
-            role.setChannelId(player.getChannelId());
+        // 缓存
+        AccountVO account = redisService.getByUserId(sc.getPlayerId(), Integer.valueOf(sc.getGameId()));
+        System.out.println("account======================[]][][][][]["+account);
+        if(account != null) {
+            role.setChannelId(account.getChannelId());
+            System.out.println("pf==========================[][][][][][]"+role.getChannelId());
         }
 
         playerRoleMapper.insert(role);

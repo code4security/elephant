@@ -5,7 +5,7 @@ package com.sjhy.platform.client.service;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.player.PlayerRole;
-import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 
 public interface RoleService {
     // 创建游戏角色第一步

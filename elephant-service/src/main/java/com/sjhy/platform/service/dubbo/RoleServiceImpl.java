@@ -5,7 +5,7 @@ import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.biz.deploy.exception.*;
 import com.sjhy.platform.client.dto.player.PlayerRole;
-import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.client.service.RoleService;
 import org.springframework.stereotype.Service;
 

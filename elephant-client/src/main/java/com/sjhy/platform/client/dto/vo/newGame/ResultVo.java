@@ -18,9 +18,9 @@ public class ResultVo {
     // 登录返回参数
     private Long iosId;
     private Long serverDate;
-    private Date monthlyTime;
-    private Date endMonthlyTime;
-    private Date adTime;
+    private Long monthlyTime;
+    private Long endMonthlyTime;
+    private Long adTime;
 
     // 购买商品返回参数
     private String goodName;
@@ -31,9 +31,9 @@ public class ResultVo {
         resultVo = new ResultVo();
         resultVo.setIosId(iosId);
         resultVo.setServerDate(System.currentTimeMillis());
-        resultVo.setMonthlyTime(monthlyTime);
+        resultVo.setMonthlyTime(monthlyTime.getTime());
         resultVo.setEndMonthlyTime(null);
-        resultVo.setAdTime(adTime);
+        resultVo.setAdTime(adTime.getTime());
         return resultVo;
     }
 

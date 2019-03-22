@@ -6,8 +6,8 @@ import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.vo.ChannelAndVersionVO;
 import com.sjhy.platform.client.dto.vo.LoginVO;
-import com.sjhy.platform.client.dto.vo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
+import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 
 import java.math.BigInteger;
 

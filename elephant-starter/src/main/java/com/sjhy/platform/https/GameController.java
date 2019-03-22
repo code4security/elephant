@@ -161,7 +161,7 @@ public class GameController {
             GameNotify gameNotify = gameNotifyMapper.selectLatestNotify(gameId);
             // 判断是否有公告
             if (gameNotify == null){
-                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),"暂无公告");
+                return ResultDTO.getFailureResult(IosCode.ERROR_NOT_NOTIFY.getErrorCode(),IosCode.ERROR_NOT_NOTIFY.getDesc(),"暂无公告");
             }
             logger.info("发送公告=====【】【】【】======"+gameNotify.getContent());
             // 设置缓存，失效时间
@@ -193,7 +193,7 @@ public class GameController {
                     // 遍历邮件集合
                     for (int i=0;i<mailList.size();i++){
                         // 邮件状态值判断，如果小于3进行状态值+1.如果大于等于3，直接删除该邮件
-                        if (mailList.get(i).getStatus() < 3){
+                        if (mailList.get(i).getStatus() < 5){
                             mail.setId(mailList.get(i).getId());
                             mail.setStatus((short) (mailList.get(i).getStatus()+1));
                             // 需要状态值+1
