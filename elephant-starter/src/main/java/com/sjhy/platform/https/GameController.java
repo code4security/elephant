@@ -78,8 +78,7 @@ public class GameController {
             }
             goodsList = payGoodsMapper.selectByGoods(channelId,gameId);
             // 设置缓存，失效时间
-            redis.set(key,goodsList);
-            redis.expire(key,30);
+            redis.set(key,goodsList,30);
 
             return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),goodsList);
         }
@@ -165,8 +164,7 @@ public class GameController {
             }
             logger.info("发送公告=====【】【】【】======"+gameNotify.getContent());
             // 设置缓存，失效时间
-            redis.set(gameId+"_bull",gameNotify.getContent());
-            redis.expire(gameId+"_bull",30);
+            redis.set(gameId+"_bull",gameNotify.getContent(),30);
             return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),gameNotify.getContent());
         }else {
             return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(),IosCode.ERROR_CLIENT_VALUE.getDesc(),"获取公告失败");

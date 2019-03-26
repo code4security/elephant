@@ -6,5 +6,4 @@ import java.io.Serializable;
 
 public class GameNotifyVO extends GameNotify implements Serializable {
 	private static final long serialVersionUID = 1L;
-   
 }

@@ -35,8 +35,7 @@ public class DbVerifyUtils {
             }
             game = gameMapper.selectByGameId(gameId);
             if (game != null){
-                redis.set("g_"+gameId,game);
-                redis.expire("g_"+gameId,30);
+                redis.set("g_"+gameId,game,30);
                 return true;
             }else {
                 return false;
@@ -63,8 +62,7 @@ public class DbVerifyUtils {
             channelAndVersion = channelAndVersionMapper.verifyChannel
                             (new ChannelAndVersion(null,channelId,gameId,null,null,null,null));
             if (channelAndVersion != null){
-                redis.set("c_"+channelId,channelAndVersion);
-                redis.expire("c_"+channelId,30);
+                redis.set("c_"+channelId,channelAndVersion,30);
                 return true;
             }else {
                 return false;

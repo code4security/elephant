@@ -107,9 +107,12 @@ public class VerifySessionBO {
             return null;
         }
 
-        IVerifySession verifySession = (IVerifySession)GetBeanHelper.getApplicationContext().getBean(channelId);
-        if (verifySession == null){
-            verifySession = (IVerifySession)GetBeanHelper.getApplicationContext().getBean("1000");
+        // 如果未找到渠道，默认为官方渠道
+        IVerifySession verifySession;
+        try{
+            verifySession = (IVerifySession) context.getBean(channelId);
+        }catch (Exception e){
+            verifySession = (IVerifySession) context.getBean("1000");
         }
 
         // 验证渠道是否存在

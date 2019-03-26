@@ -95,15 +95,16 @@ public class LoginBO {
      * @throws AccountAlreadyBindingOtherException
      * @throws NotExistAccountException
      */
-    public RegularLoginVO loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId) throws DeviceSignNullException,
+    public RegularLoginVO loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId, String channelName) throws DeviceSignNullException,
             EmptyAccountNameException, AccountAlreadyBindingOtherException, NotExistAccountException
     {
         logger.error("LoginService|======================>loginChallenge");
 
         // 判断是否是空的账号名或是空的设备唯一标识
-        if (StringUtils.isBlank( sc.getChannelUserId() ) ||  StringUtils.isBlank( deviceUniqueId ))
+        if (StringUtils.isBlank( sc.getChannelUserId() ) ||  StringUtils.isBlank( deviceUniqueId ) ||  StringUtils.isBlank( channelName ))
             throw new EmptyAccountNameException();
 
+        sc.setChannelId(channelAndVersionMapper.selectByChannelId(sc.getGameId(),channelName));
         logger.error("loginChallenge|deviceUniqueID="+deviceUniqueId);
 
         // 获取账户信息
@@ -112,8 +113,7 @@ public class LoginBO {
 
         // 产生校验器
         logger.error("loginChallenge|"+account.getPassword());
-
-        SRPVerifier verifier = SRPFactory.getInstance().makeVerifier( ( account.getPassword() ).getBytes() );
+        SRPVerifier verifier = SRPFactory.getInstance().makeVerifier( (account.getPassword()).getBytes() );
 
         // 生成加密验证session
         LoginSessionVO sessionVO = new LoginSessionVO();
@@ -137,9 +137,10 @@ public class LoginBO {
         }
         // 玩家激活状况
         sessionVO.activationState = account.getActivationState();
+        sessionVO.channelName= channelName;
 
         // 缓存
-        redis.set(String.valueOf(clientId),sessionVO);
+        redisService.setSession(clientId,sessionVO);
         redisService.put(sc.getChannelUserId(),Integer.valueOf(sc.getGameId()),account);
         /*redis.put(clientId,sessionVO);
         redis.put(sc.getChannelUserId(),Integer.parseInt(sc.getGameId()),account);*/
@@ -172,12 +173,12 @@ public class LoginBO {
             throws NotChallengeYetException, SRPAuthenticationFailedException, KairoException
     {
         logger.error("LoginService|======================>loginProof");
+        logger.info("===========[][][a][][]================:"+a);
 
         // 获取加密验证session
         LoginSessionVO sessionVO = new LoginSessionVO();
-
         // 缓存
-        sessionVO = (LoginSessionVO) redis.get(String.valueOf(clientId));
+        sessionVO = redisService.getSession(clientId);
         redis.del(String.valueOf(clientId));
         if ( sessionVO == null ){ throw new NotChallengeYetException();}
 
@@ -186,11 +187,11 @@ public class LoginBO {
             throw new NotChallengeYetException();
         }
 
-        // 使用客户端的公匙A-暂时删除
+        // 使用客户端的公匙A
         sessionVO.Session.setClientPublicKey_A( a );
-        // 计算S-暂时删除
+        // 计算S
         sessionVO.Session.computeCommonValue_S();
-        // 针对客户端的M1进行校验-暂时删除
+        // 针对客户端的M1进行校验
         sessionVO.Session.validateClientEvidenceValue_M1( m1 );
 
         long playerId = 0;

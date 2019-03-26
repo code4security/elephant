@@ -20,13 +20,13 @@ public class LoginController {
     @Resource
     private LoginBO loginBO;
 
-    @RequestMapping(value = "/one.do", method = RequestMethod.GET)
-    public String loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId) throws DeviceSignNullException,
-            EmptyAccountNameException, AccountAlreadyBindingOtherException, NotExistAccountException {
-        RegularLoginVO loginInfo = loginBO.loginChallenge(sc, clientId,deviceUniqueId);
-        return "s="+loginInfo.getSrp6Info().getSalt().toString(16)+"\n"
-                + "B="+loginInfo.getSrp6Info().getB().toString(16);
-    }
+//    @RequestMapping(value = "/one.do", method = RequestMethod.GET)
+//    public String loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId) throws DeviceSignNullException,
+//            EmptyAccountNameException, AccountAlreadyBindingOtherException, NotExistAccountException {
+//        RegularLoginVO loginInfo = loginBO.loginChallenge(sc, clientId,deviceUniqueId);
+//        return "s="+loginInfo.getSrp6Info().getSalt().toString(16)+"\n"
+//                + "B="+loginInfo.getSrp6Info().getB().toString(16);
+//    }
 
     @RequestMapping(value = "/two.do", method = RequestMethod.GET)
     public String loginProof(ServiceContext sc, int clientId, String ip, BigInteger a, BigInteger m1 , String sdkVersion) throws NotChallengeYetException,

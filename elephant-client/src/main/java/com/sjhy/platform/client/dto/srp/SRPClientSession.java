@@ -111,8 +111,10 @@ public class SRPClientSession
 	 */
 	public BigInteger getEvidenceValue_M1()
 	{
-		if ( fEvidenceValue_M1 == null )
-			throw new IllegalStateException( "computeCommonValue_S() has not been called yet." );
+		if ( fEvidenceValue_M1 == null ) {
+			System.out.println("============[][][3][][]==========="+fEvidenceValue_M1);
+			throw new IllegalStateException("computeCommonValue_S() has not been called yet.");
+		}
 
 		return fEvidenceValue_M1;
 	}
@@ -128,8 +130,10 @@ public class SRPClientSession
 	public void validateServerEvidenceValue_M2( BigInteger evidenceValueFromServer_M2 )
 			throws SRPAuthenticationFailedException
 	{
-		if ( fEvidenceValue_M1 == null )
-			throw new IllegalStateException( "computeCommonValue_S() has not been called yet." );
+		if ( fEvidenceValue_M1 == null ) {
+			System.out.println("============[][][4][][]==========="+fEvidenceValue_M1);
+			throw new IllegalStateException("computeCommonValue_S() has not been called yet.");
+		}
 
 		BigInteger M2 = SRPUtils.calcM2( fPublicKey_A, fEvidenceValue_M1, fCommonValue_S );
 		if ( !evidenceValueFromServer_M2.equals( M2 ) )

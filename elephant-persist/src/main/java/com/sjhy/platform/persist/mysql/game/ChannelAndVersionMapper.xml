@@ -123,11 +123,20 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <!-- 验证渠道 -->
     <select id="verifyChannel" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.ChannelAndVersion" >
         select
         <include refid="Base_Column_List" />
         from channel_and_version
         where channel_id = #{channelId,jdbcType=VARCHAR}
         and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByChannelId" parameterType="com.sjhy.platform.client.dto.game.ChannelAndVersion" resultType="java.lang.String" >
+        select
+            channel_id
+        from channel_and_version
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and channel_info = #{channelInfo,jdbcType=VARCHAR}
     </select>
 </mapper>

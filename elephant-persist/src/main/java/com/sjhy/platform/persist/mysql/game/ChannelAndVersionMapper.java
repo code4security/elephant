@@ -1,6 +1,7 @@
 package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -17,6 +18,9 @@ public interface ChannelAndVersionMapper {
 
     int updateByPrimaryKey(ChannelAndVersion record);
 
-    //验证渠道
+    // 验证渠道
     ChannelAndVersion verifyChannel(ChannelAndVersion record);
+
+    // 查询渠道id，通过英文简称
+    String selectByChannelId(@Param("gameId") String gameId, @Param("channelInfo") String channelInfo);
 }

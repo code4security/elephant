@@ -18,7 +18,7 @@ import java.math.BigInteger;
 /**
  * @HJ
  */
-@Service(value = "LoginService")
+@com.alibaba.dubbo.config.annotation.Service(interfaceClass = LoginService.class)
 public class LoginServiceImpl implements LoginService {
 
     @Resource
@@ -28,9 +28,9 @@ public class LoginServiceImpl implements LoginService {
     /**
      * 第一次握手
      */
-    public ResultDTO<RegularLoginVO> loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId) {
+    public ResultDTO<RegularLoginVO> loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId, String channelName) {
         try {
-            return ResultDTO.getSuccessResult(loginBO.loginChallenge(sc,clientId,deviceUniqueId));
+            return ResultDTO.getSuccessResult(loginBO.loginChallenge(sc,clientId,deviceUniqueId,channelName));
         } catch (DeviceSignNullException e) {
             e.printStackTrace();
         } catch (EmptyAccountNameException e) {

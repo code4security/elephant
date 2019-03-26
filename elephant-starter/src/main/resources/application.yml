@@ -1,3 +1,4 @@
+# 端口配置
 server:
   port: 8080
 #  port: 443
@@ -5,9 +6,11 @@ server:
 #      key-store: classpath:1880511_server.shijunhuyu.com.pfx
 #      key-store-password: KbM4QRIo
 
+# spring配置
 spring:
   profiles:
     active: dev
+    # 数据库配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/game?useUnicode=true&characterEncoding=utf-8
@@ -17,6 +20,7 @@ spring:
     # password: mv2H)jMs9AFO-gCD
     name: game
 
+# redis配置
   redis:
     host: localhost
     password:
@@ -30,6 +34,7 @@ spring:
     database: 0
     timeout: 1000ms
 
+# mybatis配置
 mybatis:
   mapper-locations: classpath:com/sjhy/platform/persist/mysql/**/*.xml
   type-aliases-package: com.sjhy.platform.client.dto.**.*
@@ -41,4 +46,5 @@ mybatis:
     use-generated-keys: true
     default-executor-type: simple
     default-statement-timeout: 25000
+
 

@@ -1,5 +1,6 @@
 package com.sjhy.platform.client.dto.srp;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
 /**
@@ -14,7 +15,7 @@ import java.math.BigInteger;
  * @version 1.3 Updated to use the SRP-6 spec 2/21/07
  * @version 1.2
  */
-public class SRPServerSession
+public class SRPServerSession implements Serializable
 {
 
 	// private static final Logger logger = LoggerFactory.getLogger( SRPServerSession.class );
@@ -116,8 +117,10 @@ public class SRPServerSession
 	 */
 	public void validateClientEvidenceValue_M1( BigInteger m1 ) throws SRPAuthenticationFailedException
 	{
-		if ( fEvidenceValue_M1 == null )
+		if ( fEvidenceValue_M1 == null ){
+			System.out.println("============[][][1][][]==========="+fEvidenceValue_M1);
 			throw new IllegalStateException( "computeCommonValue_S() has not been called yet." );
+		}
 
 		// logger.info( "M1 fromC=" + m1.toString( 16 ) );
 
@@ -132,8 +135,10 @@ public class SRPServerSession
 	 */
 	public BigInteger getEvidenceValue_M2()
 	{
-		if ( fEvidenceValue_M1 == null )
-			throw new IllegalStateException( "computeCommonValue_S() has not been called yet." );
+		if ( fEvidenceValue_M1 == null ) {
+			System.out.println("============[][][2][][]===========" + fEvidenceValue_M1);
+			throw new IllegalStateException("computeCommonValue_S() has not been called yet.");
+		}
 
 		return SRPUtils.calcM2( fPublicKey_A, fEvidenceValue_M1, fCommonValue_S );
 	}

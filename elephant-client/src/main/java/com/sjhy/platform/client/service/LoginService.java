@@ -13,7 +13,7 @@ import java.math.BigInteger;
 
 public interface LoginService {
     // 第一次握手
-    ResultDTO<RegularLoginVO> loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId);
+    ResultDTO<RegularLoginVO> loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId, String channelName);
 
     // 第二次握手
     ResultDTO<RegularLoginVO> loginProof(ServiceContext sc, int clientId, String ip, BigInteger a, BigInteger m1 , String sdkVersion);
