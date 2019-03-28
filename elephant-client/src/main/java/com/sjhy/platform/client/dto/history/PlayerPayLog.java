@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -52,7 +53,7 @@ public class PlayerPayLog {
     /**
      * 充值金额
      */
-    private Float rmb;
+    private BigDecimal rmb;
 
     /**
      * 发送虚拟货币
@@ -83,4 +84,9 @@ public class PlayerPayLog {
      * ios购买凭证
      */
     private String iosReceipt;
+
+    /**
+     * ios购买凭证验证
+     */
+    private String iosVerify;
 }

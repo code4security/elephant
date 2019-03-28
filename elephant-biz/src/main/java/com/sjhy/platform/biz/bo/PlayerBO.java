@@ -141,7 +141,6 @@ public class PlayerBO {
             IpLocation ipLocation = (IpLocation)locationList.get(0);
             player.setIpRegion(ipLocation.getLocid());
         }
-
         playerMapper.insert(player);
 
         return player;

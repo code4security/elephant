@@ -31,9 +31,17 @@ public class ResultVo {
         resultVo = new ResultVo();
         resultVo.setIosId(iosId);
         resultVo.setServerDate(System.currentTimeMillis());
-        resultVo.setMonthlyTime(monthlyTime.getTime());
+        if (monthlyTime == null){
+            resultVo.setMonthlyTime(null);
+        }else {
+            resultVo.setMonthlyTime(monthlyTime.getTime());
+        }
+        if (adTime == null){
+            resultVo.setAdTime(null);
+        }else {
+            resultVo.setAdTime(adTime.getTime());
+        }
         resultVo.setEndMonthlyTime(null);
-        resultVo.setAdTime(adTime.getTime());
         return resultVo;
     }
 

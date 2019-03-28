@@ -9,18 +9,19 @@
         <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
         <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="rmb" property="rmb" jdbcType="REAL" />
+        <result column="rmb" property="rmb" jdbcType="DECIMAL" />
         <result column="currency_get" property="currencyGet" jdbcType="INTEGER" />
         <result column="currency_get_extra" property="currencyGetExtra" jdbcType="INTEGER" />
         <result column="order_id" property="orderId" jdbcType="VARCHAR" />
         <result column="pay_status" property="payStatus" jdbcType="INTEGER" />
         <result column="ios_status" property="iosStatus" jdbcType="VARCHAR" />
         <result column="ios_receipt" property="iosReceipt" jdbcType="LONGVARCHAR" />
+        <result column="ios_verify" property="iosVerify" jdbcType="VARCHAR" />
     </resultMap>
 
     <sql id="Base_Column_List" >
         id, role_id, game_id, channel_id, goods_name, create_time, rmb, currency_get, currency_get_extra, 
-        order_id, pay_status, ios_status, ios_receipt
+        order_id, pay_status, ios_status, ios_receipt, ios_verify
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -40,12 +41,12 @@
             channel_id, goods_name, create_time, 
             rmb, currency_get, currency_get_extra, 
             order_id, pay_status, ios_status, 
-            ios_receipt)
+            ios_receipt, ios_verify)
         values (#{id,jdbcType=INTEGER}, #{roleId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR}, 
             #{channelId,jdbcType=VARCHAR}, #{goodsName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-            #{rmb,jdbcType=REAL}, #{currencyGet,jdbcType=INTEGER}, #{currencyGetExtra,jdbcType=INTEGER}, 
+            #{rmb,jdbcType=DECIMAL}, #{currencyGet,jdbcType=INTEGER}, #{currencyGetExtra,jdbcType=INTEGER}, 
             #{orderId,jdbcType=VARCHAR}, #{payStatus,jdbcType=INTEGER}, #{iosStatus,jdbcType=VARCHAR}, 
-            #{iosReceipt,jdbcType=LONGVARCHAR})
+            #{iosReceipt,jdbcType=LONGVARCHAR}, #{iosVerify,jdbcType=VARCHAR})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
@@ -90,6 +91,9 @@
             <if test="iosReceipt != null" >
                 ios_receipt,
             </if>
+            <if test="iosVerify != null" >
+                ios_verify,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
@@ -111,7 +115,7 @@
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="rmb != null" >
-                #{rmb,jdbcType=REAL},
+                #{rmb,jdbcType=DECIMAL},
             </if>
             <if test="currencyGet != null" >
                 #{currencyGet,jdbcType=INTEGER},
@@ -130,6 +134,9 @@
             </if>
             <if test="iosReceipt != null" >
                 #{iosReceipt,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="iosVerify != null" >
+                #{iosVerify,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -153,7 +160,7 @@
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="rmb != null" >
-                rmb = #{rmb,jdbcType=REAL},
+                rmb = #{rmb,jdbcType=DECIMAL},
             </if>
             <if test="currencyGet != null" >
                 currency_get = #{currencyGet,jdbcType=INTEGER},
@@ -173,6 +180,9 @@
             <if test="iosReceipt != null" >
                 ios_receipt = #{iosReceipt,jdbcType=LONGVARCHAR},
             </if>
+            <if test="iosVerify != null" >
+                ios_verify = #{iosVerify,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -184,13 +194,14 @@
             channel_id = #{channelId,jdbcType=VARCHAR},
             goods_name = #{goodsName,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},
-            rmb = #{rmb,jdbcType=REAL},
+            rmb = #{rmb,jdbcType=DECIMAL},
             currency_get = #{currencyGet,jdbcType=INTEGER},
             currency_get_extra = #{currencyGetExtra,jdbcType=INTEGER},
             order_id = #{orderId,jdbcType=VARCHAR},
             pay_status = #{payStatus,jdbcType=INTEGER},
             ios_status = #{iosStatus,jdbcType=VARCHAR},
-            ios_receipt = #{iosReceipt,jdbcType=LONGVARCHAR}
+            ios_receipt = #{iosReceipt,jdbcType=LONGVARCHAR},
+            ios_verify = #{iosVerify,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>
 
@@ -236,5 +247,14 @@
         where order_id = #{orderId,jdbcType=VARCHAR}
         and role_id = #{roleId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 验证ios购买凭证 -->
+    <select id="selectVerifyReceipt" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.history.PlayerPayLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_pay_log
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and ios_verify = #{iosVerify,jdbcType=VARCHAR}
     </select>
 </mapper>

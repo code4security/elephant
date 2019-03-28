@@ -1,6 +1,5 @@
 package com.sjhy.platform.biz.deploy.exception;
 
-import com.google.protobuf.InvalidProtocolBufferException;
 import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +37,7 @@ public class KairoException extends Exception {
 	}
 	
 	private static KairoErrorCode searchErrorCode(Exception e) {
-		if(e instanceof InvalidProtocolBufferException){
-			 return KairoErrorCode.ERROR_PARAM;
-		}else if(e instanceof RuntimeException){
+		if(e instanceof RuntimeException){
 			 return KairoErrorCode.ERROR_UNKNOW;
 		}else if(e instanceof IOException){
 			 return KairoErrorCode.ERROR_UNKNOW;

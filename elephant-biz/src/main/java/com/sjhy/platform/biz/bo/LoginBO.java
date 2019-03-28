@@ -1,5 +1,6 @@
 package com.sjhy.platform.biz.bo;
 
+import com.alibaba.fastjson.JSONObject;
 import com.sjhy.platform.biz.deploy.redis.RedisServiceImpl;
 import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.client.dto.common.ServiceContext;
@@ -38,10 +39,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @HJ
@@ -81,9 +81,12 @@ public class LoginBO {
     @Resource
     private RedisServiceImpl redisService;
 
+    // private LoginSessionVO sessionVO = new LoginSessionVO();
+
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";
     private static final String REGION = "sessionkey";
+    private Map<String,LoginSessionVO> voMap = new HashMap<>(262144);
 
     /**
      * 第一次握手
@@ -140,7 +143,7 @@ public class LoginBO {
         sessionVO.channelName= channelName;
 
         // 缓存
-        redisService.setSession(clientId,sessionVO);
+        voMap.put(clientId+"_"+sc.getGameId(),sessionVO);
         redisService.put(sc.getChannelUserId(),Integer.valueOf(sc.getGameId()),account);
         /*redis.put(clientId,sessionVO);
         redis.put(sc.getChannelUserId(),Integer.parseInt(sc.getGameId()),account);*/
@@ -178,8 +181,8 @@ public class LoginBO {
         // 获取加密验证session
         LoginSessionVO sessionVO = new LoginSessionVO();
         // 缓存
-        sessionVO = redisService.getSession(clientId);
-        redis.del(String.valueOf(clientId));
+        sessionVO = voMap.get(clientId+"_"+sc.getGameId());
+        voMap.remove(clientId+"_"+sc.getGameId());
         if ( sessionVO == null ){ throw new NotChallengeYetException();}
 
         Game game = gameMapper.selectByGameId(sc.getGameId());

@@ -79,8 +79,11 @@ public class SRPServerSession implements Serializable
 	 */
 	public void computeCommonValue_S()
 	{
-		if ( fPublicKey_A == null )
-			throw new IllegalStateException( "setClientPublicKey_A() has not been called yet." );
+		System.out.println("============[][][c1][][]===========");
+		if ( fPublicKey_A == null ) {
+			System.out.println("============[][][c2][][]==========="+fPublicKey_A);
+			throw new IllegalStateException("setClientPublicKey_A() has not been called yet.");
+		}
 
 		// BigInteger A = SRPUtils.getRealBigInteger( fPublicKey_A );
 		// BigInteger B = SRPUtils.getRealBigInteger( fPublicKey_B );
@@ -100,6 +103,7 @@ public class SRPServerSession implements Serializable
 		System.out.println("fPublicKey_B=================11111111111111111=================>"+fPublicKey_B);
 		System.out.println("fCommonValue_S===============11111111111111111===================>"+fCommonValue_S);
 		fEvidenceValue_M1 = SRPUtils.calcM1( fPublicKey_A, fPublicKey_B, fCommonValue_S );
+		System.out.println("============[][][c3][][]==========="+fEvidenceValue_M1);
 
 		// logger.info( "M1=" + fEvidenceValue_M1.toString( 16 ) );
 
@@ -135,6 +139,7 @@ public class SRPServerSession implements Serializable
 	 */
 	public BigInteger getEvidenceValue_M2()
 	{
+		System.out.println("===============[][][][fEvidenceValue_M1][][][][===============:"+fEvidenceValue_M1);
 		if ( fEvidenceValue_M1 == null ) {
 			System.out.println("============[][][2][][]===========" + fEvidenceValue_M1);
 			throw new IllegalStateException("computeCommonValue_S() has not been called yet.");

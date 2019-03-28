@@ -6,6 +6,7 @@ package com.sjhy.platform.sanguo;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -16,9 +17,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.sjhy.platform.biz.deploy.config.IosCode;
-import com.sjhy.platform.biz.deploy.redis.RedisUtil;
 import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
-import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
 import com.sjhy.platform.persist.mysql.game.GameContentMapper;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
@@ -77,7 +76,7 @@ public class IapController {
      */
     @RequestMapping(value = "/setIapCertificate",method = RequestMethod.POST)
     public String setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
-                                               @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam float rmb*/) {
+                                               @RequestParam String gameId, @RequestParam String channelId, @RequestParam BigDecimal rmb) {
         //验证传参是否为空
         if (dbVerify.isHasIos(iosId,gameId,channelId) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id) && StringUtils.isNotEmpty(transaction_id)) {
 
@@ -94,7 +93,7 @@ public class IapController {
             // 如果未查询到该订单，则插入数据库
             if (res == null){
                 playerPayLogMapper.insert(new PlayerPayLog(null,iosId,gameId,channelId,product_id,new Date(),
-                        0.0f,null,null,transaction_id,4,null,receipt));
+                        rmb,null,null,transaction_id,4,null,receipt,null));
             }
             // 更新查询支付信息数据
             payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);
@@ -186,7 +185,7 @@ public class IapController {
      */
     public void updatePlayerPayLogStatus(int id, int payStatus, String iosStatus){
         playerPayLogMapper.updateByPrimaryKeySelective(new PlayerPayLog(id, null, null, null, null,
-                null, null, null, null, null, payStatus, iosStatus, null));
+                null, null, null, null, null, payStatus, iosStatus, null,null));
     }
 
     /**

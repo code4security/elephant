@@ -1,6 +1,7 @@
 package com.sjhy.platform.biz.deploy.redis;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.ParserConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 public final class RedisUtil {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
     // =============================common============================
     /**
      * 指定缓存失效时间

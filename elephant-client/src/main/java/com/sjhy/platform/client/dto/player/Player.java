@@ -22,7 +22,7 @@ public class Player {
     /**
      * ID
      */
-    private Integer id;
+    private Long id;
 
     /**
      * 玩家id

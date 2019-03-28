@@ -1,18 +1,15 @@
 package com.sjhy.platform;
 
 import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
-import org.apache.catalina.connector.Connector;
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
  * Hello world!
@@ -22,7 +19,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 @SpringBootApplication(scanBasePackages = {"com.sjhy.platform"})
 @ImportResource("classpath:spring/application-context.xml")
 @EnableCaching
-public class App
+public class App extends WebMvcConfigurationSupport
 {
     public static void main( String[] args )
     {
@@ -30,4 +27,5 @@ public class App
         GetBeanHelper.setApplicationContext(ac);
         SpringApplication.run(App.class, args);
     }
+
 }
