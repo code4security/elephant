@@ -1,5 +1,5 @@
 package com.sjhy.platform.client.dto.vo;
-import com.sjhy.platform.client.dto.srp.SRPServerSession;
+import com.sjhy.platform.client.deploy.srp.SRPServerSession;
 
 import java.io.Serializable;
 

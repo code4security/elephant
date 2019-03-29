@@ -11,18 +11,19 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.http.ProtocolType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import com.sjhy.platform.client.deploy.config.AppConfig;
+import com.sjhy.platform.client.deploy.config.KairoErrorCode;
+import com.sjhy.platform.client.deploy.exception.*;
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
+import com.sjhy.platform.biz.utils.MD5Util;
+import com.sjhy.platform.biz.utils.StringUtils;
+import com.sjhy.platform.biz.utils.UtilDate;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.config.AppConfig;
-import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
-import com.sjhy.platform.biz.deploy.exception.*;
-import com.sjhy.platform.biz.deploy.utils.MD5Util;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import com.sjhy.platform.biz.deploy.utils.UtilDate;
+import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.client.dto.vo.AliOssAccessKeyVO;
 import com.sjhy.platform.client.dto.vo.AliOssBucketVO;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.player.PlayerGameOss;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerGameOssMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
@@ -75,6 +76,8 @@ public class OssBO {
     private Properties serverConfig;
     @Resource
     private GameMapper gameMapper;
+    @Resource
+    private DbVerifyUtils dbVerifyUtils;
 
     /**
      * 删除oss文件
@@ -109,7 +112,7 @@ public class OssBO {
     public List<AliOssAccessKeyVO> getBucketkeys(ServiceContext sc, int keyType) throws OssBucketkeyException, NoSuchRoleException {
         List<AliOssAccessKeyVO> accessKeys = new ArrayList<AliOssAccessKeyVO>();
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null){
             throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
@@ -149,7 +152,7 @@ public class OssBO {
      */
     public List<AliOssBucketVO> getBucket(ServiceContext sc) throws NoSuchRoleException{
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null){
             throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
@@ -210,7 +213,7 @@ public class OssBO {
             setPlayerRoleOssFile(sc.getRoleId(),sc.getGameId());
         }
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null){
             throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
@@ -291,7 +294,7 @@ public class OssBO {
      */
     public AliOssBucketVO putBucket(ServiceContext sc, String objKey, long gold, String saveTime, String fname, int objType) throws NoSuchRoleException, AdmiralNameIsTooLongException, IsHaveSpecialCharacterException, KairoException{
         // role
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(), sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null){
             throw new NoSuchRoleException("指定的玩家不存在,roleId="+sc.getRoleId());
         }
@@ -372,7 +375,7 @@ public class OssBO {
 
     public void setPlayerRoleOssFile(long roleId,String gameId) {
         // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(gameId,roleId);
+        PlayerRole role = dbVerifyUtils.isHasRole(gameId,null,roleId);
         if(role == null) {
             return;
         }

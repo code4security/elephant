@@ -3,7 +3,7 @@ package com.sjhy.platform.service.dubbo;
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.exception.ChannelIDErrorException;
+import com.sjhy.platform.client.deploy.exception.ChannelIDErrorException;
 import com.sjhy.platform.client.service.VerifySessionService;
 import org.springframework.stereotype.Service;
 

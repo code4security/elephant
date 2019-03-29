@@ -3,14 +3,13 @@ package com.sjhy.platform.service.dubbo;
 import com.sjhy.platform.biz.bo.LoginBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.exception.*;
-import com.sjhy.platform.client.dto.srp.SRPAuthenticationFailedException;
+import com.sjhy.platform.client.deploy.exception.*;
+import com.sjhy.platform.client.dto.player.PlayerRole;
+import com.sjhy.platform.client.deploy.srp.SRPAuthenticationFailedException;
 import com.sjhy.platform.client.dto.vo.ChannelAndVersionVO;
 import com.sjhy.platform.client.dto.vo.LoginVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.client.service.LoginService;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigInteger;
@@ -93,7 +92,7 @@ public class LoginServiceImpl implements LoginService {
     /**
      * 验证角色登陆，返回角色基本信息
      */
-    public ResultDTO<PlayerRoleVO> enterGame(ServiceContext sc, int deviceModel, String deviceToken) {
+    public ResultDTO<PlayerRole> enterGame(ServiceContext sc, int deviceModel, String deviceToken) {
         try {
             return ResultDTO.getSuccessResult(loginBO.enterGame(sc,deviceModel,deviceToken));
         } catch (PleaseLoginAgainException e) {
@@ -101,14 +100,6 @@ public class LoginServiceImpl implements LoginService {
         } catch (NoSuchRoleException e) {
             e.printStackTrace();
         } catch (AlreadyExistsPlayerRoleException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameIsNotNullableException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameIsTooLongException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameIncludeHarmonyException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameCoincideException e) {
             e.printStackTrace();
         } catch (CreateRoleException e) {
             e.printStackTrace();

@@ -1,13 +1,12 @@
 package com.sjhy.platform.biz.verify;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-
 import com.sjhy.platform.biz.bo.VerifySessionBO;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service("2200")
 public class YyhVerifyService implements IVerifySession{

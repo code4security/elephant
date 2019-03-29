@@ -1,15 +1,16 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
+import com.sjhy.platform.client.deploy.config.KairoErrorCode;
+import com.sjhy.platform.client.deploy.exception.KairoException;
+import com.sjhy.platform.biz.utils.StringUtils;
+import com.sjhy.platform.biz.utils.UtilDate;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
-import com.sjhy.platform.biz.deploy.exception.KairoException;
-import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import com.sjhy.platform.biz.deploy.utils.UtilDate;
 import com.sjhy.platform.client.dto.fixed.GiftCode;
+import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
 import com.sjhy.platform.client.dto.game.GiftCodeList;
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.persist.mysql.fixed.GiftCodeMapper;
 import com.sjhy.platform.persist.mysql.fixed.VirtualCurrencyMapper;
 import com.sjhy.platform.persist.mysql.game.GiftCodeListMapper;
@@ -41,6 +42,8 @@ public class GiftCodeBO {
     private PlayerRoleMapper playerRoleMapper;
     @Resource
     private VirtualCurrencyMapper virtualCurrencyMapper;
+    @Resource
+    private DbVerifyUtils dbVerifyUtils;
 
     /**
      * 查询是否使用过激活码
@@ -251,7 +254,7 @@ public class GiftCodeBO {
      */
     public LinkedHashMap<Integer, Integer> redeemCodeExchange(ServiceContext sc, String redeemCode) throws RoleNotFoundException, KairoException {
         // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null) {
             throw new RoleNotFoundException();
         }

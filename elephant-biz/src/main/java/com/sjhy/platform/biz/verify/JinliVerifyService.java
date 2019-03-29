@@ -1,24 +1,22 @@
 package com.sjhy.platform.biz.verify;
 
+import com.alibaba.fastjson.JSON;
+import com.sjhy.platform.biz.bo.VerifySessionBO;
+import com.sjhy.platform.biz.utils.Base64Utils;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import com.sjhy.platform.biz.utils.StringUtils;
+import com.sjhy.platform.client.dto.game.GameChannelSetting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.annotation.Resource;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
-import com.sjhy.platform.biz.bo.VerifySessionBO;
-import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.biz.deploy.utils.Base64Utils;
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSON;
 
 @Service("1800")
 public class JinliVerifyService implements IVerifySession{

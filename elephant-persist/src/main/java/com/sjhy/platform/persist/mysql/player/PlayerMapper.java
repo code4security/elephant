@@ -22,4 +22,7 @@ public interface PlayerMapper {
 
     // 查询所有玩家
     int selectByCount(Player record);
+
+    // 查询条件
+    Player selectByAll(Player record);
 }

@@ -1,18 +1,20 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.deploy.exception.MailItemErrorException;
+import com.sjhy.platform.client.deploy.exception.MailNotBelongThisRoleException;
+import com.sjhy.platform.client.deploy.exception.NoSuchRoleException;
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.client.dto.enumerate.MailTypeEnum;
-import com.sjhy.platform.biz.deploy.exception.MailItemErrorException;
-import com.sjhy.platform.biz.deploy.exception.MailNotBelongThisRoleException;
-import com.sjhy.platform.biz.deploy.exception.NoSuchRoleException;
+import com.sjhy.platform.client.deploy.enumerate.MailTypeEnum;
+import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.client.dto.vo.AddItemToPackVO;
 import com.sjhy.platform.client.dto.vo.MailVO;
 import com.sjhy.platform.client.dto.game.Mail;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.persist.mysql.game.MailMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,8 @@ public class MailBO {
     private MailMapper mailMapper;
     @Resource
     private PlayerRoleMapper playerRoleMapper;
+    @Autowired
+    private DbVerifyUtils dbVerifyUtils;
 
     /**
      * 删除邮件
@@ -60,7 +64,7 @@ public class MailBO {
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
     public List<AddItemToPackVO> getMailItem(ServiceContext sc, int mailId, int doType) throws NoSuchRoleException, MailNotBelongThisRoleException, MailItemErrorException
     {
-        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId()); // 角色基本信息
+        PlayerRole playerRoleVO = dbVerifyUtils.isHasRole(sc.getGameId(),null,sc.getRoleId());
         if (playerRoleVO == null) {
             throw new NoSuchRoleException();
         }
@@ -111,7 +115,7 @@ public class MailBO {
      * @throws NoSuchRoleException
      */
     public int getNewMailNum(ServiceContext sc) throws NoSuchRoleException {
-        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId()); // 角色基本信息
+        PlayerRole playerRoleVO = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if (playerRoleVO == null) {
             throw new NoSuchRoleException();
         }
@@ -132,8 +136,7 @@ public class MailBO {
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
     public List<MailVO> getMailList(ServiceContext sc, int from, int to) throws NoSuchRoleException {
-        PlayerRoleVO playerRoleVO = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
-
+        PlayerRole playerRoleVO = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         // 玩家是否存在验证
         if (playerRoleVO == null) {
             throw new NoSuchRoleException();

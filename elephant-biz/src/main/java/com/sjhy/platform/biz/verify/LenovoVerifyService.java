@@ -1,14 +1,15 @@
 package com.sjhy.platform.biz.verify;
 
-import java.util.Map;
-
 import com.sjhy.platform.biz.bo.VerifySessionBO;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import com.sjhy.platform.biz.utils.StringUtils;
+import com.sjhy.platform.biz.utils.XmlUtils;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import com.sjhy.platform.biz.deploy.utils.XmlUtils;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service("1600")
 public class LenovoVerifyService implements IVerifySession{

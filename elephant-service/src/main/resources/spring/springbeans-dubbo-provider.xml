@@ -42,6 +42,7 @@
     <bean id="roleService" class="com.sjhy.platform.service.dubbo.RoleServiceImpl"/>
     <bean id="serverHistoryService" class="com.sjhy.platform.service.dubbo.ServerHistoryServiceImpl"/>
     <bean id="verifySessionService" class="com.sjhy.platform.service.dubbo.VerifySessionServiceImpl"/>
+    <bean id="dbVerifyUtils" class="com.sjhy.platform.biz.utils.DbVerifyUtils" />
 
     <!-- declare the service interface to be exported -->
     <dubbo:service interface="com.sjhy.platform.client.service.test.PersonService" ref="personService"/>
@@ -55,5 +56,6 @@
     <dubbo:service interface="com.sjhy.platform.client.service.RoleService" ref="roleService"/>
     <dubbo:service interface="com.sjhy.platform.client.service.ServerHistoryService" ref="serverHistoryService"/>
     <dubbo:service interface="com.sjhy.platform.client.service.VerifySessionService" ref="verifySessionService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.DbVerify" ref="dbVerifyUtils" />
 
 </beans>

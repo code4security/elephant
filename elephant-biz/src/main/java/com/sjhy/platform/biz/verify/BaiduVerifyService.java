@@ -1,19 +1,18 @@
 package com.sjhy.platform.biz.verify;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import com.alibaba.fastjson.JSON;
 import com.sjhy.platform.biz.bo.VerifySessionBO;
+import com.sjhy.platform.biz.utils.Base64Utils;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import com.sjhy.platform.biz.utils.MD5Util;
+import com.sjhy.platform.biz.utils.StringUtils;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.biz.deploy.utils.Base64Utils;
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import com.sjhy.platform.biz.deploy.utils.MD5Util;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
+import java.net.URLDecoder;
+import java.util.Map;
 
 @Service("1500")
 public class BaiduVerifyService implements IVerifySession{
@@ -67,14 +66,14 @@ public class BaiduVerifyService implements IVerifySession{
 				String Content = result.get("Content").toString();
 				String Sign = result.get("Sign").toString();
 				
-				String VerifySign = MD5Util.me().md5Hex(channelSetting.getAppKey() + ResultCode + java.net.URLDecoder.decode(Content,"utf-8") + channelSetting.getAppSecret());
+				String VerifySign = MD5Util.me().md5Hex(channelSetting.getAppKey() + ResultCode + URLDecoder.decode(Content,"utf-8") + channelSetting.getAppSecret());
 				
 				if(VerifySign.toLowerCase().equals(Sign.toLowerCase())){
 				
 					logger.error("BaiduVerifyService|method=verify|error=baidu验证OK，");
 					
 					// Content参数需要URLDecoder
-					Content = java.net.URLDecoder.decode(Content, "utf-8");  
+					Content = URLDecoder.decode(Content, "utf-8");
 			    
 					// Base64解码
 					String jsonStr = Base64Utils.decode(Content);

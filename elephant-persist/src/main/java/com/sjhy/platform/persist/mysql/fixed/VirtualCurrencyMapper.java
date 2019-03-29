@@ -2,7 +2,9 @@ package com.sjhy.platform.persist.mysql.fixed;
 
 import com.sjhy.platform.client.dto.fixed.VirtualCurrency;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface VirtualCurrencyMapper {
     int deleteByPrimaryKey(Integer id);
 

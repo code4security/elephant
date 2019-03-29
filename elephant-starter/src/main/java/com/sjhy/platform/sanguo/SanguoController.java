@@ -1,9 +1,9 @@
 package com.sjhy.platform.sanguo;
 
-import com.sjhy.platform.biz.deploy.config.IosCode;
-import com.sjhy.platform.biz.deploy.redis.RedisUtil;
-import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
+import com.sjhy.platform.client.deploy.config.IosCode;
+import com.sjhy.platform.biz.redis.RedisUtil;
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
+import com.sjhy.platform.biz.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.game.GameContent;
 import com.sjhy.platform.client.dto.game.GameNotify;

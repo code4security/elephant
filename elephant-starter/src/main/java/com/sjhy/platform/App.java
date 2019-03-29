@@ -1,6 +1,6 @@
 package com.sjhy.platform;
 
-import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
+import com.sjhy.platform.biz.utils.GetBeanHelper;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

@@ -3,9 +3,9 @@ package com.sjhy.platform.service.dubbo;
 import com.sjhy.platform.biz.bo.MailBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.exception.MailItemErrorException;
-import com.sjhy.platform.biz.deploy.exception.MailNotBelongThisRoleException;
-import com.sjhy.platform.biz.deploy.exception.NoSuchRoleException;
+import com.sjhy.platform.client.deploy.exception.MailItemErrorException;
+import com.sjhy.platform.client.deploy.exception.MailNotBelongThisRoleException;
+import com.sjhy.platform.client.deploy.exception.NoSuchRoleException;
 import com.sjhy.platform.client.service.MailService;
 import org.springframework.stereotype.Service;
 

@@ -2,24 +2,21 @@ package com.sjhy.platform.biz.bo;
 
 import com.alibaba.fastjson.JSON;
 import com.sjhy.platform.biz.pay.*;
+import com.sjhy.platform.client.deploy.config.AppConfig;
+import com.sjhy.platform.client.deploy.config.GamePayConfig;
+import com.sjhy.platform.client.deploy.config.KairoErrorCode;
+import com.sjhy.platform.client.deploy.exception.KairoException;
+import com.sjhy.platform.client.deploy.exception.NoSuchRoleException;
+import com.sjhy.platform.biz.utils.*;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.config.AppConfig;
-import com.sjhy.platform.biz.deploy.config.GamePayConfig;
-import com.sjhy.platform.client.dto.enumerate.PayChannelEnum;
-import com.sjhy.platform.client.dto.enumerate.SubChannelEnum;
-import com.sjhy.platform.biz.deploy.exception.NoSuchRoleException;
-import com.sjhy.platform.biz.deploy.config.KairoErrorCode;
-import com.sjhy.platform.biz.deploy.exception.KairoException;
+import com.sjhy.platform.client.deploy.enumerate.PayChannelEnum;
+import com.sjhy.platform.client.deploy.enumerate.SubChannelEnum;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
 import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.game.Server;
 import com.sjhy.platform.client.dto.history.PlayerPayLog;
-import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
-import com.sjhy.platform.biz.deploy.utils.HashKit;
-import com.sjhy.platform.biz.deploy.utils.MD5Util;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
+import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.client.dto.vo.*;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.client.dto.vo.pay.*;
 import com.sjhy.platform.persist.mysql.game.PayGoodsMapper;
 import com.sjhy.platform.persist.mysql.game.ServerMapper;
@@ -64,6 +61,8 @@ public class PayBO {
     private AddTxOrderGPProxy addTxOrderGPProxy;
     @Autowired
     private AddVivoOrderGPProxy addVivoOrderGPProxy;
+    @Resource
+    private DbVerifyUtils dbVerifyUtils;
 
     private final String OFFLINE_GOOGS_ID_1 = "open_one_0";
     private final String OFFLINE_GOOGS_ID_2 = "open_two_1";
@@ -75,7 +74,7 @@ public class PayBO {
      * @return
      * @throws KairoException
      */
-    public AddYYBOrderResultVO addYYBOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException{
+    public AddYYBOrderResultVO addYYBOrder(ServiceContext sc, PayAddOrderVO order, String extra) throws KairoException {
         String orderId = null;
 
         if (sc.getRoleId() <= 0 ){
@@ -131,7 +130,7 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_YYB_ADD_ORDER, "应用宝渠道参数[openkey]错误");
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(), sc.getRoleId());
+        PlayerRole palyerRole = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
 
         String[] datas = new String[16];
         datas[0] = String.valueOf(sc.getRoleId());
@@ -254,7 +253,7 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_YYB_ADD_ORDER, "腾讯手Q渠道参数[openid]错误");
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
+        PlayerRole palyerRole = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
 
         String[] datas = new String[16];
         datas[0] = String.valueOf(sc.getRoleId());
@@ -366,7 +365,7 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
+        PlayerRole palyerRole = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
 
         String[] datas = new String[11];
         datas[0] = String.valueOf(sc.getRoleId());
@@ -466,7 +465,7 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
+        PlayerRole palyerRole = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
 
         String[] datas = new String[12];
         datas[0] = String.valueOf(sc.getRoleId());
@@ -563,7 +562,7 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
+        PlayerRole palyerRole = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
 
         String[] datas = new String[12];
         datas[0] = String.valueOf(sc.getRoleId());
@@ -631,7 +630,7 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
+        PlayerRole palyerRole = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
 
         String goodId = order.getGoodId();
 
@@ -763,7 +762,7 @@ public class PayBO {
             throw new KairoException(KairoErrorCode.ERROR_PAY_UID_ISNULL);
         }
 
-        PlayerRoleVO palyerRole = (PlayerRoleVO) playerRoleMapper.selectByRoleId(order.getGameId(),sc.getRoleId());
+        PlayerRole palyerRole = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
 
         String[] datas = new String[12];
 
@@ -961,7 +960,7 @@ public class PayBO {
 
         logger.error("PayService|baseSign="+baseSign);
 
-        String sign     = HashKit.sign(baseSign, gameChannelSetting.getPayPrivateKey().trim());
+        String sign = HashKit.sign(baseSign, gameChannelSetting.getPayPrivateKey().trim());
 
         addOrderResult.setSign(sign);
         addOrderResult.setNotifyUrl(gameChannelSetting.getNotifyUrl());
@@ -1112,7 +1111,7 @@ public class PayBO {
      */
     public PayLogVO getMedal(ServiceContext sc) throws RoleNotFoundException {
         // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null) {
             throw new RoleNotFoundException();
         }
@@ -1153,7 +1152,7 @@ public class PayBO {
         PlayerPayLog payLog = new PlayerPayLog();
 
         // 用户信息
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null) {
             throw new NoSuchRoleException();
         }
@@ -1231,7 +1230,7 @@ public class PayBO {
         }
 
         // 玩家存在与否
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByRoleId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null) {
             logger.error("======>payNotify->sc.getRoleId()<========:"+orderId+"|err=角色不存在异常");
             throw new NoSuchRoleException();

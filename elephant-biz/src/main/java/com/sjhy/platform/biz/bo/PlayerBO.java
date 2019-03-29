@@ -1,11 +1,11 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.client.deploy.config.ProtocolKey;
+import com.sjhy.platform.client.deploy.exception.AccountAlreadyBindingOtherException;
+import com.sjhy.platform.client.deploy.exception.NotExistAccountException;
+import com.sjhy.platform.biz.utils.IPOperator;
+import com.sjhy.platform.biz.utils.MD5Util;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.config.ProtocolKey;
-import com.sjhy.platform.biz.deploy.exception.AccountAlreadyBindingOtherException;
-import com.sjhy.platform.biz.deploy.exception.NotExistAccountException;
-import com.sjhy.platform.biz.deploy.utils.IPOperator;
-import com.sjhy.platform.biz.deploy.utils.MD5Util;
 import com.sjhy.platform.client.dto.vo.AccountVO;
 import com.sjhy.platform.client.dto.game.ModuleSwitch;
 import com.sjhy.platform.client.dto.fixed.IpLocation;
@@ -76,6 +76,7 @@ public class PlayerBO {
                 Player play = new Player();
                 play.setChannelId(sc.getChannelId());
                 play.setPlayerId(playerChannel.getPlayerId());
+                play.setGameId(sc.getGameId());
 
                 Player player = playerMapper.selectByPlayerId(play);
 
@@ -120,7 +121,7 @@ public class PlayerBO {
     public Player createNewPlayerByCooperate(ServiceContext sc, String deviceUniquelyId, String deviceModel, String ip) {
         // 需要更新的信息
         Date now = Calendar.getInstance().getTime();
-        Date zero = new Date(0);
+//        Date zero = new Date(0);
 
         Player player = new Player();
 
@@ -138,12 +139,15 @@ public class PlayerBO {
         long ipNum = IPOperator.ipToLong(ip);
         List<IpLocation> locationList = ipLocationMapper.selectByStart(ipNum);
         if (locationList != null) {
-            IpLocation ipLocation = (IpLocation)locationList.get(0);
+            IpLocation ipLocation = locationList.get(0);
             player.setIpRegion(ipLocation.getLocid());
         }
         playerMapper.insert(player);
+        player.setLastLoginTime(null);
+        player.setFirstLoginTime(null);
+        Player players = playerMapper.selectByAll(player);
 
-        return player;
+        return players;
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.sjhy.platform.biz.pay;
 
-import com.sjhy.platform.biz.deploy.config.GamePayConfig;
+import com.sjhy.platform.client.deploy.config.GamePayConfig;
 import com.sjhy.platform.client.dto.vo.pay.AddOrderResultVO;
 import org.json.JSONException;
 import org.json.JSONObject;

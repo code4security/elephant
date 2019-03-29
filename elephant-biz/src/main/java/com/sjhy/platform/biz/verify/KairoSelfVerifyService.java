@@ -1,14 +1,12 @@
 package com.sjhy.platform.biz.verify;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import com.alibaba.fastjson.JSON;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
+import java.util.Map;
 
 @Service("1000")
 public class KairoSelfVerifyService implements IVerifySession{

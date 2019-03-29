@@ -1,6 +1,5 @@
 package com.sjhy.platform.client.dto.vo.newGame;
 
-import com.sjhy.platform.client.dto.player.PlayerIos;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,8 +14,10 @@ public class ResultVo {
     @Autowired
     private ResultVo resultVo;
 
-    // 登录返回参数
+    // roleId,iosId
     private Long iosId;
+
+    // 登录返回参数
     private Long serverDate;
     private Long monthlyTime;
     private Long endMonthlyTime;

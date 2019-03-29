@@ -1,11 +1,10 @@
 package com.sjhy.platform.biz.bo;
 
 import com.sjhy.platform.biz.verify.IVerifySession;
+import com.sjhy.platform.client.deploy.exception.ChannelIDErrorException;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.exception.ChannelIDErrorException;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 
 import com.sjhy.platform.persist.mysql.game.GameChannelSettingMapper;

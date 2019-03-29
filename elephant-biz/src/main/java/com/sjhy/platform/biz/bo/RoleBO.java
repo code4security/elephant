@@ -1,19 +1,18 @@
 package com.sjhy.platform.biz.bo;
 
-import com.sjhy.platform.biz.deploy.redis.RedisServiceImpl;
-import com.sjhy.platform.biz.deploy.utils.ShieldingWordsUtil;
+import com.sjhy.platform.biz.redis.RedisServiceImpl;
+import com.sjhy.platform.biz.redis.redisVo.redisCont.KrGlobalCache;
+import com.sjhy.platform.biz.redis.redisVo.redisCont.PlayerRoleCache;
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
+import com.sjhy.platform.biz.utils.GetBeanHelper;
+import com.sjhy.platform.biz.utils.ShieldingWordsUtil;
+import com.sjhy.platform.biz.utils.StringUtils;
+import com.sjhy.platform.client.deploy.config.AppConfig;
+import com.sjhy.platform.client.deploy.exception.*;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.config.AppConfig;
-import com.sjhy.platform.biz.deploy.exception.*;
-import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.client.dto.game.Game;
-import com.sjhy.platform.client.dto.player.Player;
 import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.client.dto.vo.AccountVO;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
-import com.sjhy.platform.persist.mysql.game.GameMapper;
-import com.sjhy.platform.persist.mysql.player.PlayerMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,14 +28,16 @@ import java.util.List;
 public class RoleBO {
     @Resource
     private PlayerRoleMapper playerRoleMapper;
-    @Resource
-    private GameMapper gameMapper;
-    @Resource
-    private PlayerMapper playerMapper;
     @Autowired
     private ShieldingWordsUtil shieldingWordsUtil;
     @Resource
     private RedisServiceImpl redisService;
+    @Resource
+    private KrGlobalCache krGlobalCache;
+    @Resource
+    private PlayerRoleCache playerRoleCache;
+    @Resource
+    private DbVerifyUtils dbVerifyUtils;
 
     public static String ServerID = "";
 
@@ -47,17 +48,12 @@ public class RoleBO {
      * @return
      * @throws NoSuchRoleException
      * @throws AlreadyExistsPlayerRoleException
-     * @throws AdmiralNameIsNotNullableException
-     * @throws AdmiralNameIsTooLongException
-     * @throws AdmiralNameIncludeHarmonyException
-     * @throws AdmiralNameCoincideException
      * @throws CreateRoleException
      * @throws GameIdIsNotExsitsException
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public PlayerRoleVO createNewPlayer(ServiceContext sc, String roleName, String deviceToken)
-            throws NoSuchRoleException, AlreadyExistsPlayerRoleException, AdmiralNameIsNotNullableException,
-            AdmiralNameIsTooLongException, AdmiralNameIncludeHarmonyException, AdmiralNameCoincideException, CreateRoleException, GameIdIsNotExsitsException
+    public PlayerRole createNewPlayer(ServiceContext sc, String roleName, String deviceToken)
+            throws NoSuchRoleException, AlreadyExistsPlayerRoleException, CreateRoleException, GameIdIsNotExsitsException
     {
         // 1.入参校验
         System.out.println("chuangjianjuesexinxi=====================================[][]][][][][][]][][][][][][]");
@@ -67,12 +63,12 @@ public class RoleBO {
         }
         // 缓存
         // 1.1验证gameId是否正确
-        Game game = redisService.getGameDicById(sc.getGameId());
+        Game game = krGlobalCache.getGameDicById(Integer.valueOf(sc.getGameId()));
         if (game == null){
             throw new GameIdIsNotExsitsException();
         }
         // 1.2.玩家如果已经存在则直接返回错误信息
-        PlayerRoleVO playerRoleVo = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(sc.getGameId(),sc.getPlayerId());
+        PlayerRole playerRoleVo = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(playerRoleVo != null){
             throw new AlreadyExistsPlayerRoleException();
         }
@@ -83,7 +79,7 @@ public class RoleBO {
             throw new CreateRoleException();
         }
         // 缓存
-        playerRoleVo = redisService.get(role.getRoleId(),role.getGameId());
+        playerRoleVo = playerRoleCache.get(sc.getRoleId(), sc.getGameId());
         // 埋点(注释)
         // logService.setRoleBuildLog(playerRoleVO);
         return playerRoleVo;

@@ -3,9 +3,8 @@ package com.sjhy.platform.service.dubbo;
 import com.sjhy.platform.biz.bo.RoleBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.exception.*;
+import com.sjhy.platform.client.deploy.exception.*;
 import com.sjhy.platform.client.dto.player.PlayerRole;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
 import com.sjhy.platform.client.service.RoleService;
 import org.springframework.stereotype.Service;
 
@@ -23,20 +22,12 @@ public class RoleServiceImpl implements RoleService {
     /**
      * 创建游戏角色第一步
      */
-    public ResultDTO<PlayerRoleVO> createNewPlayer(ServiceContext sc, String roleName, String deviceToken) {
+    public ResultDTO<PlayerRole> createNewPlayer(ServiceContext sc, String roleName, String deviceToken) {
         try {
             return ResultDTO.getSuccessResult(roleBO.createNewPlayer(sc, roleName, deviceToken));
         } catch (NoSuchRoleException e) {
             e.printStackTrace();
         } catch (AlreadyExistsPlayerRoleException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameIsNotNullableException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameIsTooLongException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameIncludeHarmonyException e) {
-            e.printStackTrace();
-        } catch (AdmiralNameCoincideException e) {
             e.printStackTrace();
         } catch (CreateRoleException e) {
             e.printStackTrace();

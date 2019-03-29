@@ -3,7 +3,7 @@ package com.sjhy.platform.service.dubbo;
 import com.sjhy.platform.biz.bo.OssBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
-import com.sjhy.platform.biz.deploy.exception.*;
+import com.sjhy.platform.client.deploy.exception.*;
 import com.sjhy.platform.client.dto.vo.AliOssBucketVO;
 import com.sjhy.platform.client.service.OssService;
 import org.springframework.stereotype.Service;

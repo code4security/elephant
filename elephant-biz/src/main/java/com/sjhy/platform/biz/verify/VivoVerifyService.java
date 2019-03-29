@@ -1,15 +1,15 @@
 package com.sjhy.platform.biz.verify;
 
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
 import com.sjhy.platform.biz.bo.VerifySessionBO;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import com.sjhy.platform.biz.utils.StringUtils;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
+import java.util.Map;
 @Service("2000")
 public class VivoVerifyService implements IVerifySession{
 	private static final Logger logger = LoggerFactory.getLogger( VivoVerifyService.class );

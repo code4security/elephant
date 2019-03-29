@@ -1,6 +1,6 @@
 package com.sjhy.platform.client.dto.vo;
 
-import com.sjhy.platform.client.dto.enumerate.MailTypeEnum;
+import com.sjhy.platform.client.deploy.enumerate.MailTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

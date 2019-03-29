@@ -1,8 +1,9 @@
 package com.sjhy.platform.biz.bo;
 
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
-import com.sjhy.platform.client.dto.vo.cachevo.PlayerRoleVO;
+import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.slf4j.Logger;
@@ -22,6 +23,8 @@ public class GameBO {
     private PlayerRoleMapper playerRoleMapper;
     @Resource
     private PlayerBanListMapper playerBanListMapper;
+    @Resource
+    private DbVerifyUtils dbVerifyUtils;
 
     /**
      * 查询玩家封禁状态
@@ -46,7 +49,7 @@ public class GameBO {
      */
     public int banPlayer(ServiceContext sc, String banType, int minute){
         // 玩家信息取得
-        PlayerRoleVO role = (PlayerRoleVO) playerRoleMapper.selectByPlayerId(sc.getGameId(),sc.getRoleId());
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null){// 玩家不存在
             return -1;
         }

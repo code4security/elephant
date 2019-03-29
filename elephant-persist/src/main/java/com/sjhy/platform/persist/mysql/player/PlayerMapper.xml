@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sjhy.platform.persist.mysql.player.PlayerMapper" >
+<mapper namespace="com.sjhy.platform.persist.mysql.player.PlayerMapper">
 
-    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.player.Player" >
-        <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="player_id" property="playerId" jdbcType="BIGINT" />
-        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
-        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
-        <result column="server_id" property="serverId" jdbcType="INTEGER" />
-        <result column="device_model" property="deviceModel" jdbcType="VARCHAR" />
-        <result column="device_uniquely_id" property="deviceUniquelyId" jdbcType="VARCHAR" />
-        <result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP" />
-        <result column="first_login_ip" property="firstLoginIp" jdbcType="VARCHAR" />
-        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP" />
-        <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
-        <result column="ip_region" property="ipRegion" jdbcType="INTEGER" />
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.player.Player">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="player_id" property="playerId" jdbcType="BIGINT"/>
+        <result column="game_id" property="gameId" jdbcType="VARCHAR"/>
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR"/>
+        <result column="server_id" property="serverId" jdbcType="INTEGER"/>
+        <result column="device_model" property="deviceModel" jdbcType="VARCHAR"/>
+        <result column="device_uniquely_id" property="deviceUniquelyId" jdbcType="VARCHAR"/>
+        <result column="first_login_time" property="firstLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="first_login_ip" property="firstLoginIp" jdbcType="VARCHAR"/>
+        <result column="last_login_time" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR"/>
+        <result column="ip_region" property="ipRegion" jdbcType="INTEGER"/>
     </resultMap>
 
-    <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
         id, player_id, game_id, channel_id, server_id, device_model, device_uniquely_id, 
         first_login_time, first_login_ip, last_login_time, last_login_ip, ip_region
     </sql>
 
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-        select 
-        <include refid="Base_Column_List" />
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
         from player
         where id = #{id,jdbcType=BIGINT}
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from player
         where id = #{id,jdbcType=BIGINT}
     </delete>
 
-    <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.Player" >
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.Player">
         insert into player (id, player_id, game_id, 
             channel_id, server_id, device_model, 
             device_uniquely_id, first_login_time, first_login_ip, 
@@ -47,127 +47,127 @@
             )
     </insert>
 
-    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.Player" >
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.Player">
         insert into player
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
                 id,
             </if>
-            <if test="playerId != null" >
+            <if test="playerId != null">
                 player_id,
             </if>
-            <if test="gameId != null" >
+            <if test="gameId != null">
                 game_id,
             </if>
-            <if test="channelId != null" >
+            <if test="channelId != null">
                 channel_id,
             </if>
-            <if test="serverId != null" >
+            <if test="serverId != null">
                 server_id,
             </if>
-            <if test="deviceModel != null" >
+            <if test="deviceModel != null">
                 device_model,
             </if>
-            <if test="deviceUniquelyId != null" >
+            <if test="deviceUniquelyId != null">
                 device_uniquely_id,
             </if>
-            <if test="firstLoginTime != null" >
+            <if test="firstLoginTime != null">
                 first_login_time,
             </if>
-            <if test="firstLoginIp != null" >
+            <if test="firstLoginIp != null">
                 first_login_ip,
             </if>
-            <if test="lastLoginTime != null" >
+            <if test="lastLoginTime != null">
                 last_login_time,
             </if>
-            <if test="lastLoginIp != null" >
+            <if test="lastLoginIp != null">
                 last_login_ip,
             </if>
-            <if test="ipRegion != null" >
+            <if test="ipRegion != null">
                 ip_region,
             </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
                 #{id,jdbcType=BIGINT},
             </if>
-            <if test="playerId != null" >
+            <if test="playerId != null">
                 #{playerId,jdbcType=BIGINT},
             </if>
-            <if test="gameId != null" >
+            <if test="gameId != null">
                 #{gameId,jdbcType=VARCHAR},
             </if>
-            <if test="channelId != null" >
+            <if test="channelId != null">
                 #{channelId,jdbcType=VARCHAR},
             </if>
-            <if test="serverId != null" >
+            <if test="serverId != null">
                 #{serverId,jdbcType=INTEGER},
             </if>
-            <if test="deviceModel != null" >
+            <if test="deviceModel != null">
                 #{deviceModel,jdbcType=VARCHAR},
             </if>
-            <if test="deviceUniquelyId != null" >
+            <if test="deviceUniquelyId != null">
                 #{deviceUniquelyId,jdbcType=VARCHAR},
             </if>
-            <if test="firstLoginTime != null" >
+            <if test="firstLoginTime != null">
                 #{firstLoginTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="firstLoginIp != null" >
+            <if test="firstLoginIp != null">
                 #{firstLoginIp,jdbcType=VARCHAR},
             </if>
-            <if test="lastLoginTime != null" >
+            <if test="lastLoginTime != null">
                 #{lastLoginTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="lastLoginIp != null" >
+            <if test="lastLoginIp != null">
                 #{lastLoginIp,jdbcType=VARCHAR},
             </if>
-            <if test="ipRegion != null" >
+            <if test="ipRegion != null">
                 #{ipRegion,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.player.Player" >
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.player.Player">
         update player
-        <set >
-            <if test="playerId != null" >
+        <set>
+            <if test="playerId != null">
                 player_id = #{playerId,jdbcType=BIGINT},
             </if>
-            <if test="gameId != null" >
+            <if test="gameId != null">
                 game_id = #{gameId,jdbcType=VARCHAR},
             </if>
-            <if test="channelId != null" >
+            <if test="channelId != null">
                 channel_id = #{channelId,jdbcType=VARCHAR},
             </if>
-            <if test="serverId != null" >
+            <if test="serverId != null">
                 server_id = #{serverId,jdbcType=INTEGER},
             </if>
-            <if test="deviceModel != null" >
+            <if test="deviceModel != null">
                 device_model = #{deviceModel,jdbcType=VARCHAR},
             </if>
-            <if test="deviceUniquelyId != null" >
+            <if test="deviceUniquelyId != null">
                 device_uniquely_id = #{deviceUniquelyId,jdbcType=VARCHAR},
             </if>
-            <if test="firstLoginTime != null" >
+            <if test="firstLoginTime != null">
                 first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="firstLoginIp != null" >
+            <if test="firstLoginIp != null">
                 first_login_ip = #{firstLoginIp,jdbcType=VARCHAR},
             </if>
-            <if test="lastLoginTime != null" >
+            <if test="lastLoginTime != null">
                 last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="lastLoginIp != null" >
+            <if test="lastLoginIp != null">
                 last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
             </if>
-            <if test="ipRegion != null" >
+            <if test="ipRegion != null">
                 ip_region = #{ipRegion,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.player.Player" >
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.player.Player">
         update player
         set player_id = #{playerId,jdbcType=BIGINT},
             game_id = #{gameId,jdbcType=VARCHAR},
@@ -184,11 +184,11 @@
     </update>
 
     <!-- 查询玩家id -->
-    <select id="selectByPlayerId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.Player" >
+    <select id="selectByPlayerId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.Player">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from player
-        where 
+        where
         <choose>
             <when test="playerId >= 10000000">
                 id = #{playerId,jdbcType=BIGINT}
@@ -201,7 +201,54 @@
     </select>
 
     <!-- 查询玩家数量 -->
-    <select id="selectByCount" parameterType="com.sjhy.platform.client.dto.player.Player" resultType="java.lang.Integer">
+    <select id="selectByCount" parameterType="com.sjhy.platform.client.dto.player.Player"
+            resultType="java.lang.Integer">
         select count(*) from player
+    </select>
+
+    <!-- 查询玩家id -->
+    <select id="selectByAll" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.Player">
+        select
+        <include refid="Base_Column_List"/>
+        from player
+        <where>
+            <if test="id != null">
+                and id = #{id,jdbcType=BIGINT}
+            </if>
+            <if test="playerId != null">
+                and player_id = #{playerId,jdbcType=BIGINT}
+            </if>
+            <if test="gameId != null">
+                and game_id = #{gameId,jdbcType=VARCHAR}
+            </if>
+            <if test="channelId != null">
+                and channel_id = #{channelId,jdbcType=VARCHAR}
+            </if>
+            <if test="serverId != null">
+                and server_id = #{serverId,jdbcType=INTEGER}
+            </if>
+            <if test="deviceModel != null">
+                and device_model = #{deviceModel,jdbcType=VARCHAR}
+            </if>
+            <if test="deviceUniquelyId != null">
+                and device_uniquely_id = #{deviceUniquelyId,jdbcType=VARCHAR}
+            </if>
+            <if test="firstLoginTime != null">
+                and first_login_time = #{firstLoginTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="firstLoginIp != null">
+                and first_login_ip = #{firstLoginIp,jdbcType=VARCHAR}
+            </if>
+            <if test="lastLoginTime != null">
+                and last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="lastLoginIp != null">
+                and last_login_ip = #{lastLoginIp,jdbcType=VARCHAR}
+            </if>
+            <if test="ipRegion != null">
+                and ip_region = #{ipRegion,jdbcType=INTEGER}
+            </if>
+        </where>
+        Limit 1
     </select>
 </mapper>

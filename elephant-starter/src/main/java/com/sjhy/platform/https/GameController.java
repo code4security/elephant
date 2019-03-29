@@ -1,10 +1,10 @@
 package com.sjhy.platform.https;
 
-import com.sjhy.platform.biz.deploy.config.IosCode;
-import com.sjhy.platform.biz.deploy.config.IosMsg;
-import com.sjhy.platform.biz.deploy.redis.RedisUtil;
-import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
+import com.sjhy.platform.client.deploy.config.IosCode;
+import com.sjhy.platform.client.deploy.config.IosMsg;
+import com.sjhy.platform.biz.redis.RedisUtil;
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
+import com.sjhy.platform.biz.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.game.GameContent;
 import com.sjhy.platform.client.dto.game.GameNotify;
@@ -206,7 +206,7 @@ public class GameController {
                     // 更新查询
                     mailList = mailMapper.selectByRoleId(iosId,gameId,0,30);
                     // 返回邮件列表
-                    return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),mailList);
+                    return ResultDTO.getSuccessResult(IosCode.SEND_MAIL_GIFT.getErrorCode(),mailList);
                 }else {
                     // 没有奖励
                     return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),null);

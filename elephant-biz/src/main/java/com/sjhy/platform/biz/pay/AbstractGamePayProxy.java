@@ -1,19 +1,19 @@
 package com.sjhy.platform.biz.pay;
 
-import java.util.Properties;
-
-//import javax.annotation.Resource;
-
-import com.sjhy.platform.biz.deploy.config.AppConfig;
-import com.sjhy.platform.biz.deploy.config.GamePayConfig;
-import com.sjhy.platform.biz.deploy.utils.DESUtil;
-import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import com.sjhy.platform.biz.deploy.utils.MD5Util;
+import com.sjhy.platform.client.deploy.config.AppConfig;
+import com.sjhy.platform.client.deploy.config.GamePayConfig;
+import com.sjhy.platform.biz.utils.DESUtil;
+import com.sjhy.platform.biz.utils.GetBeanHelper;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import com.sjhy.platform.biz.utils.MD5Util;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Properties;
+
+//import javax.annotation.Resource;
 
 /** 
  * <p>类说明:</p>

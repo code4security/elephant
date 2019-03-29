@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlayerRole {
+public class PlayerRole implements Comparable,Serializable {
     /**
      * ID
      */
@@ -108,4 +109,15 @@ public class PlayerRole {
      * 虚拟货币数量
      */
     private Integer currency;
+
+    @Override
+    public int compareTo(Object o) {
+        PlayerRole role = (PlayerRole) o;
+        if (this.id-role.id>0){
+            return 1;
+        }else if (this.id-role.id==0){
+            return 0;
+        }
+        return -1;
+    }
 }

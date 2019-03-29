@@ -4,9 +4,9 @@ package com.sjhy.platform.https;
  */
 
 import com.alibaba.fastjson.JSONObject;
-import com.sjhy.platform.biz.deploy.config.IosCode;
-import com.sjhy.platform.biz.deploy.redis.RedisUtil;
-import com.sjhy.platform.biz.deploy.utils.DbVerifyUtils;
+import com.sjhy.platform.client.deploy.config.IosCode;
+import com.sjhy.platform.biz.redis.RedisUtil;
+import com.sjhy.platform.biz.utils.DbVerifyUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.game.GameContent;
@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;

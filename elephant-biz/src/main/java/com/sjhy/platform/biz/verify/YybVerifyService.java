@@ -1,23 +1,22 @@
 package com.sjhy.platform.biz.verify;
 
-import java.util.Date;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
 import com.sjhy.platform.biz.bo.VerifySessionBO;
-import com.sjhy.platform.biz.deploy.config.AppConfig;
-import com.sjhy.platform.client.dto.enumerate.SubChannelEnum;
+import com.sjhy.platform.client.deploy.config.AppConfig;
+import com.sjhy.platform.client.deploy.enumerate.SubChannelEnum;
+import com.sjhy.platform.biz.utils.GetBeanHelper;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import com.sjhy.platform.biz.utils.MD5Util;
+import com.sjhy.platform.biz.utils.StringUtils;
 import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.biz.deploy.utils.GetBeanHelper;
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import com.sjhy.platform.biz.deploy.utils.MD5Util;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
 import com.sjhy.platform.persist.mysql.game.GameChannelSettingMapper;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * 应用宝渠道

@@ -1,19 +1,19 @@
 package com.sjhy.platform.biz.verify;
 
+import com.alibaba.fastjson.JSON;
+import com.sjhy.platform.biz.bo.VerifySessionBO;
+import com.sjhy.platform.biz.utils.HashKit;
+import com.sjhy.platform.biz.utils.HttpUtil;
+import com.sjhy.platform.biz.utils.StringUtils;
+import com.sjhy.platform.client.dto.game.GameChannelSetting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.sjhy.platform.biz.bo.VerifySessionBO;
-import com.sjhy.platform.client.dto.game.GameChannelSetting;
-import com.sjhy.platform.biz.deploy.utils.HashKit;
-import com.sjhy.platform.biz.deploy.utils.HttpUtil;
-import com.sjhy.platform.biz.deploy.utils.StringUtils;
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSON;
 
 @Service("1400")
 public class MiVerifyService implements IVerifySession{
