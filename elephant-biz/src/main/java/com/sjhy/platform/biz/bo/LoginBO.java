@@ -46,7 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @HJ
  */
-@Service
+@Service("LoginBO")
 public class LoginBO {
 
     private static final Logger logger = LoggerFactory.getLogger( LoginBO.class );
@@ -101,7 +101,7 @@ public class LoginBO {
     public RegularLoginVO loginChallenge(ServiceContext sc, int clientId, String deviceUniqueId, String channelName) throws DeviceSignNullException,
             EmptyAccountNameException, AccountAlreadyBindingOtherException, NotExistAccountException
     {
-        logger.error("LoginService|======================>loginChallenge");
+        logger.error("LoginServiced|======================>loginChallenge");
 
         // 判断是否是空的账号名或是空的设备唯一标识
         if (StringUtils.isBlank( sc.getChannelUserId() ) ||  StringUtils.isBlank( deviceUniqueId ) ||  StringUtils.isBlank( channelName ))
@@ -173,7 +173,7 @@ public class LoginBO {
     public RegularLoginVO loginProof(ServiceContext sc, int clientId, String ip, BigInteger a, BigInteger m1 , String sdkVersion)
             throws NotChallengeYetException, SRPAuthenticationFailedException, KairoException
     {
-        logger.error("LoginService|======================>loginProof");
+        logger.error("LoginServiced|======================>loginProof");
         logger.info("===========[][][a][][]================:"+a);
 
         // 获取加密验证session
@@ -281,7 +281,7 @@ public class LoginBO {
         cav.setChannelId(sc.getChannelId());
         ChannelAndVersion channelAndVersion = channelAndVersionMapper.verifyChannel(cav);
 
-        logger.error("LoginService|======================>checkChannelAndVersion");
+        logger.error("LoginServiced|======================>checkChannelAndVersion");
 
         // 不存在的渠道号,直接认为通过了,不管理该渠道
         if(channelAndVersion == null){
@@ -310,7 +310,7 @@ public class LoginBO {
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
     public LoginVO confirmServer(ServiceContext sc, String ip, String activationCode)  throws FreezeTheAccountException, NotChallengeYetException, NotExistAccountException, IpIsNotInWhiteListException, ActivationCodeIsNotRightException
     {
-        logger.error("LoginService|======================>confirmServer");
+        logger.error("LoginServiced|======================>confirmServer");
         /*
         * 缓存
         * 从redis中根据playerId获取sessionkey，如果sessionkey不存在的话报为经过srp6验证的过程

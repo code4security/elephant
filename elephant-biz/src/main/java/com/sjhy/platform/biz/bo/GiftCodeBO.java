@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 /**
  * @HJ
  */
-@Service
+@Service("GiftCodeBO")
 public class GiftCodeBO {
     private static final Logger logger = LoggerFactory.getLogger( GiftCodeBO.class );
     @Resource

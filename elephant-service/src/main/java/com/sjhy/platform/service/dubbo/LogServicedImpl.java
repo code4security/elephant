@@ -1,10 +1,12 @@
 package com.sjhy.platform.service.dubbo;
 
 import com.sjhy.platform.biz.bo.LogBO;
-import com.sjhy.platform.client.service.LogService;
+import com.sjhy.platform.client.service.LogServiced;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public class LogServiceImpl implements LogService {
+@Service(value = "LogServiced")
+public class LogServicedImpl implements LogServiced {
     @Autowired
     private LogBO logBO;
 

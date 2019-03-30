@@ -32,32 +32,32 @@
 
     <!-- service implementation, as same as regular local bean -->
     <bean id="personService" class="com.sjhy.platform.service.dubbo.test.PersonServiceImpl"/>
-    <bean id="loginService" class="com.sjhy.platform.service.dubbo.LoginServiceImpl"/>
-    <bean id="gameService" class="com.sjhy.platform.service.dubbo.GameServiceImpl"/>
-    <bean id="giftCodeService" class="com.sjhy.platform.service.dubbo.GiftCodeServiceImpl"/>
-    <bean id="mailService" class="com.sjhy.platform.service.dubbo.MailServiceImpl"/>
-    <bean id="ossService" class="com.sjhy.platform.service.dubbo.OssServiceImpl"/>
-    <bean id="payService" class="com.sjhy.platform.service.dubbo.PayServiceImpl"/>
-    <bean id="playerService" class="com.sjhy.platform.service.dubbo.PlayerServiceImpl"/>
-    <bean id="roleService" class="com.sjhy.platform.service.dubbo.RoleServiceImpl"/>
-    <bean id="serverHistoryService" class="com.sjhy.platform.service.dubbo.ServerHistoryServiceImpl"/>
-    <bean id="verifySessionService" class="com.sjhy.platform.service.dubbo.VerifySessionServiceImpl"/>
+    <bean id="loginServiced" class="com.sjhy.platform.service.dubbo.LoginServicedImpl"/>
+    <bean id="gameServiced" class="com.sjhy.platform.service.dubbo.GameServicedImpl"/>
+    <bean id="giftCodeServiced" class="com.sjhy.platform.service.dubbo.GiftCodeServicedImpl"/>
+    <bean id="mailServiced" class="com.sjhy.platform.service.dubbo.MailServicedImpl"/>
+    <bean id="ossServiced" class="com.sjhy.platform.service.dubbo.OssServicedImpl"/>
+    <bean id="payServiced" class="com.sjhy.platform.service.dubbo.PayServicedImpl"/>
+    <bean id="playerServiced" class="com.sjhy.platform.service.dubbo.PlayerServicedImpl"/>
+    <bean id="roleServiced" class="com.sjhy.platform.service.dubbo.RoleServicedImpl"/>
+    <bean id="serverHistoryServiced" class="com.sjhy.platform.service.dubbo.ServerHistoryServicedImpl"/>
+    <bean id="verifySessionServiced" class="com.sjhy.platform.service.dubbo.VerifySessionServicedImpl"/>
     <bean id="dbVerifyUtils" class="com.sjhy.platform.biz.utils.DbVerifyUtils" />
-    <bean id="logService" class="com.sjhy.platform.service.dubbo.LogServiceImpl"/>
+    <bean id="logServiced" class="com.sjhy.platform.service.dubbo.LogServicedImpl"/>
 
     <!-- declare the service interface to be exported -->
     <dubbo:service interface="com.sjhy.platform.client.service.test.PersonService" ref="personService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.LoginService" ref="loginService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.GameService" ref="gameService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.GiftCodeService" ref="giftCodeService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.MailService" ref="mailService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.OssService" ref="ossService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.PayService" ref="payService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.PlayerService" ref="playerService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.RoleService" ref="roleService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.ServerHistoryService" ref="serverHistoryService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.VerifySessionService" ref="verifySessionService"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.LoginServiced" ref="loginServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.GameServiced" ref="gameServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.GiftCodeServiced" ref="giftCodeServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.MailServiced" ref="mailServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.OssServiced" ref="ossServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.PayServiced" ref="payServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.PlayerServiced" ref="playerServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.RoleServiced" ref="roleServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.ServerHistoryServiced" ref="serverHistoryServiced"/>
+    <dubbo:service interface="com.sjhy.platform.client.service.VerifySessionServiced" ref="verifySessionServiced"/>
     <dubbo:service interface="com.sjhy.platform.client.service.DbVerify" ref="dbVerifyUtils" />
-    <dubbo:service interface="com.sjhy.platform.client.service.LogService" ref="logService" />
+    <dubbo:service interface="com.sjhy.platform.client.service.LogServiced" ref="logServiced" />
 
 </beans>

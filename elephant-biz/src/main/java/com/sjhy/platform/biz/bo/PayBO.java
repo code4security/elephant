@@ -958,7 +958,7 @@ public class PayBO {
 
         String baseSign = getNoSign(signParams, false);
 
-        logger.error("PayService|baseSign="+baseSign);
+        logger.error("PayServiced|baseSign="+baseSign);
 
         String sign = HashKit.sign(baseSign, gameChannelSetting.getPayPrivateKey().trim());
 

@@ -1,5 +1,6 @@
 package com.sjhy.platform.biz.utils;
 
+import com.sjhy.platform.biz.bo.RoleBO;
 import com.sjhy.platform.biz.redis.RedisUtil;
 import com.sjhy.platform.biz.redis.redisVo.redisCont.KrGlobalCache;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
@@ -173,16 +174,21 @@ public class DbVerifyUtils implements DbVerify {
      * @return
      */
     public Integer isHasLastServer(String gameId,Long roleId){
+        int status = 0;
         Integer serverId = (Integer) redis.get(roleId+"_serverId"+gameId);
         if (serverId != null){
-            return serverId;
+            status = serverId;
+        }else {
+            serverId = playerRoleMapper.selectByRoleId(gameId,roleId).getLastLoginServer();
+            if (serverId == null){
+                status = -1;
+            }
+            redis.set(roleId+"_serverId"+gameId,serverId,600);
         }
-        serverId = playerRoleMapper.selectByRoleId(gameId,roleId).getLastLoginServer();
-        if (serverId == null){
-            return -1;
+        if (status != -1 && !RoleBO.ServerID.equals(status+"")){
+            return -2;
         }
-        redis.set(roleId+"_serverId"+gameId,serverId,600);
-        return serverId;
+        return 0;
     }
 
     /**
