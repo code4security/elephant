@@ -80,7 +80,7 @@ public class RoleBO {
         }
         // 缓存
         playerRoleVo = playerRoleCache.get(sc.getRoleId(), sc.getGameId());
-        // 埋点(注释)
+        // 埋点(注释)（1）
         // logService.setRoleBuildLog(playerRoleVO);
         return playerRoleVo;
     }
@@ -133,10 +133,12 @@ public class RoleBO {
     public void updateLastLoginTime(ServiceContext sc){
         PlayerRole record = new PlayerRole();
         record.setRoleId(sc.getRoleId());
+        record.setGameId(sc.getGameId());
         record.setLastLoginTime(Calendar.getInstance().getTime());
         // 上传最后一次登录的服务器ID（修改，待验证）
         if("".equals(ServerID)){
             ServerID = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
+            System.out.println("===================[][][][****][ServerId][]"+ServerID);
         }
         record.setLastLoginServer(StringUtils.getInt(ServerID));
         playerRoleMapper.updateByPrimaryKeySelective(record);

@@ -24,6 +24,7 @@ import com.sjhy.platform.client.dto.vo.AliOssAccessKeyVO;
 import com.sjhy.platform.client.dto.vo.AliOssBucketVO;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.player.PlayerGameOss;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerGameOssMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
@@ -71,13 +72,13 @@ public class OssBO {
     @Resource
     private PlayerGameOssMapper playerGameOssMapper;
     @Resource
-    private PlayerRoleMapper playerRoleMapper;
-    @Resource
     private Properties serverConfig;
     @Resource
     private GameMapper gameMapper;
     @Resource
     private DbVerifyUtils dbVerifyUtils;
+    @Resource
+    private ReturnVo returnVo;
 
     /**
      * 删除oss文件
@@ -159,14 +160,14 @@ public class OssBO {
         List<PlayerGameOss> playerGameOss = null;
         List<AliOssBucketVO> roleBuckets  = new ArrayList<AliOssBucketVO>();
 
-        // 相关文件未进行迁移（注释）
+        // 相关文件未进行迁移（注释）（1）
         /*GameServerChannelHandler cch = GameServerSendService.getInstance().GetPlayerOnlineById(roleId);
         if(cch == null) {
             playerGameOss = playerGameOssMapper.selectByRoleId(gameId,roleId);
         }else{
             playerGameOss = new ArrayList<PlayerGameOss>(cch.getPlayerGameOss().values());
         }*/
-        playerGameOss = playerGameOssMapper.selectByRoleId(sc.getGameId(),sc.getRoleId()); // 暂代上方方法
+        playerGameOss = dbVerifyUtils.isHasOss(sc.getGameId(),sc.getRoleId());
 
         if(playerGameOss != null && playerGameOss.size() > 0){
             for(PlayerGameOss val : playerGameOss){
@@ -202,7 +203,8 @@ public class OssBO {
 
         /*GameServerChannelHandler cch = GameServerSendService.getInstance().GetPlayerOnlineById(roleId);*/
         if(operateId > 0) {
-            playerGameOss = playerGameOssMapper.selectByGameKey(operateId,sc.getGameId());
+            playerGameOss = dbVerifyUtils.isHasOssGameKey(operateId,sc.getGameId());
+            // （注释）（1）
             /*if(cch == null) {
                 playerGameOss = playerGameOssMapper.selectByPrimaryKey(operateId);
             }else{
@@ -221,7 +223,7 @@ public class OssBO {
             // 如果result是成功状态则更新
             if(result == 1) {
                 playerGameOssMapper.updateEndtimeByRoleId(sc.getGameId(),sc.getRoleId());
-                // 刷新缓存 （注释）
+                // 刷新缓存 （注释）（2）
                 /*if(cch != null) {
                     cch.refreshPlayerGameOssTime(now);
                     // 也需要刷新一下
@@ -237,7 +239,7 @@ public class OssBO {
             playerGameOss.setStatus(SUCCESSED);
             playerGameOss.setMetaMd5(md5);
 
-            // 参数返回（注释）
+            // 参数返回（注释）（2）
             // sendUpdatePlayerBucketInfo(role, playerGameOss);
         }else{
             OSSClient client = null;
@@ -256,7 +258,7 @@ public class OssBO {
                 if(metadata != null && md5.equals(metadata.getContentMD5())){
                     playerGameOss.setStatus(SUCCESSED);
                     playerGameOss.setMetaMd5(md5);
-                    // 参数返回（注释）
+                    // 参数返回（注释）（2）
                     // sendUpdatePlayerBucketInfo(role, playerGameOss);
                 }else{
                     logger.error("AliyunOssStsService|method=notifyEndPut|存档md5不一致");
@@ -278,7 +280,7 @@ public class OssBO {
         playerGameOss.setEndTime(now);
         playerGameOss.setUpdateTime(now);
         playerGameOssMapper.updateByPrimaryKeySelective(playerGameOss);
-        // 刷新缓存（注释）
+        // 刷新缓存（注释）（2）
         /*if(cch != null) {
             cch.setPlayerGameOssByType(playerGameOss.getObjType(), playerGameOss);
         }*/
@@ -292,7 +294,7 @@ public class OssBO {
      * @throws IsHaveSpecialCharacterException
      * @throws KairoException
      */
-    public AliOssBucketVO putBucket(ServiceContext sc, String objKey, long gold, String saveTime, String fname, int objType) throws NoSuchRoleException, AdmiralNameIsTooLongException, IsHaveSpecialCharacterException, KairoException{
+    public ReturnVo putBucket(ServiceContext sc, String objKey, long gold, String saveTime, String fname, int objType) throws NoSuchRoleException, AdmiralNameIsTooLongException, IsHaveSpecialCharacterException, KairoException{
         // role
         PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null){
@@ -311,19 +313,19 @@ public class OssBO {
         if(objKey.length() > 64){
             throw new AdmiralNameIsTooLongException("Oss 上传文件名太长");
         }
-        PlayerGameOss playerGameOss = null;
+        PlayerGameOss playerGameOss = new PlayerGameOss();
         playerGameOss.setRoleId(sc.getRoleId());
         playerGameOss.setGameId(sc.getGameId());
         playerGameOss.setObjKey(objKey);
         playerGameOss.setBucket(getProperty(AppConfig.ALI_OSS_BUCKET, BUCKET_KEY));
-        playerGameOss = playerGameOssMapper.selectByRoleIdAndObjKey(playerGameOss);
-        // cch相关（注释）
-        /*GameServerChannelHandler cch = GameServerSendService.getInstance().GetPlayerOnlineById(roleId);
-        if(cch == null) {
-            playerGameOss = playerGameOssMapper.selectByRoleIdAndObjKey(roleId, getProperty(AppConfig.ALI_OSS_BUCKET, BUCKET_KEY), objKey);
-        } else {
-            playerGameOss = cch.getPlayerGameOssByType(objType);
-        }*/
+        playerGameOss = dbVerifyUtils.isHasOssObjKey(playerGameOss);
+        // cch相关（注释）（1）
+//        GameServerChannelHandler cch = GameServerSendService.getInstance().GetPlayerOnlineById(roleId);
+//        if(cch == null) {
+//            playerGameOss = playerGameOssMapper.selectByRoleIdAndObjKey(roleId, getProperty(AppConfig.ALI_OSS_BUCKET, BUCKET_KEY), objKey);
+//        } else {
+//            playerGameOss = cch.getPlayerGameOssByType(objType);
+//        }
 
         // objkey检测
         if(playerGameOss == null){
@@ -353,11 +355,14 @@ public class OssBO {
             //playerGameOss.setBackupOssTime(now);
             playerGameOss.setMetaMd5("");
             playerGameOss.setEndTime(null);
+            playerGameOss.setGameId(sc.getGameId());
 
             playerGameOssMapper.insert(playerGameOss);
         }else{
             playerGameOssMapper.updateByPrimaryKeySelective(playerGameOss);
         }
+
+        playerGameOss = dbVerifyUtils.isHasOssGame(sc.getGameId(),sc.getRoleId());
 
         // 缓存更新（注释）
         /*if(cch != null){
@@ -370,7 +375,8 @@ public class OssBO {
         aliOssBucket.setOperateId(playerGameOss.getId());
         aliOssBucket.setGameId(role.getGameId());
         aliOssBucket.setMetaMd5("");
-        return aliOssBucket;
+        aliOssBucket.setType(objType);
+        return returnVo.putBucket(aliOssBucket,playerGameOss);
     }
 
     public void setPlayerRoleOssFile(long roleId,String gameId) {
@@ -403,9 +409,9 @@ public class OssBO {
 
             // 获取文件，玩家存档文件取得
             List<PlayerGameOss>  playerGameOss = null;
-            playerGameOss = playerGameOssMapper.selectByRoleId(gameId,roleId);
+            playerGameOss = dbVerifyUtils.isHasOss(gameId,roleId);
 
-            // 相关代码，之后修改（注释）
+            // 相关代码，之后修改（注释）（1）
             /*GameServerChannelHandler cch  = GameServerSendService.getInstance().GetPlayerOnlineById(roleId);*/
             /*if(cch == null) {
                 playerGameOss = playerGameOssMapper.selectByRoleId(roleId);

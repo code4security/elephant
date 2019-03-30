@@ -4,6 +4,7 @@ import com.sjhy.platform.biz.utils.DbVerifyUtils;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
 import com.sjhy.platform.client.dto.player.PlayerRole;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.slf4j.Logger;
@@ -20,11 +21,11 @@ import java.util.Calendar;
 public class GameBO {
     private static final Logger logger = LoggerFactory.getLogger(GameBO.class);
     @Resource
-    private PlayerRoleMapper playerRoleMapper;
-    @Resource
     private PlayerBanListMapper playerBanListMapper;
     @Resource
     private DbVerifyUtils dbVerifyUtils;
+    @Resource
+    private ReturnVo returnVo;
 
     /**
      * 查询玩家封禁状态
@@ -47,11 +48,11 @@ public class GameBO {
      * @param minute
      * @return
      */
-    public int banPlayer(ServiceContext sc, String banType, int minute){
+    public ReturnVo banPlayer(ServiceContext sc, String banType, int minute){
         // 玩家信息取得
         PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
         if(role == null){// 玩家不存在
-            return -1;
+            return returnVo.banPlayer(-1,"");
         }
         boolean isNeedInsert = false;
         // 玩家封停状态取得
@@ -66,10 +67,10 @@ public class GameBO {
             isNeedInsert = true;
         }
         if(!isNeedInsert && !isRealBan(playerBanList) && "ban_off".equalsIgnoreCase(banType)){// 玩家不处于封停状态
-            return -2;
+            return returnVo.banPlayer(-2,"");
         }
         if(!isNeedInsert && isRealBan(playerBanList) && "ban_on".equalsIgnoreCase(banType)){// 玩家已处于封停状态
-            return -3;
+            return returnVo.banPlayer(-3,"");
         }
 
         // 封停或者解除封停逻辑
@@ -81,7 +82,7 @@ public class GameBO {
             playerBanList.setGameId(sc.getGameId());
             playerBanList.setChannelId(role.getChannelId());
 
-            // 如果玩家在线踢出玩家（注释）
+            // 如果玩家在线踢出玩家（注释）（1）
             /* if(sendService.isOnline(roleId)) {
                 kickOut(roleId, KairoErrorCode.ERROR_KICKOUT_BY_GM.getErrorCode());
             }*/
@@ -97,6 +98,6 @@ public class GameBO {
             playerBanListMapper.updateByPrimaryKey(playerBanList);
         }
 
-        return 0;
+        return returnVo.banPlayer(0,banType);
     }
 }

@@ -247,6 +247,15 @@
         and role_id = #{roleId,jdbcType=BIGINT}
     </select>
 
+    <!-- 查询oss文件id -->
+    <select id="selectByOssRoleGame" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss" >
+        select
+        <include refid="Base_Column_List" />
+        from player_game_oss
+        where game_id = #{gameId,jdbcType=VARCHAR}
+        and role_id = #{roleId,jdbcType=BIGINT}
+    </select>
+
     <!-- 修改最后时间 -->
     <update id="updateEndtimeByRoleId" parameterType="com.sjhy.platform.client.dto.player.PlayerGameOss"  >
   	    update player_game_oss

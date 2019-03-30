@@ -1238,7 +1238,7 @@ public class PayBO {
         int payStatus = notify.getPayStatus();
 
         return payStatus;
-        // （注释） 到前端调用
+        // （注释） 到前端调用（1）
         /*if (payStatus == PayStatusEnum.Success.getValue()){
             logger.error("this here -->addPayValue");
             addPayValue(sc.getRoleId(), notify, gameId);

@@ -8,6 +8,7 @@ import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.client.dto.vo.ChannelAndVersionVO;
 import com.sjhy.platform.client.dto.vo.LoginVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 
 import java.math.BigInteger;
 
@@ -25,5 +26,5 @@ public interface LoginService {
     ResultDTO<LoginVO> confirmServer(ServiceContext sc, String ip, String activationCode);
 
     // 验证角色登陆，返回角色基本信息
-    ResultDTO<PlayerRole> enterGame(ServiceContext sc, int deviceModel, String deviceToken);
+    ResultDTO<ReturnVo> enterGame(ServiceContext sc, int deviceModel, String deviceToken);
 }

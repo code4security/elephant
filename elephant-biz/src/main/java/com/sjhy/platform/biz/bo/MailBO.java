@@ -10,6 +10,7 @@ import com.sjhy.platform.client.dto.player.PlayerRole;
 import com.sjhy.platform.client.dto.vo.AddItemToPackVO;
 import com.sjhy.platform.client.dto.vo.MailVO;
 import com.sjhy.platform.client.dto.game.Mail;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.persist.mysql.game.MailMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.slf4j.Logger;
@@ -31,10 +32,10 @@ public class MailBO {
     private static final Logger logger = LoggerFactory.getLogger(MailBO.class);
     @Resource
     private MailMapper mailMapper;
-    @Resource
-    private PlayerRoleMapper playerRoleMapper;
     @Autowired
     private DbVerifyUtils dbVerifyUtils;
+    @Resource
+    private ReturnVo returnVo;
 
     /**
      * 删除邮件
@@ -62,7 +63,7 @@ public class MailBO {
      * @throws MailItemErrorException
      */
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor=Exception.class)
-    public List<AddItemToPackVO> getMailItem(ServiceContext sc, int mailId, int doType) throws NoSuchRoleException, MailNotBelongThisRoleException, MailItemErrorException
+    public ReturnVo getMailItem(ServiceContext sc, int mailId, int doType) throws NoSuchRoleException, MailNotBelongThisRoleException, MailItemErrorException
     {
         PlayerRole playerRoleVO = dbVerifyUtils.isHasRole(sc.getGameId(),null,sc.getRoleId());
         if (playerRoleVO == null) {
@@ -74,7 +75,7 @@ public class MailBO {
         Mail mail = mailMapper.selectByMailId(mailId,sc.getGameId());
         if(mail == null){
             logger.error("This mail["+mailId+"] is not exist");
-            return goods;
+            return returnVo.getMailItem(goods,0);
         }else if(mail.getStatus()>2) {
             throw new MailItemErrorException("该邮件已被领取");
         }
@@ -100,13 +101,13 @@ public class MailBO {
             // 删除邮件
             deleteMail(sc, mailId);
 
-            // 通知客户端（注释）
+            // 通知客户端（注释）（1）
             /*GS2C_Mail_Delete_Res.Builder resBuilder = GS2C_Mail_Delete_Res.newBuilder();
             resBuilder.setErrorCode(KairoErrorCode.OK.getErrorCode());
             resBuilder.setMailId(mailId);
              GameServerSendService.getInstance().sendMessage(roleId, new SM_MAIL_DELETE(resBuilder.build().toByteArray()));*/
         }
-        return goods;
+        return returnVo.getMailItem(goods,doType);
     }
 
     /**

@@ -9,6 +9,7 @@ import com.sjhy.platform.client.deploy.srp.SRPAuthenticationFailedException;
 import com.sjhy.platform.client.dto.vo.ChannelAndVersionVO;
 import com.sjhy.platform.client.dto.vo.LoginVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.client.service.LoginService;
 
 import javax.annotation.Resource;
@@ -92,7 +93,7 @@ public class LoginServiceImpl implements LoginService {
     /**
      * 验证角色登陆，返回角色基本信息
      */
-    public ResultDTO<PlayerRole> enterGame(ServiceContext sc, int deviceModel, String deviceToken) {
+    public ResultDTO<ReturnVo> enterGame(ServiceContext sc, int deviceModel, String deviceToken) {
         try {
             return ResultDTO.getSuccessResult(loginBO.enterGame(sc,deviceModel,deviceToken));
         } catch (PleaseLoginAgainException e) {

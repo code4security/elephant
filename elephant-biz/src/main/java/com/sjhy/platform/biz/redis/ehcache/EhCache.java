@@ -23,6 +23,7 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.event.CacheEventListener;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 

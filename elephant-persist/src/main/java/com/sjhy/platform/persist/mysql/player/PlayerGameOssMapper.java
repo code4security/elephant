@@ -2,9 +2,11 @@ package com.sjhy.platform.persist.mysql.player;
 
 import com.sjhy.platform.client.dto.player.PlayerGameOss;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface PlayerGameOssMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -23,6 +25,9 @@ public interface PlayerGameOssMapper {
 
     // 根据role_id 查询存档
     List<PlayerGameOss> selectByRoleId(@Param("gameId") String gameId, @Param("roleId") long roleId);
+
+    // 根据role_id 查询存档
+    PlayerGameOss selectByOssRoleGame(@Param("gameId") String gameId, @Param("roleId") long roleId);
 
     // 修改最后时间
     int updateEndtimeByRoleId(@Param("gameId") String gameId, @Param("roleId") long roleId);

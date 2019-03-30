@@ -6,6 +6,9 @@ import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.deploy.exception.MailItemErrorException;
 import com.sjhy.platform.client.deploy.exception.MailNotBelongThisRoleException;
 import com.sjhy.platform.client.deploy.exception.NoSuchRoleException;
+import com.sjhy.platform.client.dto.vo.AddItemToPackVO;
+import com.sjhy.platform.client.dto.vo.MailVO;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.client.service.MailService;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +37,7 @@ public class MailServiceImpl implements MailService {
     /**
      * 获取邮件物品
      */
-    public ResultDTO<List> getMailItem(ServiceContext sc, int mailId, int doType) {
+    public ResultDTO<ReturnVo> getMailItem(ServiceContext sc, int mailId, int doType) {
         try {
             return ResultDTO.getSuccessResult(mailBO.getMailItem(sc, mailId, doType));
         } catch (NoSuchRoleException e) {
@@ -64,7 +67,7 @@ public class MailServiceImpl implements MailService {
     /**
      * 获取邮件列表
      */
-    public ResultDTO<List> getMailList(ServiceContext sc, int from, int to) {
+    public ResultDTO<List<MailVO>> getMailList(ServiceContext sc, int from, int to) {
         try {
             return ResultDTO.getSuccessResult(mailBO.getMailList(sc,from,to));
         } catch (NoSuchRoleException e) {

@@ -5,6 +5,7 @@ package com.sjhy.platform.client.service;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 
 public interface GameService {
 
@@ -12,6 +13,6 @@ public interface GameService {
     ResultDTO<Boolean> isRealBan(PlayerBanList ban);
 
     // 封停或解封角色
-    ResultDTO<Integer> banPlayer(ServiceContext sc, String banType, int minute);
+    ResultDTO<ReturnVo> banPlayer(ServiceContext sc, String banType, int minute);
 
 }

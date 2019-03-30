@@ -4,7 +4,9 @@ import com.sjhy.platform.biz.bo.OssBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.deploy.exception.*;
+import com.sjhy.platform.client.dto.vo.AliOssAccessKeyVO;
 import com.sjhy.platform.client.dto.vo.AliOssBucketVO;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.client.service.OssService;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +34,7 @@ public class OssServiceImpl implements OssService {
     /**
      * 获取oss文件Bucketkeys
      */
-    public ResultDTO<List> getBucketkeys(ServiceContext sc, int keyType) {
+    public ResultDTO<List<AliOssAccessKeyVO>> getBucketkeys(ServiceContext sc, int keyType) {
         try {
             return ResultDTO.getSuccessResult(ossBO.getBucketkeys(sc, keyType));
         } catch (OssBucketkeyException e) {
@@ -47,7 +49,7 @@ public class OssServiceImpl implements OssService {
     /**
      * 取得用户上传信息
      */
-    public ResultDTO<List> getBucket(ServiceContext sc) {
+    public ResultDTO<List<AliOssBucketVO>> getBucket(ServiceContext sc) {
         try {
             return ResultDTO.getSuccessResult(ossBO.getBucket(sc));
         } catch (NoSuchRoleException e) {
@@ -75,7 +77,7 @@ public class OssServiceImpl implements OssService {
     /**
      * 申请上传操作
      */
-    public ResultDTO<AliOssBucketVO> putBucket(ServiceContext sc, String objKey, long gold, String saveTime, String fname, int objType) {
+    public ResultDTO<ReturnVo> putBucket(ServiceContext sc, String objKey, long gold, String saveTime, String fname, int objType) {
         try {
             return ResultDTO.getSuccessResult(ossBO.putBucket(sc, objKey, gold, saveTime, fname, objType));
         } catch (NoSuchRoleException e) {

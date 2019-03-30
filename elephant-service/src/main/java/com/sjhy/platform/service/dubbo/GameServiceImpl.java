@@ -4,6 +4,7 @@ import com.sjhy.platform.biz.bo.GameBO;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.common.ServiceContext;
 import com.sjhy.platform.client.dto.player.PlayerBanList;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.client.service.GameService;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class GameServiceImpl implements GameService {
     /**
      * 封停或解封角色
      */
-    public ResultDTO<Integer> banPlayer(ServiceContext sc, String banType, int minute) {
+    public ResultDTO<ReturnVo> banPlayer(ServiceContext sc, String banType, int minute) {
         return ResultDTO.getSuccessResult(gameBO.banPlayer(sc,banType,minute));
     }
 }

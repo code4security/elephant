@@ -4,13 +4,14 @@ import com.sjhy.platform.biz.redis.RedisUtil;
 import com.sjhy.platform.biz.redis.redisVo.redisCont.KrGlobalCache;
 import com.sjhy.platform.client.dto.game.ChannelAndVersion;
 import com.sjhy.platform.client.dto.game.Game;
+import com.sjhy.platform.client.dto.game.GameNotify;
+import com.sjhy.platform.client.dto.player.PlayerGameOss;
 import com.sjhy.platform.client.dto.player.PlayerIos;
 import com.sjhy.platform.client.dto.player.PlayerRole;
-import com.sjhy.platform.client.dto.vo.BulletinLoginVO;
 import com.sjhy.platform.client.service.DbVerify;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
 import com.sjhy.platform.persist.mysql.game.GameMapper;
-import com.sjhy.platform.persist.mysql.game.GameNotifyMapper;
+import com.sjhy.platform.persist.mysql.player.PlayerGameOssMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerIosMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ public class DbVerifyUtils implements DbVerify {
     private PlayerIosMapper playerIosMapper;
     @Autowired
     private PlayerRoleMapper playerRoleMapper;
-    @Autowired
-    private GameNotifyMapper gameNotifyMapper;
     @Resource
     private KrGlobalCache krGlobalCache;
+    @Autowired
+    private PlayerGameOssMapper playerGameOssMapper;
 
     /**
      * 验证gameId是否存在数据库
@@ -118,27 +119,33 @@ public class DbVerifyUtils implements DbVerify {
      * @return
      */
     public PlayerRole isHasRole(String gameId,Long playerId,Long roleId){
-        PlayerRole roleVO = new PlayerRole();
-        if (playerId != null && roleId ==null && redis.get("r_"+playerId)!= null){
-            roleId = Long.parseLong(redis.get("r_"+playerId).toString());
+        try {
+            PlayerRole roleVO = new PlayerRole();
+            if (playerId != null && roleId ==null && redis.get(gameId+"r_"+playerId)!= null){
+                roleId = Long.parseLong(redis.get(gameId+"r_"+playerId).toString());
+            }
+
+            roleVO = (PlayerRole) redis.get(roleId+"_r_"+gameId);
+            if (roleVO != null){
+                return roleVO;
+            }
+
+            if (roleId != null){
+                roleVO = playerRoleMapper.selectByRoleId(gameId, roleId);
+                redis.set(roleVO.getRoleId()+"_r_"+gameId,roleVO,3600);
+                return roleVO;
+            }else if (playerId != null){
+                roleVO = playerRoleMapper.selectByPlayerId(gameId, playerId);
+                redis.set(roleVO.getRoleId()+"_r_"+gameId,roleVO,3600);
+                redis.set(gameId+"r_"+playerId,roleVO.getRoleId(),300);
+                return roleVO;
+            }
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
 
-        roleVO = (PlayerRole) redis.get(roleId+"_r_"+gameId);
-        if (roleVO != null){
-            return roleVO;
-        }
-
-        if (roleId != null){
-            roleVO = playerRoleMapper.selectByRoleId(gameId, roleId);
-            redis.set(roleVO.getRoleId()+"_r_"+gameId,roleVO,3600);
-            return roleVO;
-        }else if (playerId != null){
-            roleVO = playerRoleMapper.selectByPlayerId(gameId, playerId);
-            redis.set(roleVO.getRoleId()+"_r_"+gameId,roleVO,3600);
-            redis.set("r_"+playerId,roleVO.getRoleId(),300);
-            return roleVO;
-        }
-        return null;
     }
 
     /**
@@ -151,9 +158,116 @@ public class DbVerifyUtils implements DbVerify {
     }
 
     @Override
-    public List<BulletinLoginVO> isHasNotity(String gameId) {
-        List<BulletinLoginVO> notity = (List<BulletinLoginVO>) krGlobalCache.getGsNotify(Integer.valueOf(gameId));
-        return notity;
+    /**
+     * 获取公告
+     */
+    public GameNotify isHasNotity(String gameId) {
+        GameNotify gameNotify = krGlobalCache.getGsNotify(Integer.valueOf(gameId));
+        return gameNotify;
+    }
+
+    /**
+     * 获取玩家最后登陆服务器
+     * @param gameId
+     * @param roleId
+     * @return
+     */
+    public Integer isHasLastServer(String gameId,Long roleId){
+        Integer serverId = (Integer) redis.get(roleId+"_serverId"+gameId);
+        if (serverId != null){
+            return serverId;
+        }
+        serverId = playerRoleMapper.selectByRoleId(gameId,roleId).getLastLoginServer();
+        if (serverId == null){
+            return -1;
+        }
+        redis.set(roleId+"_serverId"+gameId,serverId,600);
+        return serverId;
+    }
+
+    /**
+     * 获取oss存档,返回list
+     * @param gameId
+     * @param roleId
+     * @return
+     */
+    public List<PlayerGameOss> isHasOss(String gameId, Long roleId){
+        List<PlayerGameOss> playerGameOss = (List<PlayerGameOss>) redis.get(gameId+"_oss_"+roleId);
+        if (playerGameOss !=null){
+            return playerGameOss;
+        }
+        playerGameOss = playerGameOssMapper.selectByRoleId(gameId,roleId);
+        if (playerGameOss == null){
+            return null;
+        }
+        redis.set(gameId+"_oss_"+roleId,playerGameOss,30);
+        return playerGameOss;
+    }
+
+    /**
+     * 获取oss存档,返回对象
+     * @param gameId
+     * @param roleId
+     * @return
+     */
+    public PlayerGameOss isHasOssGame(String gameId, Long roleId){
+        PlayerGameOss playerGameOss = (PlayerGameOss) redis.get(gameId+"_ossGame_"+roleId);
+        if (playerGameOss !=null){
+            return playerGameOss;
+        }
+        playerGameOss = playerGameOssMapper.selectByOssRoleGame(gameId,roleId);
+        if (playerGameOss == null){
+            return null;
+        }
+        redis.set(gameId+"_ossGame_"+roleId,playerGameOss,30);
+        return playerGameOss;
+    }
+
+    /**
+     * 根据id和gameid查询存档
+     * @param id
+     * @param gameId
+     * @return
+     */
+    public PlayerGameOss isHasOssGameKey(Integer id,String gameId){
+        PlayerGameOss playerGameOss = (PlayerGameOss) redis.get(id+"_ossId_"+gameId);
+        if (playerGameOss !=null){
+            return playerGameOss;
+        }
+        playerGameOss = playerGameOssMapper.selectByGameKey(id,gameId);
+        if (playerGameOss == null){
+            return null;
+        }
+        redis.set(id+"_ossId_"+gameId,playerGameOss,300);
+        return playerGameOss;
+    }
+
+    /**
+     * 根据objkey查询存档
+     * @param ossObj
+     * @return
+     */
+    public PlayerGameOss isHasOssObjKey(PlayerGameOss ossObj){
+        PlayerGameOss playerGameOss = (PlayerGameOss) redis.get(ossObj.getRoleId()+"_ossObj_"+ossObj.getGameId());
+        if (playerGameOss !=null){
+            return playerGameOss;
+        }
+        playerGameOss = playerGameOssMapper.selectByRoleIdAndObjKey(ossObj);
+        if (playerGameOss == null){
+            return null;
+        }
+        redis.set(playerGameOss.getRoleId()+"_ossObj_"+playerGameOss.getGameId(),playerGameOss,300);
+        return playerGameOss;
+    }
+
+    public PlayerGameOss ossSelectByPrimaryKey(Integer id){
+        return playerGameOssMapper.selectByPrimaryKey(id);
+    }
+    public void ossUpdateByPrimaryKeySelective(PlayerGameOss playerGameOss){
+        playerGameOssMapper.updateByPrimaryKeySelective(playerGameOss);
+    }
+    public void ossUpdateEndtimeByRoleId(String gameId,Long roleId){
+        playerGameOssMapper.updateEndtimeByRoleId(gameId,roleId);
     }
 
 }

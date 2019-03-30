@@ -6,7 +6,6 @@ import com.sjhy.platform.client.deploy.exception.*;
 import com.sjhy.platform.biz.redis.RedisServiceImpl;
 import com.sjhy.platform.biz.redis.RedisUtil;
 import com.sjhy.platform.biz.redis.redisVo.redisCont.KrGlobalCache;
-import com.sjhy.platform.biz.redis.redisVo.redisCont.PlayerRoleCache;
 import com.sjhy.platform.biz.redis.redisVo.redisCont.SessionKeyHMapCpt;
 import com.sjhy.platform.biz.utils.DbVerifyUtils;
 import com.sjhy.platform.biz.utils.StringUtils;
@@ -28,12 +27,10 @@ import com.sjhy.platform.client.dto.vo.AccountVO;
 import com.sjhy.platform.client.dto.vo.LoginSessionVO;
 import com.sjhy.platform.client.dto.vo.RegularLoginVO;
 import com.sjhy.platform.persist.mysql.game.ChannelAndVersionMapper;
-import com.sjhy.platform.persist.mysql.game.GameMapper;
 import com.sjhy.platform.persist.mysql.game.ServerMapper;
 import com.sjhy.platform.persist.mysql.history.PlayerLoginLogMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerBanListMapper;
 import com.sjhy.platform.persist.mysql.player.PlayerMapper;
-import com.sjhy.platform.persist.mysql.player.PlayerRoleMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @HJ
@@ -69,9 +67,7 @@ public class LoginBO {
     @Autowired
     private ServerMapper serverMapper;
     @Autowired
-    private GameMapper gameMapper;
-    @Autowired
-    private PlayerRoleMapper playerRoleMapper;
+    private ReturnVo returnVo;
     @Autowired
     private RoleBO roleBO;
     @Autowired
@@ -85,16 +81,12 @@ public class LoginBO {
     @Resource
     private KrGlobalCache krGlobalCache;
     @Resource
-    private PlayerRoleCache playerRoleCache;
-    @Resource
     private DbVerifyUtils dbVerifyUtils;
-
-    // private LoginSessionVO sessionVO = new LoginSessionVO();
 
     public static String ServerCloseEnterTime = "";
     public static String ServerTotalPlayers   = "";
     private static final String REGION = "sessionkey";
-    private Map<String,LoginSessionVO> voMap = new HashMap<>(262144);
+    private Map<String,LoginSessionVO> voMap = new ConcurrentHashMap<>(262144);
 
     /**
      * 第一次握手
@@ -110,9 +102,6 @@ public class LoginBO {
             EmptyAccountNameException, AccountAlreadyBindingOtherException, NotExistAccountException
     {
         logger.error("LoginService|======================>loginChallenge");
-        if (redis.get("game_id")== null){
-            redis.set("game_id"+sc.getGameId(),sc.getGameId(),600);
-        }
 
         // 判断是否是空的账号名或是空的设备唯一标识
         if (StringUtils.isBlank( sc.getChannelUserId() ) ||  StringUtils.isBlank( deviceUniqueId ) ||  StringUtils.isBlank( channelName ))
@@ -271,12 +260,12 @@ public class LoginBO {
             result.setNeedActivation(false);
         }
 
-        // 埋点(注释)
+        // 埋点(注释)（1）
         AccountVO account = (AccountVO) redis.get(sessionVO.channelUserId+"_"+sc.getGameId());
         if (account == null){
             logger.info("", sessionVO.channelUserId, sc.getPlayerId()+"", "", sc.getGameId(), "loginsessiontwo_server");
         }else {
-            logger.info(account.getDeviceUniquelyCode(), account.getChUserId(), sc.getPlayerId()+"", account.getChannelId(), sc.getGameId(), "loginsessiontwo_server");
+            logger.info(account.getDeviceUniquelyId(), account.getChUserId(), sc.getPlayerId()+"", account.getChannelId(), sc.getGameId(), "loginsessiontwo_server", account.getDeviceUniquelyCode());
         }
         return result;
     }
@@ -406,9 +395,9 @@ public class LoginBO {
      * @throws GameIdIsNotExsitsException
      * @throws KairoException
      */
-    public PlayerRole enterGame(ServiceContext sc, int deviceModel, String deviceToken) throws PleaseLoginAgainException, NoSuchRoleException, AlreadyExistsPlayerRoleException, CreateRoleException, GameIdIsNotExsitsException, KairoException {
+    public ReturnVo enterGame(ServiceContext sc, int deviceModel, String deviceToken) throws PleaseLoginAgainException, NoSuchRoleException, AlreadyExistsPlayerRoleException, CreateRoleException, GameIdIsNotExsitsException, KairoException {
 
-        // 缓存（注释）
+        // 缓存（注释）（1）
         // 1.验证用户的 sessionKey
         String redisSessionKey = SessionKeyHMapCpt.getSessionKey(sc.getPlayerId()+"_"+sc.getGameId());
         if(redisSessionKey == null){throw new PleaseLoginAgainException();}
@@ -436,6 +425,6 @@ public class LoginBO {
         dbVerifyUtils.remoteRole(playerRoleVo.getGameId(),playerRoleVo.getRoleId());
         // 5.埋点
         // logService.setRoleLoginLog(playerRoleVO);
-        return playerRoleVo;
+        return returnVo.enterGame(playerRoleVo,redisSessionKey);
     }
 }
