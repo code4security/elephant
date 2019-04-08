@@ -9,7 +9,7 @@
     </resultMap>
 
     <sql id="Base_Column_List" >
-        id, unit, explain
+        id, unit, `explain`
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >

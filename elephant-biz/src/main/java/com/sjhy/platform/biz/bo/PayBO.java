@@ -2,9 +2,11 @@ package com.sjhy.platform.biz.bo;
 
 import com.alibaba.fastjson.JSON;
 import com.sjhy.platform.biz.pay.*;
+import com.sjhy.platform.biz.redis.redisVo.redisCont.PlayerRoleCache;
 import com.sjhy.platform.client.deploy.config.AppConfig;
 import com.sjhy.platform.client.deploy.config.GamePayConfig;
 import com.sjhy.platform.client.deploy.config.KairoErrorCode;
+import com.sjhy.platform.client.deploy.enumerate.PayStatusEnum;
 import com.sjhy.platform.client.deploy.exception.KairoException;
 import com.sjhy.platform.client.deploy.exception.NoSuchRoleException;
 import com.sjhy.platform.biz.utils.*;
@@ -30,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.management.relation.RoleNotFoundException;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -63,6 +66,12 @@ public class PayBO {
     private AddVivoOrderGPProxy addVivoOrderGPProxy;
     @Resource
     private DbVerifyUtils dbVerifyUtils;
+    @Autowired
+    private LogBO logBO;
+    @Resource
+    private PlayerRoleCache playerRoleCache;
+    @Resource
+    private ReturnVo returnVo;
 
     private final String OFFLINE_GOOGS_ID_1 = "open_one_0";
     private final String OFFLINE_GOOGS_ID_2 = "open_two_1";
@@ -88,7 +97,7 @@ public class PayBO {
         }
 
         // 检查是否存在此商品
-        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
+        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, sc.getChannelId(), sc.getGameId());
         if(goods == null) {
             throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
@@ -142,8 +151,8 @@ public class PayBO {
             datas[4] = order.getRemark();
         }
 
-        if (order.getChannelId() != null){
-            datas[5] = order.getChannelId();
+        if (sc.getChannelId() != null){
+            datas[5] = sc.getChannelId();
         }
 
         // 角色名
@@ -166,10 +175,7 @@ public class PayBO {
         datas[12] = String.valueOf(palyerRole.getGameId());
         datas[13] = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
 
-        Server server = new Server();
-        server.setGameId(order.getGameId());
-        server.setServerId(StringUtils.getInt(datas[13]));
-        server = serverMapper.selectByServer(server);
+        Server server = serverMapper.selectByServer(sc.getGameId(),Integer.valueOf(datas[13]));
         if(server == null){
             throw new KairoException(KairoErrorCode.ERROR_PARAM);
         }
@@ -215,7 +221,7 @@ public class PayBO {
         }
 
         // 检查是否存在此商品
-        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
+        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, sc.getChannelId(), sc.getGameId());
         if(goods == null) {
             throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
@@ -265,8 +271,8 @@ public class PayBO {
             datas[4] = order.getRemark();
         }
 
-        if (order.getChannelId() != null){
-            datas[5] = order.getChannelId();
+        if (sc.getChannelId() != null){
+            datas[5] = sc.getChannelId();
         }
 
         // 角色名
@@ -297,10 +303,7 @@ public class PayBO {
         datas[12] = String.valueOf(palyerRole.getGameId());
         datas[13] = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
 
-        Server server = new Server();
-        server.setGameId(order.getGameId());
-        server.setServerId(StringUtils.getInt(datas[13]));
-        server = serverMapper.selectByServer(server);
+        Server server = serverMapper.selectByServer(sc.getGameId(),Integer.valueOf(datas[13]));
         if(server == null){
             throw new KairoException(KairoErrorCode.ERROR_PARAM);
         }
@@ -346,7 +349,7 @@ public class PayBO {
         }
 
         // 检查是否存在此商品
-        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(),order.getGameId());
+        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, sc.getChannelId(),sc.getGameId());
         if(goods == null) {
             throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
@@ -377,24 +380,22 @@ public class PayBO {
             datas[4] = order.getRemark();
         }
 
-        if (order.getChannelId() != null){
-            datas[5] = order.getChannelId();
+        if (sc.getChannelId() != null){
+            datas[5] = sc.getChannelId();
         }
 
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(sc.getGameId(), sc.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
         datas[8] = String.valueOf(palyerRole.getGameId());
         datas[9] = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
 
-        Server server = new Server();
-        server.setGameId(order.getGameId());
-        server.setServerId(StringUtils.getInt(datas[9]));
-        server = serverMapper.selectByServer(server);
+        Server server = serverMapper.selectByServer(sc.getGameId(),Integer.valueOf(datas[9]));
+
         if(server == null){
             throw new KairoException(KairoErrorCode.ERROR_PARAM);
         }
@@ -416,7 +417,7 @@ public class PayBO {
 
         addOrderResult.setRmbPrice(goods.getRmb().toString());
 
-        GameChannelSetting gameChannelSetting = VerifySessionBO.getGameChannelSetting(palyerRole.getGameId()+"", order.getChannelId());
+        GameChannelSetting gameChannelSetting = VerifySessionBO.getGameChannelSetting(palyerRole.getGameId()+"", sc.getChannelId());
 
         if(gameChannelSetting != null) {
             addOrderResult.setNotifyUrl(gameChannelSetting.getNotifyUrl());
@@ -446,7 +447,7 @@ public class PayBO {
         }
 
         // 检查是否存在此商品
-        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
+        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, sc.getChannelId(), sc.getGameId());
         if(goods == null) {
             throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
@@ -477,24 +478,21 @@ public class PayBO {
             datas[4] = order.getRemark();
         }
 
-        if (order.getChannelId() != null){
-            datas[5] = order.getChannelId();
+        if (sc.getChannelId() != null){
+            datas[5] = sc.getChannelId();
         }
 
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(sc.getGameId(), sc.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
         datas[8] = String.valueOf(palyerRole.getGameId());
         datas[9] = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
 
-        Server server = new Server();
-        server.setGameId(order.getGameId());
-        server.setServerId(StringUtils.getInt(datas[9]));
-        server = serverMapper.selectByServer(server);
+        Server server = serverMapper.selectByServer(sc.getGameId(),Integer.valueOf(datas[9]));
         if(server == null){
             throw new KairoException(KairoErrorCode.ERROR_PARAM);
         }
@@ -543,7 +541,7 @@ public class PayBO {
         }
 
         // 检查是否存在此商品
-        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), order.getGameId());
+        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, sc.getChannelId(), sc.getGameId());
         if(goods == null) {
             throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
@@ -574,24 +572,21 @@ public class PayBO {
             datas[4] = order.getRemark();
         }
 
-        if (order.getChannelId() != null){
-            datas[5] = order.getChannelId();
+        if (sc.getChannelId() != null){
+            datas[5] = sc.getChannelId();
         }
 
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(sc.getGameId(), sc.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
         datas[8] = String.valueOf(palyerRole.getGameId());
         datas[9] = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
 
-        Server server = new Server();
-        server.setGameId(order.getGameId());
-        server.setServerId(StringUtils.getInt(datas[9]));
-        server = serverMapper.selectByServer(server);
+        Server server = serverMapper.selectByServer(sc.getGameId(),Integer.valueOf(datas[9]));
         if(server == null){
             throw new KairoException(KairoErrorCode.ERROR_PARAM);
         }
@@ -616,7 +611,7 @@ public class PayBO {
         return addOrderResult;
     }
 
-    /**
+    /**payNotify
      * 联想渠道
      * @param order
      * @param extra
@@ -639,7 +634,7 @@ public class PayBO {
         }
 
         // 检查是否存在此商品
-        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(), palyerRole.getGameId());
+        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, sc.getChannelId(), palyerRole.getGameId());
         if(goods == null) {
             throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
         }
@@ -677,24 +672,21 @@ public class PayBO {
             datas[4] = order.getRemark();
         }
 
-        if (order.getChannelId() != null){
-            datas[5] = order.getChannelId();
+        if (sc.getChannelId() != null){
+            datas[5] = sc.getChannelId();
         }
 
         // 角色名
         datas[6] = palyerRole.getRoleName();
 
-        String channelUserId = playerChannelMapper.selectByChannelUserId(order.getGameId(), order.getChannelId(), palyerRole.getPlayerId());
+        String channelUserId = playerChannelMapper.selectByChannelUserId(sc.getGameId(), sc.getChannelId(), palyerRole.getPlayerId());
 
         datas[7] = channelUserId+"";
 
         datas[8] = String.valueOf(palyerRole.getGameId());
         datas[9] = GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, "");
 
-        Server server = new Server();
-        server.setGameId(order.getGameId());
-        server.setServerId(StringUtils.getInt(datas[9]));
-        server = serverMapper.selectByServer(server);
+        Server server = serverMapper.selectByServer(sc.getGameId(),Integer.valueOf(datas[9]));
         if(server == null){
             throw new KairoException(KairoErrorCode.ERROR_PARAM);
         }
@@ -742,7 +734,7 @@ public class PayBO {
         }
 
         // 检查是否存在此商品
-        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, order.getChannelId(),order.getGameId());
+        PayGoods goods = payGoodsMapper.selectByGChannelId(goodId, sc.getChannelId(),sc.getGameId());
         if(goods == null) {
             System.out.println(sc.getRoleId() + "_" + goodId+"_"+order.getChannel());
             throw new KairoException(KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR, sc.getRoleId() + "_" + goodId);
@@ -779,10 +771,7 @@ public class PayBO {
 
         logger.error("datas[3]===================================>>>"+GetBeanHelper.getServerConfig().getProperty(AppConfig.SERVER_ID, ""));
 
-        Server server = new Server();
-        server.setGameId(order.getGameId());
-        server.setServerId(StringUtils.getInt(datas[3]));
-        server = serverMapper.selectByServer(server);
+        Server server = serverMapper.selectByServer(sc.getGameId(),Integer.valueOf(datas[3]));
         logger.error("serverOk=========================>"+server);
 
         if(server == null){
@@ -812,8 +801,8 @@ public class PayBO {
         datas[9] = "Android";// 默认为android
         logger.error("datas[9]===================================>>>Android");
 
-        datas[10] = order.getChannelId();
-        logger.error("datas[10]===================================>>>"+order.getChannelId());
+        datas[10] = sc.getChannelId();
+        logger.error("datas[10]===================================>>>"+sc.getChannelId());
 
         datas[11] = "";
         logger.error("datas[11]===================================>>>jiushi+null+de");
@@ -836,13 +825,13 @@ public class PayBO {
         addOrderResult.setGoodName(goods.getGoodsName());
         addOrderResult.setGoodDic(goods.getGoodsDes());
 
-        if(order.getChannelId().equals("2300")) {
+        if(sc.getChannelId().equals("2300")) {
 
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
 
-            setHwPaySign(goods, orderId, palyerRole.getGameId()+"", order.getChannelId(), addOrderResult);
-        } else if(order.getChannelId().equals("2100")) {
+            setHwPaySign(goods, orderId, palyerRole.getGameId()+"", sc.getChannelId(), addOrderResult);
+        } else if(sc.getChannelId().equals("2100")) {
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
 
@@ -850,8 +839,8 @@ public class PayBO {
 
             addOrderResult.setCreateTime(createTime);
 
-            addOrderResult.setSign(getMzPaySign(goods, orderId, palyerRole.getGameId()+"", order.getChannelId(), createTime));
-        } else if(order.getChannelId().equals("2900")) {
+            addOrderResult.setSign(getMzPaySign(goods, orderId, palyerRole.getGameId()+"", sc.getChannelId(), createTime));
+        } else if(sc.getChannelId().equals("2900")) {
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
             String[] good = goods.getProp().split("_");
@@ -860,8 +849,8 @@ public class PayBO {
 
             addOrderResult.setCreateTime(createTime);
 
-            setBiliPaySign(goods, orderId, palyerRole.getGameId()+"", order.getChannelId(), addOrderResult);
-        } else if(order.getChannelId().equals("1900")) {
+            setBiliPaySign(goods, orderId, palyerRole.getGameId()+"", sc.getChannelId(), addOrderResult);
+        } else if(sc.getChannelId().equals("1900")) {
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
             String[] good = goods.getProp().split("_");
@@ -870,8 +859,8 @@ public class PayBO {
 
             addOrderResult.setCreateTime(createTime);
 
-            setAnzhiPaySign(goods, orderId, palyerRole.getGameId()+"", order.getChannelId(), addOrderResult);
-        }else if(order.getChannelId().equals("2600")) {
+            setAnzhiPaySign(goods, orderId, palyerRole.getGameId()+"", sc.getChannelId(), addOrderResult);
+        }else if(sc.getChannelId().equals("2600")) {
             addOrderResult.setGoodName(goods.getGoodsName());
             addOrderResult.setGoodDic(goods.getGoodsDes());
             String[] good = goods.getProp().split("_");
@@ -890,7 +879,7 @@ public class PayBO {
 
             setM4399PaySign(orderId,playM4399,server.getServerId(),secret,orderId,(int)createTime,null,0,addOrderResult);
         } else {
-            GameChannelSetting gameChannelSetting = VerifySessionBO.getGameChannelSetting(palyerRole.getGameId()+"", order.getChannelId());
+            GameChannelSetting gameChannelSetting = VerifySessionBO.getGameChannelSetting(palyerRole.getGameId()+"", sc.getChannelId());
 
             if(gameChannelSetting != null) {
                 addOrderResult.setNotifyUrl(gameChannelSetting.getNotifyUrl());
@@ -901,7 +890,7 @@ public class PayBO {
         df.setRoundingMode(RoundingMode.HALF_UP);
 
         addOrderResult.setRmbPrice(df.format(goods.getRmb()));
-
+        logger.error("datas===================================>>>======addorder=======[][][][end");
         return addOrderResult;
     }
 
@@ -1236,16 +1225,159 @@ public class PayBO {
             throw new NoSuchRoleException();
         }
         int payStatus = notify.getPayStatus();
-
         return payStatus;
         // （注释） 到前端调用（1）
         /*if (payStatus == PayStatusEnum.Success.getValue()){
             logger.error("this here -->addPayValue");
-            addPayValue(sc.getRoleId(), notify, gameId);
+            payStatus = addPayValue(sc, notify);
         }else{
             logger.error("this here -->addPayValue error");
             SendNotifyVO(sc.getRoleId(), notify, 0, 0, notify.getVirtualAmount());
         }*/
+    }
+
+    /**
+     * 分发奖励
+     * @param sc
+     * @param notify
+     * @throws NoSuchRoleException
+     */
+    public ReturnVo addPayValue(ServiceContext sc, PayNotifyVO notify) throws NoSuchRoleException{
+        // 发送金币
+        return addSingleRecharge(sc, notify);
+    }
+
+    /**
+     * 单笔充值发送元宝
+     * 7 成功，8失败1, 9失败2
+     * @param sc
+     * @param notify
+     * @throws NoSuchRoleException
+     */
+    private ReturnVo addSingleRecharge(ServiceContext sc, PayNotifyVO notify) throws NoSuchRoleException{
+        System.out.println("PayService|method=addSingleRecharge|begin");
+
+        PlayerRole role = dbVerifyUtils.isHasRole(sc.getGameId(),sc.getPlayerId(),sc.getRoleId());
+        if(role == null) {
+            logger.error("======>addSingleRecharge->roleId<========:"+sc.getRoleId()+"|err=角色不存在异常");
+            throw new NoSuchRoleException();
+        }
+
+        // 检查是否存在此商品
+        PayGoods goods = null;
+
+        goods = payGoodsMapper.selectByGChannelId(notify.getGoodsName(), notify.getChannelId(), role.getGameId());
+
+        if(goods == null) {
+            logger.error("addSingleRecharge|no goods|goodsId="+notify.getGoodsName());
+//            sendNotify(roleId, notify, KairoErrorCode.ERROR_PAY_GOOD_ID_ERROR.getErrorCode());
+            return returnVo.addPayValue(null,null,null,null,8);
+        }
+
+        // 重置金额比较对账处理
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+
+        String basePrice   = df.format(goods.getRmb() * 1.00);
+
+        String targetPrice = df.format(notify.getRmb() / 100.00);
+
+        //logger.error("addSingleRecharge|goodsId="+notify.getGoodsName()+"|err=商品价格验证错误|basePrice="+basePrice+"|channelPrice=" + targetPrice);
+        if(!basePrice.equals(targetPrice)) {
+//          sendNotify(roleId, notify, KairoErrorCode.ERROR_PAY_GOOD_PRICE_ERROR.getErrorCode());
+            logger.error("addSingleRecharge|goodsId="+notify.getGoodsName()+"|err=商品价格验证错误|basePrice="+basePrice+"|channelPrice=" + targetPrice);
+            return returnVo.addPayValue(null,null,null,null,9);
+        }
+
+        // paylog
+        PlayerPayLog playerPayLog = new PlayerPayLog();
+
+        playerPayLog.setGoodsName(notify.getGoodsName());
+
+        // 充值日志更新
+        playerPayLog.setCreateTime(new Date());
+
+        Integer currency = 0;
+
+        // 修改为paygoogs的Ingot
+        String[] prop = goods.getProp().split("&");
+        for (int k = 0; k < prop.length; k++) {
+            String[] props = prop[k].split("#");
+            if (props[0] == "1"){
+                currency = Integer.valueOf(props[1]);
+            }
+        }
+        playerPayLog.setCurrencyGet(currency);
+
+        playerPayLog.setCurrencyGetExtra(0);
+
+        int state = 1;
+
+        if("subscription_on_case0_00".equals(notify.getGoodsName())) {// 如果是购买黄金会员
+            PlayerRole newRole = new PlayerRole();
+
+            newRole.setRoleId(sc.getRoleId());
+            newRole.setViptime(Calendar.getInstance().getTime());
+
+            playerRoleMapper.updateByPrimaryKeySelective(newRole);
+
+            role.setViptime(newRole.getViptime());
+            // 刷新玩家缓存
+            playerRoleCache.update(role);
+
+            state = 3;
+        } else if("ad_off_case0".equals(notify.getGoodsName())) {// 如果购买是，付费去广告
+            PlayerRole newRole = new PlayerRole();
+
+            newRole.setRoleId(sc.getRoleId());
+            newRole.setAdtime(Calendar.getInstance().getTime());
+
+            playerRoleMapper.updateByPrimaryKeySelective(newRole);
+
+            role.setAdtime(newRole.getAdtime());
+
+            // 刷新玩家缓存
+            playerRoleCache.update(role);
+
+            state = 2;
+        } else if("highspeed_on_case0".equals(notify.getGoodsName())){// 高速模式
+            state = 4;
+        } else{//赛车2去除黄金会员奖牌加成
+			//System.out.println("==================>|"+role.getViptime().getTime() + "|"+Calendar.getInstance().getTimeInMillis());
+			if(role.getViptime() != null){
+				long sub = Calendar.getInstance().getTimeInMillis() - role.getViptime().getTime();
+
+				// 永久黄金会员30=>9999
+				if(sub <= 9999 * 24 * 3600 * 1000L){
+					//System.out.println("=========2=========>|"+role.getViptime());
+                    Double extra = currency * 0.25;
+					//Double extra = (double)goods.getCurrency();
+
+					playerPayLog.setCurrencyGetExtra(extra.intValue());
+				}
+			}
+
+			state = 1;
+		}
+
+        playerPayLog.setChannelId(notify.getChannelId());
+        playerPayLog.setRmb(BigDecimal.valueOf(notify.getRmb()));
+        playerPayLog.setRoleId(sc.getRoleId());
+        playerPayLog.setOrderId(notify.getOrderId());
+        playerPayLog.setGameId(sc.getGameId());
+
+        playerPayLogMapper.insert(playerPayLog);
+
+        // 埋点
+        logBO.saveRechargeLog(sc.getRoleId(),sc.getGameId(), notify.getGoodsName(), notify.getChannelId(), notify.getOrderId());
+
+//        sendNotify(roleId, notify, 0, 0, 0);
+
+        // 主动通知客户端
+//        sendGetMedalNotify(role, state, goods.getGoodsName(), playerPayLog.getCurrencyGet() + playerPayLog.getCurrencyGetExtra());
+        System.out.println("PayService|method=addSingleRecharge|end");
+
+        return returnVo.addPayValue(role,state,goods.getGoodsName(),playerPayLog.getCurrencyGet()+playerPayLog.getCurrencyGetExtra(),7);
     }
 
 }

@@ -195,7 +195,7 @@
     <!-- 查询角色所有未领取邮件 -->
     <select id="selcetByRoleMail" parameterType="com.sjhy.platform.client.dto.game.Mail" resultType="java.lang.Integer">
         select
-            count (*)
+            count(*)
         from mail
         where recv_role_id = #{recvRoleId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}

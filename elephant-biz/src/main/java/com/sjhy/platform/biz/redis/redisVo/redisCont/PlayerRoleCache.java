@@ -47,9 +47,9 @@ public class PlayerRoleCache {
 		// 属性copy
 		BeanUtils.copyProperties(playerRole, role);
 		//System.out.println("bb->"+Calendar.getInstance().getTimeInMillis());
-		KrCache.getChannel().set(REGION, role.getRoleId(), role);
+		KrCache.getChannel().set(REGION, role.getRoleId()+'_'+role.getGameId(), role);
 		
-		KrCache.getChannel().set(REGION, role.getRoleId()+"_server", role.getLastLoginServer());
+		KrCache.getChannel().set(REGION, role.getRoleId()+"_server"+role.getGameId(), role.getLastLoginServer());
 		
 		KrCache.getChannel().set(REGION, role.getPlayerId() +"_"+ role.getGameId(), role.getRoleId());
 		
@@ -62,7 +62,7 @@ public class PlayerRoleCache {
 	 * @return
 	 */
 	public int getLastLoginServerId(long roleId,String gameId){
-		CacheObject value = KrCache.getChannel().getFromRedis(REGION, roleId+"_server");
+		CacheObject value = KrCache.getChannel().getFromRedis(REGION, roleId+"_server"+gameId);
 		
 		if (value != null && value.getValue() != null){
 			return (int)value.getValue();
@@ -72,7 +72,7 @@ public class PlayerRoleCache {
 				return -1;
 			}
 			
-			KrCache.getChannel().set(REGION, roleId+"_server", playerRole.getLastLoginServer());
+			KrCache.getChannel().set(REGION, roleId+"_server"+gameId, playerRole.getLastLoginServer());
 			
 			return playerRole.getLastLoginServer();
 		}
@@ -102,18 +102,18 @@ public class PlayerRoleCache {
 			return;
 		}
 		
-		KrCache.getChannel().evict(REGION, roleId);
+		KrCache.getChannel().evict(REGION, roleId+"_"+gameId);
 		KrCache.getChannel().evict(REGION, role.getPlayerId()+"_"+role.getGameId());
 		
-		KrCache.getChannel().evict(REGION, roleId+"_server");
+		KrCache.getChannel().evict(REGION, roleId+"_server"+gameId);
 	}
 	
-	public void update(PlayerRoleVO role) {
+	public void update(PlayerRole role) {
 		if(role == null) {
 			return;
 		}
 		
-		KrCache.getChannel().set(REGION, role.getRoleId(), role);
+		KrCache.getChannel().set(REGION, role.getRoleId()+'_'+role.getGameId(), role);
 	}
 	
 	public void remove(long userId, int gameId){

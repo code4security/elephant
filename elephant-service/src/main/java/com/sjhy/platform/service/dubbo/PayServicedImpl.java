@@ -8,6 +8,7 @@ import com.sjhy.platform.client.deploy.exception.NoSuchRoleException;
 import com.sjhy.platform.client.dto.vo.PayAddOrderVO;
 import com.sjhy.platform.client.dto.vo.PayLogVO;
 import com.sjhy.platform.client.dto.vo.PayNotifyVO;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.client.dto.vo.pay.*;
 import com.sjhy.platform.client.service.PayServiced;
 import org.springframework.stereotype.Service;
@@ -152,4 +153,18 @@ public class PayServicedImpl implements PayServiced {
         }
         return null;
     }
+
+    @Override
+    /**
+     * 发送奖励
+     */
+    public ResultDTO<ReturnVo> addPayValue(ServiceContext sc, PayNotifyVO notify) {
+        try {
+            return ResultDTO.getSuccessResult(payBO.addPayValue(sc,notify));
+        } catch (NoSuchRoleException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

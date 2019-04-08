@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
+import java.util.Currency;
 import java.util.List;
 
 /**
@@ -16,9 +17,9 @@ import java.util.List;
 @Data
 @Component
 public class ReturnVo implements Serializable {
+    private ReturnVo returnVo;
     // 确认登陆
     private PlayerRole playerRole;
-    private ReturnVo returnVo;
     private String redisSessionKey;
     // 上传bucket
     private AliOssBucketVO aliOssBucketVO;
@@ -29,6 +30,11 @@ public class ReturnVo implements Serializable {
     // 封禁玩家
     private Integer banPlayer;
     private String banType;
+    // 购买发送奖励
+    private Integer state;
+    private String goodName;
+    private Integer num;
+    private Integer payStatus;
 
     public ReturnVo enterGame(PlayerRole playerRole,String redisSessionKey){
         returnVo = new ReturnVo();
@@ -55,6 +61,16 @@ public class ReturnVo implements Serializable {
         returnVo = new ReturnVo();
         returnVo.setBanPlayer(banPlayer);
         returnVo.setBanType(banType);
+        return returnVo;
+    }
+
+    public ReturnVo addPayValue(PlayerRole playerRole,Integer state,String goodName,Integer num,Integer payStatus){
+        returnVo = new ReturnVo();
+        returnVo.setPlayerRole(playerRole);
+        returnVo.setState(state);
+        returnVo.setGoodName(goodName);
+        returnVo.setNum(num);
+        returnVo.setPayStatus(payStatus);
         return returnVo;
     }
 

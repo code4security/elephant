@@ -141,6 +141,7 @@
         from player_gift_log
         where player_id = #{playerId,jdbcType=BIGINT}
         and game_id = #{gameId,jdbcType=VARCHAR}
+        and gift_list_id = #{giftListId,jdbcType=INTEGER}
     </select>
 
     <!-- 查询激活码是被使用过 -->

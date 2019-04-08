@@ -25,6 +25,8 @@ import javax.management.relation.RoleNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @HJ
@@ -166,15 +168,15 @@ public class GiftCodeBO {
                 return null;
             }
 
-            if(sc.getGameId() != maType.getGameId()){
+            if(!sc.getGameId().equals(maType.getGameId())){
                 logger.error("不同游戏不能使用|code="+code);
                 return null;
             }
 
-            if(!sc.getChannelId().equals(maType.getChannelId())){
-                logger.error("不同渠道不能使用|code="+code);
-                return null;
-            }
+//            if(!sc.getChannelId().equals(maType.getChannelId())){
+//                logger.error("不同渠道不能使用|code="+code);
+//                return null;
+//            }
 
             // 检查激活码是否被使用过
             PlayerGiftLog playerGiftLog = new PlayerGiftLog();
@@ -276,13 +278,13 @@ public class GiftCodeBO {
 
         String goodsInfo  = giftCodeList.getGiftRewardId();
 
-        String[] goods    = goodsInfo.split(",");
+        String[] goods    = goodsInfo.split("&");
         String[] goodInfo = null;
 
         LinkedHashMap<Integer, Integer> goodsMap = new LinkedHashMap<Integer, Integer>();
 
         for(String good : goods) {
-            goodInfo = good.split(":");
+            goodInfo = good.split("#");
 
             if(goodInfo.length > 1) {
                 // goodId是否有效
@@ -294,6 +296,8 @@ public class GiftCodeBO {
         }
 
         // 更新兑换码
+        sc.setPlayerId(role.getPlayerId());
+        sc.setChannelId(role.getChannelId());
         this.redeemCode(sc, redeemCode, giftCodeList.getId());
 
         return goodsMap;

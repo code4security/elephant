@@ -260,7 +260,7 @@ public class LoginBO {
             result.setNeedActivation(false);
         }
 
-        // 埋点(注释)（1）
+        // 埋点(注释)
         AccountVO account = (AccountVO) redis.get(sessionVO.channelUserId+"_"+sc.getGameId());
         if (account == null){
             logger.info("", sessionVO.channelUserId, sc.getPlayerId()+"", "", sc.getGameId(), "loginsessiontwo_server");
@@ -368,11 +368,7 @@ public class LoginBO {
         playerLoginLogMapper.insert(record);
 
         // 获取服务器版本号
-        Server servers = new Server();
-        servers.setGameId(sc.getGameId());
-        servers.setServerId(sc.getServerId());
-        Server server = serverMapper.selectByServer(servers);
-
+        Server server = serverMapper.selectByServer(sc.getGameId(),sc.getServerId());
         // 埋点
         logger.info(sc.getChannelId(), redisService.getChUserId(sc.getPlayerId(), Integer.valueOf(sc.getGameId())), sc.getPlayerId()+"", sc.getGameId(), ip);
 
@@ -397,7 +393,7 @@ public class LoginBO {
      */
     public ReturnVo enterGame(ServiceContext sc, int deviceModel, String deviceToken) throws PleaseLoginAgainException, NoSuchRoleException, AlreadyExistsPlayerRoleException, CreateRoleException, GameIdIsNotExsitsException, KairoException {
 
-        // 缓存（注释）（1）
+        // 缓存（注释）
         // 1.验证用户的 sessionKey
         String redisSessionKey = SessionKeyHMapCpt.getSessionKey(sc.getPlayerId()+"_"+sc.getGameId());
         if(redisSessionKey == null){throw new PleaseLoginAgainException();}

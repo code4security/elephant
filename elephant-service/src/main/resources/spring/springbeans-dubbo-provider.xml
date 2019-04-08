@@ -24,6 +24,8 @@
     <!-- provider's application name, used for tracing dependency relationship -->
     <dubbo:application name="platform-elephant"/>
 
+    <dubbo:provider timeout="5000" />
+
     <!-- use multicast registry center to export service -->
     <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
 
@@ -42,7 +44,7 @@
     <bean id="roleServiced" class="com.sjhy.platform.service.dubbo.RoleServicedImpl"/>
     <bean id="serverHistoryServiced" class="com.sjhy.platform.service.dubbo.ServerHistoryServicedImpl"/>
     <bean id="verifySessionServiced" class="com.sjhy.platform.service.dubbo.VerifySessionServicedImpl"/>
-    <bean id="dbVerifyUtils" class="com.sjhy.platform.biz.utils.DbVerifyUtils" />
+    <bean id="dbVerify" class="com.sjhy.platform.biz.utils.DbVerifyUtils" />
     <bean id="logServiced" class="com.sjhy.platform.service.dubbo.LogServicedImpl"/>
 
     <!-- declare the service interface to be exported -->
@@ -57,7 +59,7 @@
     <dubbo:service interface="com.sjhy.platform.client.service.RoleServiced" ref="roleServiced"/>
     <dubbo:service interface="com.sjhy.platform.client.service.ServerHistoryServiced" ref="serverHistoryServiced"/>
     <dubbo:service interface="com.sjhy.platform.client.service.VerifySessionServiced" ref="verifySessionServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.DbVerify" ref="dbVerifyUtils" />
+    <dubbo:service interface="com.sjhy.platform.client.service.DbVerify" ref="dbVerify" />
     <dubbo:service interface="com.sjhy.platform.client.service.LogServiced" ref="logServiced" />
 
 </beans>

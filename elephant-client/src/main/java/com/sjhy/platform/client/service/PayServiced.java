@@ -6,6 +6,7 @@ import com.sjhy.platform.client.dto.game.PayGoods;
 import com.sjhy.platform.client.dto.vo.PayAddOrderVO;
 import com.sjhy.platform.client.dto.vo.PayLogVO;
 import com.sjhy.platform.client.dto.vo.PayNotifyVO;
+import com.sjhy.platform.client.dto.vo.ReturnVo;
 import com.sjhy.platform.client.dto.vo.pay.*;
 
 /**
@@ -32,4 +33,6 @@ public interface PayServiced {
     ResultDTO<String[]> isPlayerBuyOfflineGoods(ServiceContext sc, String goodsName);
     // 支付通知
     ResultDTO<Integer> payNotify(ServiceContext sc, PayNotifyVO notify);
+
+    ResultDTO<ReturnVo> addPayValue (ServiceContext sc, PayNotifyVO notify);
 }
