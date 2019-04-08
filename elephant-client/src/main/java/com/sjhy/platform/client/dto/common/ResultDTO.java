@@ -1,5 +1,6 @@
 package com.sjhy.platform.client.dto.common;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * @author Liu Zheng
  */
 @Data
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ResultDTO<T> implements Serializable {
 
     protected boolean success;

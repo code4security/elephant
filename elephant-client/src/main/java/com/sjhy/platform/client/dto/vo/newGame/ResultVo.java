@@ -1,5 +1,6 @@
 package com.sjhy.platform.client.dto.vo.newGame;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 @Data
 @Component
+@JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class ResultVo {
 
     @Autowired

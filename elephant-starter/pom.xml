@@ -49,6 +49,12 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>com/sjhy/platform</directory>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>

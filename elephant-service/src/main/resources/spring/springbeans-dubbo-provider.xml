@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one or more
@@ -64,70 +63,3 @@
     <dubbo:service interface="com.sjhy.platform.client.service.LogServiced" ref="logServiced" />
 
 </beans>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  Licensed to the Apache Software Foundation (ASF) under one or more
-  contributor license agreements.  See the NOTICE file distributed with
-  this work for additional information regarding copyright ownership.
-  The ASF licenses this file to You under the Apache License, Version 2.0
-  (the "License"); you may not use this file except in compliance with
-  the License.  You may obtain a copy of the License at
-
-      http://www.apache.org/licenses/LICENSE-2.0
-
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-  -->
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
-       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
-
-    <!-- provider's application name, used for tracing dependency relationship -->
-    <dubbo:application name="platform-elephant"/>
-
-    <dubbo:provider timeout="5000" />
-
-    <!-- use multicast registry center to export service -->
-    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
-
-    <!-- use dubbo protocol to export service on port 20880 -->
-    <dubbo:protocol name="dubbo" port="20880"/>
-
-    <!-- service implementation, as same as regular local bean -->
-    <bean id="personService" class="com.sjhy.platform.service.dubbo.test.PersonServiceImpl"/>
-    <bean id="loginServiced" class="com.sjhy.platform.service.dubbo.LoginServicedImpl"/>
-    <bean id="gameServiced" class="com.sjhy.platform.service.dubbo.GameServicedImpl"/>
-    <bean id="giftCodeServiced" class="com.sjhy.platform.service.dubbo.GiftCodeServicedImpl"/>
-    <bean id="mailServiced" class="com.sjhy.platform.service.dubbo.MailServicedImpl"/>
-    <bean id="ossServiced" class="com.sjhy.platform.service.dubbo.OssServicedImpl"/>
-    <bean id="payServiced" class="com.sjhy.platform.service.dubbo.PayServicedImpl"/>
-    <bean id="playerServiced" class="com.sjhy.platform.service.dubbo.PlayerServicedImpl"/>
-    <bean id="roleServiced" class="com.sjhy.platform.service.dubbo.RoleServicedImpl"/>
-    <bean id="serverHistoryServiced" class="com.sjhy.platform.service.dubbo.ServerHistoryServicedImpl"/>
-    <bean id="verifySessionServiced" class="com.sjhy.platform.service.dubbo.VerifySessionServicedImpl"/>
-    <bean id="dbVerifyUtils" class="com.sjhy.platform.biz.utils.DbVerifyUtils" />
-    <bean id="logServiced" class="com.sjhy.platform.service.dubbo.LogServicedImpl"/>
-
-    <!-- declare the service interface to be exported -->
-    <dubbo:service interface="com.sjhy.platform.client.service.test.PersonService" ref="personService"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.LoginServiced" ref="loginServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.GameServiced" ref="gameServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.GiftCodeServiced" ref="giftCodeServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.MailServiced" ref="mailServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.OssServiced" ref="ossServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.PayServiced" ref="payServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.PlayerServiced" ref="playerServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.RoleServiced" ref="roleServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.ServerHistoryServiced" ref="serverHistoryServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.VerifySessionServiced" ref="verifySessionServiced"/>
-    <dubbo:service interface="com.sjhy.platform.client.service.DbVerify" ref="dbVerifyUtils" />
-    <dubbo:service interface="com.sjhy.platform.client.service.LogServiced" ref="logServiced" />
-
-</beans>
->>>>>>> fbb421ed9b7b48b40b170e3fe923dd58907356d6

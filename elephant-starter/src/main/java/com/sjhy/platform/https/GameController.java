@@ -90,7 +90,6 @@ public class GameController {
 
     /**
      * 登录
-     *
      * @param gameId
      * @param channelId
      * @param userId    设备唯一id
@@ -265,6 +264,14 @@ public class GameController {
         return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "获取奖牌失败");
     }
 
+    /**
+     * 使用激活码
+     * @param iosId
+     * @param gameId
+     * @param channelId
+     * @param giftCode
+     * @return
+     */
     @PostMapping("/uselipinma")
     public ResultDTO<Map<String, String>> useLPM(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId, @RequestParam String giftCode) {
         GiftCode codes = giftCodeMapper.selectByCode(giftCode);
@@ -318,7 +325,7 @@ public class GameController {
         }
     }
 
-    @GetMapping("/test")
+    @PostMapping("/test")
     public String test() {
         return "ok";
     }
