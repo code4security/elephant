@@ -25,10 +25,7 @@ public interface PlayerGiftLogMapper {
     //检查激活码是否使用过
     PlayerGiftLog selectByGiftCode(PlayerGiftLog record);
 
-    /**
-     *  检查激活码是否使用过 2
-     * @param map
-     * @return
-     */
-    int ishas(Map<String, Object> map);
+    //验证是否使用过激活码
+    PlayerGiftLog selectByRoleGiftCode(PlayerGiftLog record);
+
 }

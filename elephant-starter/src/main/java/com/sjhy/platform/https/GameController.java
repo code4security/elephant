@@ -292,18 +292,18 @@ public class GameController {
             return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "礼品码已过期");//3丶判断礼品码是否过期  b  a
         } else {
             //4丶判断礼品码使用log中是否存在数据
-            Map<String, Object> map = new HashMap<>();
-            map.put("giftlistid", listId);
-            map.put("iosId", iosId);
-            map.put("gameId", gameId);
-            map.put("channelId", channelId);
-            if (playerGiftLogMapper.ishas(map) > 0) {
+            PlayerGiftLog playerGiftLog = new PlayerGiftLog();
+            playerGiftLog.setGiftListId(listId);
+            playerGiftLog.setRoleId(iosId);
+            playerGiftLog.setGameId(gameId);
+            playerGiftLog = playerGiftLogMapper.selectByUseGiftCode(playerGiftLog);
+            if (playerGiftLog != null) {
                 return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "用户已使用过礼品码");
             } else {
                 //5丶礼品码的产品信息  1#20 2#111  ...等等  修改注册码状态  新加使用记录  向客户端发送结果
                 giftCodeMapper.updateByUse(giftCode);
 
-                PlayerGiftLog playerGiftLog=new PlayerGiftLog();
+                playerGiftLog=new PlayerGiftLog();
                 playerGiftLog.setGiftCode(giftCode);
                 playerGiftLog.setGiftListId(listId);
                 playerGiftLog.setRoleId(iosId);

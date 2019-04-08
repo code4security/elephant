@@ -152,4 +152,14 @@
         where gift_code = #{giftCode,jdbcType=VARCHAR}
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
+
+    <!-- 查询是否使用过激活码 -->
+    <select id="selectByRoleGiftCode" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_gift_log
+        where role_id = #{roleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        and gift_list_id = #{giftListId,jdbcType=INTEGER}
+    </select>
 </mapper>
