@@ -90,4 +90,7 @@ public class PlayerPayLog implements Serializable {
      * ios购买凭证验证
      */
     private String iosVerify;
+
+    public PlayerPayLog(int id, Long aLong, String s, String s1, String s2, Date date, Float aFloat, Integer integer, Integer integer1, String s3, int payStatus, String iosStatus, String s4) {
+    }
 }

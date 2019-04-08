@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sjhy.platform.persist.mysql.game.MailMapper" >
@@ -216,4 +217,224 @@
             send_time DESC
         LIMIT #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}
   </select>
+=======
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.game.MailMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.game.Mail" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="send_role_id" property="sendRoleId" jdbcType="BIGINT" />
+        <result column="recv_role_id" property="recvRoleId" jdbcType="BIGINT" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="SMALLINT" />
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="context" property="context" jdbcType="VARCHAR" />
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
+        <result column="goods_num" property="goodsNum" jdbcType="INTEGER" />
+        <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+        <result column="status" property="status" jdbcType="SMALLINT" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, send_role_id, recv_role_id, game_id, channel_id, type, title, context, goods_id, 
+        goods_num, send_time, status
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from mail
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from mail
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.game.Mail" >
+        insert into mail (id, send_role_id, recv_role_id, 
+            game_id, channel_id, type, 
+            title, context, goods_id, 
+            goods_num, send_time, status
+            )
+        values (#{id,jdbcType=INTEGER}, #{sendRoleId,jdbcType=BIGINT}, #{recvRoleId,jdbcType=BIGINT}, 
+            #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, 
+            #{title,jdbcType=VARCHAR}, #{context,jdbcType=VARCHAR}, #{goodsId,jdbcType=INTEGER}, 
+            #{goodsNum,jdbcType=INTEGER}, #{sendTime,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}
+            )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.game.Mail" >
+        insert into mail
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="sendRoleId != null" >
+                send_role_id,
+            </if>
+            <if test="recvRoleId != null" >
+                recv_role_id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="title != null" >
+                title,
+            </if>
+            <if test="context != null" >
+                context,
+            </if>
+            <if test="goodsId != null" >
+                goods_id,
+            </if>
+            <if test="goodsNum != null" >
+                goods_num,
+            </if>
+            <if test="sendTime != null" >
+                send_time,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="sendRoleId != null" >
+                #{sendRoleId,jdbcType=BIGINT},
+            </if>
+            <if test="recvRoleId != null" >
+                #{recvRoleId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=SMALLINT},
+            </if>
+            <if test="title != null" >
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="context != null" >
+                #{context,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null" >
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsNum != null" >
+                #{goodsNum,jdbcType=INTEGER},
+            </if>
+            <if test="sendTime != null" >
+                #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=SMALLINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.game.Mail" >
+        update mail
+        <set >
+            <if test="sendRoleId != null" >
+                send_role_id = #{sendRoleId,jdbcType=BIGINT},
+            </if>
+            <if test="recvRoleId != null" >
+                recv_role_id = #{recvRoleId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=SMALLINT},
+            </if>
+            <if test="title != null" >
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="context != null" >
+                context = #{context,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null" >
+                goods_id = #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsNum != null" >
+                goods_num = #{goodsNum,jdbcType=INTEGER},
+            </if>
+            <if test="sendTime != null" >
+                send_time = #{sendTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.game.Mail" >
+        update mail
+        set send_role_id = #{sendRoleId,jdbcType=BIGINT},
+            recv_role_id = #{recvRoleId,jdbcType=BIGINT},
+            game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            type = #{type,jdbcType=SMALLINT},
+            title = #{title,jdbcType=VARCHAR},
+            context = #{context,jdbcType=VARCHAR},
+            goods_id = #{goodsId,jdbcType=INTEGER},
+            goods_num = #{goodsNum,jdbcType=INTEGER},
+            send_time = #{sendTime,jdbcType=TIMESTAMP},
+            status = #{status,jdbcType=SMALLINT}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 查询邮件id -->
+    <select id="selectByMailId" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.game.Mail" >
+        select
+        <include refid="Base_Column_List" />
+        from mail
+        where id = #{id,jdbcType=INTEGER}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询角色所有未领取邮件 -->
+    <select id="selcetByRoleMail" parameterType="com.sjhy.platform.client.dto.game.Mail" resultType="java.lang.Integer">
+        select
+            count(*)
+        from mail
+        where recv_role_id = #{recvRoleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        and status = 0
+    </select>
+
+    <!-- 查询邮件列表 -->
+    <select id="selectByRoleId" parameterType="com.sjhy.platform.client.dto.game.Mail" resultMap="BaseResultMap">
+        SELECT
+            <include refid="Base_Column_List" />
+        FROM
+            mail
+        WHERE
+            recv_role_id = #{recvRoleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        /*and status &lt; 3*/
+        ORDER BY
+            send_time DESC
+        LIMIT #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}
+  </select>
+>>>>>>> fbb421ed9b7b48b40b170e3fe923dd58907356d6
 </mapper>

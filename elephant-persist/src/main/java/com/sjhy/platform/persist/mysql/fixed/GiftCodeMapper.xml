@@ -76,10 +76,23 @@
             gift_list_id = #{giftListId,jdbcType=INTEGER}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <update id="updateByUse">
+        update gift_code set gift_list_id = 0 where gift_code = #{giftCode}
+    </update>
 
     <!-- 查询礼品码 -->
     <select id="selectByCode" parameterType="java.lang.String" resultMap="BaseResultMap">
         select * from gift_code
         where gift_code = #{giftCode,jdbcType=VARCHAR}
     </select>
+    <select id="isHas" resultType="java.lang.Integer">
+        select count(*) from gift_code where gift_code = #{giftCode}
+    </select>
+    <select id="expired" resultType="java.lang.Integer">
+        select count(*) from gift_code_list where (now() between #{beginTime} and #{endTime})   and id = #{id}
+    </select>
+    <select id="queryListId" resultType="com.sjhy.platform.client.dto.fixed.GiftCode">
+         select gift_list_id from gift_code where `gift_code` = #{giftCode,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

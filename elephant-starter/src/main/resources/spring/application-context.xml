@@ -8,8 +8,8 @@
         <property name="location" value="classpath:server.properties" />
     </bean>
 
-    <import resource="classpath:spring/springbeans-dubbo-provider.xml"/>
-    <import resource="applicationContext-json-context.xml" />
+    <!--<import resource="classpath:spring/springbeans-dubbo-provider.xml"/>
+    <import resource="applicationContext-json-context.xml" />-->
     <!--<import resource="applicationContext-service-context.xml" />-->
 
 </beans>

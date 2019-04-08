@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sjhy.platform.persist.mysql.history.PlayerGiftLogMapper" >
@@ -152,4 +153,164 @@
         where gift_code = #{giftCode,jdbcType=VARCHAR}
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
+=======
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sjhy.platform.persist.mysql.history.PlayerGiftLogMapper" >
+
+    <resultMap id="BaseResultMap" type="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="gift_code" property="giftCode" jdbcType="VARCHAR" />
+        <result column="gift_list_id" property="giftListId" jdbcType="INTEGER" />
+        <result column="role_id" property="roleId" jdbcType="BIGINT" />
+        <result column="player_id" property="playerId" jdbcType="BIGINT" />
+        <result column="game_id" property="gameId" jdbcType="VARCHAR" />
+        <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+        <result column="activate_time" property="activateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, gift_code, gift_list_id, role_id, player_id, game_id, channel_id, activate_time
+    </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select 
+        <include refid="Base_Column_List" />
+        from player_gift_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+        delete from player_gift_log
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        insert into player_gift_log (id, gift_code, gift_list_id, 
+            role_id, player_id, game_id, 
+            channel_id, activate_time)
+        values (#{id,jdbcType=INTEGER}, #{giftCode,jdbcType=VARCHAR}, #{giftListId,jdbcType=INTEGER}, 
+            #{roleId,jdbcType=BIGINT}, #{playerId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR}, 
+            #{channelId,jdbcType=VARCHAR}, #{activateTime,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        insert into player_gift_log
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="giftCode != null" >
+                gift_code,
+            </if>
+            <if test="giftListId != null" >
+                gift_list_id,
+            </if>
+            <if test="roleId != null" >
+                role_id,
+            </if>
+            <if test="playerId != null" >
+                player_id,
+            </if>
+            <if test="gameId != null" >
+                game_id,
+            </if>
+            <if test="channelId != null" >
+                channel_id,
+            </if>
+            <if test="activateTime != null" >
+                activate_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="giftCode != null" >
+                #{giftCode,jdbcType=VARCHAR},
+            </if>
+            <if test="giftListId != null" >
+                #{giftListId,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null" >
+                #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="playerId != null" >
+                #{playerId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="activateTime != null" >
+                #{activateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        update player_gift_log
+        <set >
+            <if test="giftCode != null" >
+                gift_code = #{giftCode,jdbcType=VARCHAR},
+            </if>
+            <if test="giftListId != null" >
+                gift_list_id = #{giftListId,jdbcType=INTEGER},
+            </if>
+            <if test="roleId != null" >
+                role_id = #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="playerId != null" >
+                player_id = #{playerId,jdbcType=BIGINT},
+            </if>
+            <if test="gameId != null" >
+                game_id = #{gameId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelId != null" >
+                channel_id = #{channelId,jdbcType=VARCHAR},
+            </if>
+            <if test="activateTime != null" >
+                activate_time = #{activateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        update player_gift_log
+        set gift_code = #{giftCode,jdbcType=VARCHAR},
+            gift_list_id = #{giftListId,jdbcType=INTEGER},
+            role_id = #{roleId,jdbcType=BIGINT},
+            player_id = #{playerId,jdbcType=BIGINT},
+            game_id = #{gameId,jdbcType=VARCHAR},
+            channel_id = #{channelId,jdbcType=VARCHAR},
+            activate_time = #{activateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!-- 查询是否使用过激活码 -->
+    <select id="selectByUseGiftCode" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_gift_log
+        where player_id = #{playerId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+
+    <!-- 查询激活码是被使用过 -->
+    <select id="selectByGiftCode" resultMap="BaseResultMap" parameterType="com.sjhy.platform.client.dto.history.PlayerGiftLog" >
+        select
+        <include refid="Base_Column_List" />
+        from player_gift_log
+        where gift_code = #{giftCode,jdbcType=VARCHAR}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+    </select>
+    <select id="ishas" resultType="java.lang.Integer">
+        select count(*) from player_gift_log
+        where gift_list_id = #{giftlistid}
+        and role_id = #{iosId} and game_id = #{gameId} and channel_id = #{channelId}
+    </select>
+>>>>>>> fbb421ed9b7b48b40b170e3fe923dd58907356d6
 </mapper>

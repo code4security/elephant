@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 端口配置
 server:
   port: 8080
@@ -48,3 +49,55 @@ mybatis:
     default-statement-timeout: 25000
 
 
+=======
+# 端口配置
+server:
+  port: 8080
+#  port: 443
+#  ssl:
+#      key-store: classpath:1880511_server.shijunhuyu.com.pfx
+#      key-store-password: KbM4QRIo
+
+# spring配置
+spring:
+  profiles:
+    active: dev
+    # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://localhost:3306/game?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://47.92.153.243:3306/game?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: mv2H)jMs9AFO-gCD
+    # password: mv2H)jMs9AFO-gCD
+    name: game
+
+# redis配置
+  redis:
+    host: localhost
+    password:
+    port: 7000
+    jedis:
+      pool:
+        max-idle: 100
+        min-idle: 0
+        max-active: 1000
+        max-wait: -1s
+    database: 0
+    timeout: 1000ms
+
+# mybatis配置
+mybatis:
+  mapper-locations: classpath:com/sjhy/platform/persist/mysql/**/*.xml
+  type-aliases-package: com.sjhy.platform.client.dto.**.*
+  configuration:
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    use-column-label: true
+    use-generated-keys: true
+    default-executor-type: simple
+    default-statement-timeout: 25000
+
+
+>>>>>>> fbb421ed9b7b48b40b170e3fe923dd58907356d6

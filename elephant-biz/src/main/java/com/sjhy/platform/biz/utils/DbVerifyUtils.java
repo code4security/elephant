@@ -92,7 +92,7 @@ public class DbVerifyUtils implements DbVerify {
     }
 
     /**
-     * 验证ios玩家id是否存在
+     * 验证ios玩家id是否存在  存在 返回true
      * @param iosId
      * @param gameId
      * @param channelId
