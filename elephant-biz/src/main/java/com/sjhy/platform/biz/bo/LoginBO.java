@@ -368,11 +368,7 @@ public class LoginBO {
         playerLoginLogMapper.insert(record);
 
         // 获取服务器版本号
-        Server servers = new Server();
-        servers.setGameId(sc.getGameId());
-        servers.setServerId(sc.getServerId());
-        Server server = serverMapper.selectByServer(servers);
-
+        Server server = serverMapper.selectByServer(sc.getGameId(),sc.getServerId());
         // 埋点
         logger.info(sc.getChannelId(), redisService.getChUserId(sc.getPlayerId(), Integer.valueOf(sc.getGameId())), sc.getPlayerId()+"", sc.getGameId(), ip);
 

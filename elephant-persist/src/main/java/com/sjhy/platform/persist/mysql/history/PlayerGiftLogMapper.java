@@ -1,7 +1,11 @@
 package com.sjhy.platform.persist.mysql.history;
 
 import com.sjhy.platform.client.dto.history.PlayerGiftLog;
+import org.springframework.stereotype.Repository;
 
+import java.util.Map;
+
+@Repository
 public interface PlayerGiftLogMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,4 +24,11 @@ public interface PlayerGiftLogMapper {
 
     //检查激活码是否使用过
     PlayerGiftLog selectByGiftCode(PlayerGiftLog record);
+
+    /**
+     *  检查激活码是否使用过 2
+     * @param map
+     * @return
+     */
+    int ishas(Map<String, Object> map);
 }

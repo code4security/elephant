@@ -51,7 +51,7 @@ public class DbVerifyUtils implements DbVerify {
                 return true;
             }
             game = gameMapper.selectByGameId(gameId);
-            if (game != null){
+            if (game != null && game.getType() ==1){
                 redis.set("g_"+gameId,game,30);
                 return true;
             }else {
@@ -92,7 +92,7 @@ public class DbVerifyUtils implements DbVerify {
     }
 
     /**
-     * 验证ios玩家id是否存在
+     * 验证ios玩家id是否存在  存在 返回true
      * @param iosId
      * @param gameId
      * @param channelId
@@ -133,10 +133,16 @@ public class DbVerifyUtils implements DbVerify {
 
             if (roleId != null){
                 roleVO = playerRoleMapper.selectByRoleId(gameId, roleId);
+                if(roleVO == null){
+                    return null;
+                }
                 redis.set(roleVO.getRoleId()+"_r_"+gameId,roleVO,3600);
                 return roleVO;
             }else if (playerId != null){
                 roleVO = playerRoleMapper.selectByPlayerId(gameId, playerId);
+                if(roleVO ==null){
+                    return null;
+                }
                 redis.set(roleVO.getRoleId()+"_r_"+gameId,roleVO,3600);
                 redis.set(gameId+"r_"+playerId,roleVO.getRoleId(),300);
                 return roleVO;
@@ -254,7 +260,7 @@ public class DbVerifyUtils implements DbVerify {
      * @return
      */
     public PlayerGameOss isHasOssObjKey(PlayerGameOss ossObj){
-        PlayerGameOss playerGameOss = (PlayerGameOss) redis.get(ossObj.getRoleId()+"_ossObj_"+ossObj.getGameId());
+        PlayerGameOss playerGameOss = (PlayerGameOss) redis.get("ossObj_"+ossObj.getObjKey());
         if (playerGameOss !=null){
             return playerGameOss;
         }
@@ -262,7 +268,7 @@ public class DbVerifyUtils implements DbVerify {
         if (playerGameOss == null){
             return null;
         }
-        redis.set(playerGameOss.getRoleId()+"_ossObj_"+playerGameOss.getGameId(),playerGameOss,300);
+        redis.set("ossObj_"+ossObj.getObjKey(),playerGameOss,300);
         return playerGameOss;
     }
 

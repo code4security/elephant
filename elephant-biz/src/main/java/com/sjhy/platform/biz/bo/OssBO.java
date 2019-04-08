@@ -362,7 +362,9 @@ public class OssBO {
             playerGameOssMapper.updateByPrimaryKeySelective(playerGameOss);
         }
 
-        playerGameOss = dbVerifyUtils.isHasOssGame(sc.getGameId(),sc.getRoleId());
+
+        playerGameOss = playerGameOssMapper.selectByRoleIdAndObjKey(playerGameOss);
+//        playerGameOss = dbVerifyUtils.isHasOssGame(sc.getGameId(),sc.getRoleId());
 
         // 缓存更新（注释）
         /*if(cch != null){

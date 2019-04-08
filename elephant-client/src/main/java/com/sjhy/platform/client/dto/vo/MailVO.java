@@ -26,4 +26,7 @@ public class MailVO implements Serializable {
 	private int goodNum = -1;
 	private short status;
 	private String admiralAvatar;
+	public boolean isHaveGood() {
+		return goodNum > 0 ? true : false;
+	}
 }

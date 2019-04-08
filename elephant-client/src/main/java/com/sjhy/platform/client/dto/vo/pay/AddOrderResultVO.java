@@ -1,5 +1,8 @@
 package com.sjhy.platform.client.dto.vo.pay;
-/** 
+
+import java.io.Serializable;
+
+/**
  * <p>类说明:</p>
  * <p>文件名： AddOrderResultVO.java</p>
  * <p>创建人及时间：	宋士龙 2012-11-29</p>
@@ -8,7 +11,7 @@ package com.sjhy.platform.client.dto.vo.pay;
  * <p>修改时间：</p>
  * <p>修改描述：</p>
  **/
-public class AddOrderResultVO extends AbstractResultVO{
+public class AddOrderResultVO extends AbstractResultVO implements Serializable {
 
 	private String orderId;
 	private String sign;

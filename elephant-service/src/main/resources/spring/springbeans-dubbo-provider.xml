@@ -24,6 +24,8 @@
     <!-- provider's application name, used for tracing dependency relationship -->
     <dubbo:application name="platform-elephant"/>
 
+    <dubbo:provider timeout="5000" />
+
     <!-- use multicast registry center to export service -->
     <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
 

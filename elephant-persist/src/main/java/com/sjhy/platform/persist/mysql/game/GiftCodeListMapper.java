@@ -1,7 +1,9 @@
 package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.GiftCodeList;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface GiftCodeListMapper {
     int deleteByPrimaryKey(Integer id);
 

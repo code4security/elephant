@@ -19,5 +19,5 @@ public interface ServerMapper {
     int updateByPrimaryKey(Server record);
 
     //查询服务器
-    Server selectByServer(Server record);
+    Server selectByServer(@Param("gameId") String gameId,@Param("serverId") Integer serverId);
 }

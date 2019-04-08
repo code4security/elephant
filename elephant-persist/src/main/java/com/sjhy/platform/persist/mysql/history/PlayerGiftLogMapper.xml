@@ -151,4 +151,9 @@
         where gift_code = #{giftCode,jdbcType=VARCHAR}
         and game_id = #{gameId,jdbcType=VARCHAR}
     </select>
+    <select id="ishas" resultType="java.lang.Integer">
+        select count(*) from player_gift_log
+        where gift_list_id = #{giftlistid}
+        and role_id = #{iosId} and game_id = #{gameId} and channel_id = #{channelId}
+    </select>
 </mapper>
