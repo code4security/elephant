@@ -46,13 +46,13 @@ public class DbVerifyUtils implements DbVerify {
      */
     public boolean isHasGame(String gameId){
         try {
-            Game game = (Game) redis.get("g_"+gameId);
+            Game game = (Game) redis.get("g_+"+gameId);
             if (game != null){
                 return true;
             }
             game = gameMapper.selectByGameId(gameId);
             if (game != null && game.getType() ==1){
-                redis.set("g_"+gameId,game,30);
+                redis.set("g_+"+gameId,game,30);
                 return true;
             }else {
                 return false;
@@ -72,14 +72,14 @@ public class DbVerifyUtils implements DbVerify {
      */
     public boolean isHasChannel(String channelId,String gameId){
         try {
-            ChannelAndVersion channelAndVersion = (ChannelAndVersion) redis.get("c_"+channelId);
+            ChannelAndVersion channelAndVersion = (ChannelAndVersion) redis.get("c_+"+channelId);
             if (channelAndVersion != null){
                 return true;
             }
             channelAndVersion = channelAndVersionMapper.verifyChannel
                             (new ChannelAndVersion(null,channelId,gameId,null,null,null,null));
             if (channelAndVersion != null){
-                redis.set("c_"+channelId,channelAndVersion,30);
+                redis.set("c_+"+channelId,channelAndVersion,30);
                 return true;
             }else {
                 return false;

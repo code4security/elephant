@@ -88,8 +88,29 @@ public class GameController {
         return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosMsg.ERROR_CLIENT_VALUE.getInnerMsg(), "获取商品失败");
     }
 
+    @PostMapping(value = "/version")
+    public ResultDTO<String> VerifyVersion(@RequestParam String gameId, @RequestParam String channelId, @RequestParam float version) {
+        try {
+            if (dbVerify.isHasChannel(channelId, gameId)) {
+                ChannelAndVersion andVersion = (ChannelAndVersion) redis.get("c_+" + channelId);
+                if (andVersion == null) {
+                    return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(), IosCode.ERROR_UNKNOWN.getDesc(), "未知异常");
+                }
+                if (Float.valueOf(andVersion.getVersionNum()) > version) {
+                    return ResultDTO.getFailureResult(IosCode.UPDATE_NEW_VERSION.getErrorCode(), andVersion.getVersionDownload(),"版本需要进行更新");
+                } else {
+                    return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),"");
+                }
+            }
+            return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getErrorCode(), "游戏或渠道不存在");
+        } catch (Exception e) {
+            return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(), IosCode.ERROR_UNKNOWN.getDesc(), "未知异常");
+        }
+    }
+
     /**
      * 登录
+     *
      * @param gameId
      * @param channelId
      * @param userId    设备唯一id
@@ -266,6 +287,7 @@ public class GameController {
 
     /**
      * 使用激活码
+     *
      * @param iosId
      * @param gameId
      * @param channelId
@@ -275,21 +297,21 @@ public class GameController {
     @PostMapping("/uselipinma")
     public ResultDTO<Map<String, String>> useLPM(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId, @RequestParam String giftCode) {
         GiftCode codes = giftCodeMapper.selectByCode(giftCode);
-        if (codes == null){
-            return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "礼品码不存在");
+        if (codes == null) {
+            return ResultDTO.getFailureResult(IosCode.ERROR_GIFT_CODE.getErrorCode(), IosCode.ERROR_GIFT_CODE.getDesc(), "礼品码不存在");
         }
         Integer listId = codes.getGiftListId();
-        GiftCodeList giftCodeList=giftCodeListMapper.selectByPrimaryKey(listId);
-            //2丶判断礼品码是否存在
-        if (giftCodeList==null) {
-            return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "礼品码不存在");
+        GiftCodeList giftCodeList = giftCodeListMapper.selectByPrimaryKey(listId);
+        //2丶判断礼品码是否存在
+        if (giftCodeList == null) {
+            return ResultDTO.getFailureResult(IosCode.ERROR_GIFT_CODE.getErrorCode(), IosCode.ERROR_GIFT_CODE.getDesc(), "礼品码不存在");
         }
         //1丶判断玩家是否存在
         if (!dbVerify.isHasIos(iosId, gameId, channelId)) {
             return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "未找到玩家");
             //3丶判断礼品码是否过期  b  a
-        } else if (giftCodeMapper.expired(listId,giftCodeList.getBeginTime(),giftCodeList.getEndTime()) == 0) {
-            return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "礼品码已过期");//3丶判断礼品码是否过期  b  a
+        } else if (giftCodeMapper.expired(listId, giftCodeList.getBeginTime(), giftCodeList.getEndTime()) == 0) {
+            return ResultDTO.getFailureResult(IosCode.ERROR_GIFT_CODE.getErrorCode(), IosCode.ERROR_GIFT_CODE.getDesc(), "礼品码已过期");//3丶判断礼品码是否过期  b  a
         } else {
             //4丶判断礼品码使用log中是否存在数据
             PlayerGiftLog playerGiftLog = new PlayerGiftLog();
@@ -298,12 +320,12 @@ public class GameController {
             playerGiftLog.setGameId(gameId);
             playerGiftLog = playerGiftLogMapper.selectByUseGiftCode(playerGiftLog);
             if (playerGiftLog != null) {
-                return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "用户已使用过礼品码");
+                return ResultDTO.getFailureResult(IosCode.ERROR_GIFT_CODE.getErrorCode(), IosCode.ERROR_GIFT_CODE.getDesc(), "用户已使用过礼品码");
             } else {
                 //5丶礼品码的产品信息  1#20 2#111  ...等等  修改注册码状态  新加使用记录  向客户端发送结果
                 giftCodeMapper.updateByUse(giftCode);
 
-                playerGiftLog=new PlayerGiftLog();
+                playerGiftLog = new PlayerGiftLog();
                 playerGiftLog.setGiftCode(giftCode);
                 playerGiftLog.setGiftListId(listId);
                 playerGiftLog.setRoleId(iosId);
@@ -315,8 +337,8 @@ public class GameController {
                 playerGiftLogMapper.insertSelective(playerGiftLog);
                 Map<String, String> concurrentHashMap = new ConcurrentHashMap<>();
                 String[] split = giftCodeList.getGiftRewardId().split("&");
-                for(String split2 :  split){
-                    concurrentHashMap.put(split2.split("#")[0],split2.split("#")[1]);
+                for (String split2 : split) {
+                    concurrentHashMap.put(split2.split("#")[0], split2.split("#")[1]);
                 }
                 logger.info("激活码已被使用!!!");
                 return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), concurrentHashMap);

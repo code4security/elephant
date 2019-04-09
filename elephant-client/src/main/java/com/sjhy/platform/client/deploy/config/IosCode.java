@@ -14,7 +14,9 @@ public enum IosCode {
     ERROR_NOT_NOTIFY("10004","暂无公告"),
     ERROR_CLIENT_VALUE("10005","客户端传送参数有误"),
     ERROR_FAILURE("10006","验证支付参数失败"),
-    SEND_MAIL_GIFT("10007","发送邮件奖励");
+    SEND_MAIL_GIFT("10007","发送邮件奖励"),
+    ERROR_GIFT_CODE("10008","兑换码无效"),
+    UPDATE_NEW_VERSION("10009","版本更新");
 
     private String errorCode;
     private String desc;
