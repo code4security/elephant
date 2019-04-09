@@ -5,6 +5,7 @@ import com.sjhy.platform.client.deploy.config.IosMsg;
 import com.sjhy.platform.biz.redis.RedisUtil;
 import com.sjhy.platform.biz.utils.DbVerifyUtils;
 import com.sjhy.platform.biz.utils.StringUtils;
+import com.sjhy.platform.client.deploy.config.ModuleConfig;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.fixed.GiftCode;
 import com.sjhy.platform.client.dto.game.*;
@@ -58,6 +59,8 @@ public class GameController {
     private GiftCodeListMapper giftCodeListMapper;
     @Autowired
     private ResultVo resultVo;
+    @Autowired
+    private ModuleSwitchMapper moduleSwitchMapper;
 
     /**
      * 获取全部商品
@@ -88,6 +91,13 @@ public class GameController {
         return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosMsg.ERROR_CLIENT_VALUE.getInnerMsg(), "获取商品失败");
     }
 
+    /**
+     * 验证版本
+     * @param gameId
+     * @param channelId
+     * @param version
+     * @return
+     */
     @PostMapping(value = "/version")
     public ResultDTO<String> VerifyVersion(@RequestParam String gameId, @RequestParam String channelId, @RequestParam float version) {
         try {
@@ -106,6 +116,29 @@ public class GameController {
         } catch (Exception e) {
             return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(), IosCode.ERROR_UNKNOWN.getDesc(), "未知异常");
         }
+    }
+
+    /**
+     * 开启热更新板块
+     * @param gameId
+     * @param channelId
+     * @return
+     */
+    @GetMapping(value = "/hotUpdate")
+    public ResultDTO<Boolean> HotUpdate(@RequestParam String gameId, @RequestParam String channelId){
+        if (dbVerify.isHasChannel(channelId,gameId)){
+            ModuleSwitch module = moduleSwitchMapper.selectByModule(new ModuleSwitch(null,gameId,channelId,ModuleConfig.HOT_UPDATE.getModule(),null));
+            if (module == null){
+                return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(),IosCode.ERROR_UNKNOWN.getDesc(),"未找到更新模块");
+            }
+            // 判断如果是0表示不更新，1表示更新
+            if (module.getStatus()){
+                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),true);
+            }else {
+                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),false);
+            }
+        }
+        return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(),IosCode.ERROR_CLIENT_VALUE.getDesc(),"验证游戏或渠道失败");
     }
 
     /**
