@@ -235,7 +235,7 @@ public class GameController {
                     // 更新查询
                     mailList = mailMapper.selectByRoleId(iosId, gameId, 0, 30);
                     // 返回邮件列表
-                    return ResultDTO.getSuccessResult(IosCode.SEND_MAIL_GIFT.getErrorCode(), mailList);
+                    return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), mailList);
                 } else {
                     // 没有奖励
                     return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), null);
