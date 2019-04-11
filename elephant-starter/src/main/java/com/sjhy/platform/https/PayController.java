@@ -143,16 +143,16 @@ public class PayController {
             String url = certificateUrl;    // 苹果服务器地址
             boolean bol = false; // 返回参数判断
             int status = -1;      // 苹果返回支付状态
-            final String certificateCode = receipt;     // 购买凭证
 
             // 处理请求，循环2次判断，如果返回ios状态值为21007，使用测试地址再次连接
+            logger.info(gameId+"=============[][][0][][]:url-"+url+"===========code-"+receipt);
             int j = 0;
             try {
                 while (j < 2) {
                     j++;
                     // 发送请求
-                    String receipt_data = sendHttpsCoon(url, certificateCode);
-                    logger.info("=============[][][1][][]" + receipt_data);
+                    String receipt_data = sendHttpsCoon(url, receipt);
+                    logger.info(gameId+"=============[][][1][][]" + receipt_data);
                     // 解析最外层json
                     JSONObject job = JSONObject.parseObject(receipt_data);
                     // 获取状态值并进行判断
@@ -304,7 +304,7 @@ public class PayController {
      * @param code
      * @return
      */
-    private String sendHttpsCoon(@RequestParam String url, @RequestParam String code) {
+    private String sendHttpsCoon(String url, String code) {
         if (url.isEmpty()) {
             return null;
         }

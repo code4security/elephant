@@ -26,7 +26,10 @@ import javax.net.ssl.X509TrustManager;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
@@ -75,6 +78,7 @@ public class IapController {
     @RequestMapping(value = "/setIapCertificate",method = RequestMethod.POST)
     public String setIapCertificate(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
                                                @RequestParam String gameId, @RequestParam String channelId/*, @RequestParam BigDecimal rmb*/) {
+
         //验证传参是否为空
         if (dbVerify.isHasIos(iosId,gameId,channelId) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id) && StringUtils.isNotEmpty(transaction_id)) {
 
@@ -91,7 +95,7 @@ public class IapController {
             // 如果未查询到该订单，则插入数据库
             if (res == null){
                 playerPayLogMapper.insert(new PlayerPayLog(null,iosId,gameId,channelId,product_id,new Date(),
-                        null,null,null,transaction_id,4,null,receipt,null));
+                        BigDecimal.valueOf(0),null,null,transaction_id,4,null,receipt,null));
             }
             // 更新查询支付信息数据
             payLog = playerPayLogMapper.selectByIosPayLog(gameId,iosId,transaction_id);

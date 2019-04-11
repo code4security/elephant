@@ -1,8 +1,10 @@
 package com.sjhy.platform.test;
 
+import com.sjhy.platform.sanguo.IapController;
+
 public class ios {
     public static void main(String[] args) {
-        String a = "1.0";
-        System.out.println(Float.valueOf(a));
+
     }
+
 }
