@@ -41,7 +41,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping("/pay")
@@ -218,101 +220,97 @@ public class PayController {
         //验证传参是否为空
         if (dbVerify.isHasIos(iosId, gameId, channelId) && StringUtils.isNotEmpty(receipt) && StringUtils.isNotEmpty(product_id) && StringUtils.isNotEmpty(transaction_id)) {
 
-            // 验证商品
-            PayGoods payGoods = payGoodsMapper.selectByGChannelId(product_id, channelId, gameId);
-            if (payGoods == null)
-                return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "购买商品不存在");
-
-            // md5加密购买凭证
-            String vif = null;
-            try {
-                vif = IosMD5.md5(receipt, md5Key);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // 购买商品为消耗型商品时，凭证是否存在
-            PlayerPayLog payLog = playerPayLogMapper.selectVerifyReceipt(gameId, receipt);
-            if (payLog != null && payGoods.getType() != 2 && payGoods.getType() != 3)
-                return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "凭证已存在");
-
             // 查询订单
-            payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
-            // 判断订单是否存在，如果状态值不为4则返回
-            if (payLog != null && payLog.getPayStatus() != 4) {
-                if (payGoods.getType() != 2 && payGoods.getType() != 3) {
-                    return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "订单已存在");
-                }
-            } else if (payLog == null) {
-                // 如果未查询到该订单，则插入数据库
-                playerPayLogMapper.insert(new PlayerPayLog(null, iosId, gameId, channelId, product_id, new Date(),
-                        rmb, null, null, transaction_id, 4, null, receipt, vif));
-                // 更新查询支付信息数据
-                payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
+            PlayerPayLog payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
+            if (payLog != null) {
+                return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "订单已存在");
             }
-            // 查询游戏包名
-            Game game = gameMapper.selectByGameId(gameId);
-            String gamePackage = game.getNameEn();
 
             // 初始化
             String url = certificateUrl;    // 苹果服务器地址
             boolean bol = false; // 返回参数判断
             int status = -1;      // 苹果返回支付状态
-
-            // 处理请求，循环2次判断，如果返回ios状态值为21007，使用测试地址再次连接
-            logger.info(gameId + "=============[][][0][][]:url-" + url + "===========code-" + receipt);
-            int j = 0;
             try {
-                while (j < 2) {
-                    j++;
+                // 查询商品类型
+                PayGoods good = payGoodsMapper.selectByGChannelId(product_id, channelId, gameId);
+                if (good == null)
+                    return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "商品不存在");
+
+                // 查询是否存在加密后的凭证
+                String md5Receipt = playerPayLogMapper.selectVerifyReceipt(gameId, IosMD5.md5(receipt, md5Key)).getIosVerify();
+                if (good.getType() != 2 && good.getType() != 3 && md5Receipt != null)
+                    return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "消耗型商品凭证已存在");
+
+                // 初始化插入订单
+                playerPayLogMapper.insert(new PlayerPayLog(null, iosId, gameId, channelId, product_id, new Date(),
+                        rmb, null, null, transaction_id, 4, null, receipt, md5Receipt));
+                // 更新查询
+                payLog = playerPayLogMapper.selectByIosPayLog(gameId, iosId, transaction_id);
+
+                // 处理请求，循环2次判断，如果返回ios状态值为21007，使用测试地址再次连接
+                for (int k = 0; k < 2; k++) {
                     // 发送请求
                     String receipt_data = sendHttpsCoon(url, receipt);
                     logger.info(gameId + "=============[][][1][][]" + receipt_data);
-                    // 解析最外层json
+                    // 1. 解析最外层json
                     JSONObject job = JSONObject.parseObject(receipt_data);
-                    // 获取状态值并进行判断
+                    // 1.1 获取status
                     status = (int) job.get("status");
+                    // 1.2 判断status，等于0表示成功
                     if (status == 0) {
-                        // 解析receipt层json
+                        // 2. 解析receipt
                         JSONObject jobReceipt = job.getJSONObject("receipt");
-                        // 判断是否存在in_app
-                        if (gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid")))) {
-                            // 验证商品
-                            bol = verifyGoods(iosId, gameId, channelId, payGoods);
-                        } else {
-                            return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "游戏包不存在");
-                        }
-                        JSONObject jobIn = jobReceipt.getJSONObject("in_app");
-                        if (jobIn != null) {
-                            // 遍历in_app
-                            for (int i = 1; i < jobIn.size(); i++) {
-                                // 判断商品id和订单号是否相同
-                                if (jobIn.get("transaction_id").equals(transaction_id) && jobIn.get("product_id ").equals(product_id)) {
-                                    bol = true;
-                                    break;
+                        if (jobReceipt != null) {
+                            String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
+                            // 2.1 验证游戏包名是否正确
+                            if (gamePackage == jobReceipt.get("bid")) {
+                                // 3. 解析in_app
+                                String jobIn = String.valueOf(jobReceipt.get("in_app"));
+                                logger.info("=============[][][3][][]" + jobIn);
+                                List<Map<String, Object>> jobApp = JSONObject.parseObject(jobIn, List.class);
+                                if (jobApp != null) {
+                                    // 3.1 遍历in_app集合
+                                    for (Map<String, Object> jobMap : jobApp) {
+                                        // 验证订单是否相同
+                                        if (transaction_id.equalsIgnoreCase(String.valueOf(jobMap.get("transaction_id")))) {
+                                            // 验证商品是否相同
+                                            if (product_id.equalsIgnoreCase(String.valueOf(jobMap.get("product_id")))) {
+                                                // 验证商品，更新数据
+                                                bol = verifyGoods(iosId, gameId, channelId, good);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    // 不存在in_app，状态值改为30000
+                                    status = 30000;
+                                    if (transaction_id.equalsIgnoreCase(String.valueOf(jobReceipt.get("transaction_id")))) {
+                                        // 验证商品是否相同
+                                        if (product_id.equalsIgnoreCase(String.valueOf(jobReceipt.get("product_id")))) {
+                                            // 验证商品，更新数据
+                                            bol = verifyGoods(iosId, gameId, channelId, good);
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
-                        } else {
-                            status = 30000;// 没有in_app数值
-                            if (product_id.equalsIgnoreCase(String.valueOf(jobReceipt.get("product_id"))) && transaction_id.equalsIgnoreCase(String.valueOf("transaction_id"))){
-                                bol = true;
-                                break;
-                            }else {
-                                return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "商品和订单验证失败");
+                            } else {
+                                return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "游戏包不存在");
                             }
                         }
                     } else if (status == 21007) {
+                        // 4. 如果状态值等于21007，更换请求url再次访问
                         url = certificateUrlTest;
                         continue;
                     }
                     break;
                 }
-                // 判断是否成功
+                // 验证是否成功
                 if (bol == true) {
                     // 修改支付状态，成功
                     updatePlayerPayLogStatus(payLog.getId(), 5, String.valueOf(status));
                     // 解析物品
-                    String[] prop = payGoods.getProp().split("&");
-                    Map<String, String> propMap = new HashMap<>();
+                    String[] prop = good.getProp().split("&");
+                    Map<String, String> propMap = new ConcurrentHashMap<>();
                     for (int k = 0; k < prop.length; k++) {
                         String[] props = prop[k].split("#");
                         propMap.put(props[0], props[1]);
@@ -327,7 +325,7 @@ public class PayController {
                 return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(), IosCode.ERROR_UNKNOWN.getDesc(), "支付失败");
             }
         }
-        return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "支付失败");
+        return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "支付失败，客户端参数有误");
     }
 
     /**
@@ -346,6 +344,7 @@ public class PayController {
 
     /**
      * 验证商品,物品格式：物品id1#物品数量&物品id2#物品数量
+     * 修改奖牌
      *
      * @param iosId
      * @param gameId

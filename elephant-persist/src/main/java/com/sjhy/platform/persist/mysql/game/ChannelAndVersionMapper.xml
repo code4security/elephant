@@ -137,6 +137,6 @@
             channel_id
         from channel_and_version
         where game_id = #{gameId,jdbcType=VARCHAR}
-        and channel_info = #{channelInfo,jdbcType=VARCHAR}
+        and channel_info like "%"#{channelInfo,jdbcType=VARCHAR}"%"
     </select>
 </mapper>
