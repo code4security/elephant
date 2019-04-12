@@ -95,7 +95,7 @@ public class PayController {
     };
 
     /**
-     * 接收iOS端发过来的购买凭证
+     * 接收iOS端发过来的购买凭证，不进行验证in_app
      *
      * @param iosId          设备唯一id
      * @param receipt        购买凭证
@@ -213,7 +213,14 @@ public class PayController {
         }
         return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "支付失败");
     }
-
+    /**
+     * 接收iOS端发过来的购买凭证，验证in_app
+     *
+     * @param iosId          设备唯一id
+     * @param receipt        购买凭证
+     * @param product_id     商品名称
+     * @param transaction_id 订单号
+     */
     @RequestMapping(value = "/iosApp", method = RequestMethod.POST)
     public ResultDTO<ResultVo> iosPay(@RequestParam Long iosId, @RequestParam String receipt, @RequestParam String product_id, @RequestParam String transaction_id,
                                       @RequestParam String gameId, @RequestParam String channelId, @RequestParam BigDecimal rmb) {
@@ -237,9 +244,13 @@ public class PayController {
                     return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "商品不存在");
 
                 // 查询是否存在加密后的凭证
-                String md5Receipt = playerPayLogMapper.selectVerifyReceipt(gameId, IosMD5.md5(receipt, md5Key)).getIosVerify();
-                if (good.getType() != 2 && good.getType() != 3 && md5Receipt != null)
-                    return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "消耗型商品凭证已存在");
+                String md5Receipt = IosMD5.md5(receipt, md5Key);
+                if (good.getType() != 2 && good.getType() != 3){
+                    payLog = playerPayLogMapper.selectVerifyReceipt(gameId, md5Receipt);
+                    if (payLog != null){
+                        return ResultDTO.getFailureResult(IosCode.ERROR_FAILURE.getErrorCode(), IosCode.ERROR_FAILURE.getDesc(), "消耗型商品凭证已存在");
+                    }
+                }
 
                 // 初始化插入订单
                 playerPayLogMapper.insert(new PlayerPayLog(null, iosId, gameId, channelId, product_id, new Date(),
@@ -263,7 +274,7 @@ public class PayController {
                         if (jobReceipt != null) {
                             String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
                             // 2.1 验证游戏包名是否正确
-                            if (gamePackage == jobReceipt.get("bid")) {
+                            if (gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid")))) {
                                 // 3. 解析in_app
                                 String jobIn = String.valueOf(jobReceipt.get("in_app"));
                                 logger.info("=============[][][3][][]" + jobIn);
@@ -364,11 +375,11 @@ public class PayController {
                     break;
                 case 2: // 去广告
                     playerIosMapper.updateByPrimaryKeySelective
-                            (new PlayerIos(iosId, null, null, null, null, null, null, null, new Date()));
+                            (new PlayerIos(iosId, null, null, null, null, null, null, null, new Date(),null));
                     break;
                 case 3: // 月卡
                     playerIosMapper.updateByPrimaryKeySelective
-                            (new PlayerIos(iosId, null, null, null, null, null, new Date(), null, null));
+                            (new PlayerIos(iosId, null, null, null, null, null, new Date(), null, null,null));
                     break;
                 default:
                     return true;
@@ -389,19 +400,24 @@ public class PayController {
      * @param rmbMedal
      */
     private void updateGold(Long iosId, String gameId, String channelId, String rmbMedal) {
-        // 初始化
-        GameContent gameContent = new GameContent();
-        gameContent.setRoleId(iosId);
-        gameContent.setGameId(gameId);
-        gameContent.setChannelId(channelId);
-        // 查询
-        gameContent = gameContentMapper.selectByRole(gameContent);
-        // 赋值
-        gameContent.setLastMedal(Integer.valueOf(gameContent.getLastMedal() + Integer.valueOf(rmbMedal)));
-        gameContent.setRmbMedal(Integer.valueOf(gameContent.getRmbMedal() + Integer.valueOf(rmbMedal)));
-        gameContent.setTotalMedal(Integer.valueOf(gameContent.getTotalMedal() + Integer.valueOf(rmbMedal)));
-        // 修改
-        gameContentMapper.updateByPrimaryKeySelective(gameContent);
+        try {
+            // 初始化
+            GameContent gameContent = new GameContent();
+            gameContent.setRoleId(iosId);
+            gameContent.setGameId(gameId);
+            gameContent.setChannelId(channelId);
+            // 查询
+            gameContent = gameContentMapper.selectByRole(gameContent);
+            // 赋值
+            gameContent.setLastMedal(Integer.valueOf(gameContent.getLastMedal() + Integer.valueOf(rmbMedal)));
+            gameContent.setRmbMedal(Integer.valueOf(gameContent.getRmbMedal() + Integer.valueOf(rmbMedal)));
+            gameContent.setTotalMedal(Integer.valueOf(gameContent.getTotalMedal() + Integer.valueOf(rmbMedal)));
+            // 修改
+            gameContentMapper.updateByPrimaryKeySelective(gameContent);
+        }catch (Exception e){
+            logger.info("==========[][][3][][]玩家金币状态修改失败:" + e.getMessage());
+        }
+
     }
 
     /**

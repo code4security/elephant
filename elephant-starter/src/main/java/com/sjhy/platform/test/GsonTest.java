@@ -41,12 +41,14 @@ public class GsonTest {
         System.out.println(jobRece);
         System.out.println(jobRece.get("original_transaction_id"));
         System.out.println(jobRece.get("in_app"));
-        String jobIn = String.valueOf(jobRece.get("in_app"));
+        String jobIn = String.valueOf(jobRece.get("in_apps"));
         List<Map<String, Object>> listKylinTable1 = JSONObject.parseObject(jobIn, List.class);
-        for (Map<String, Object> jobs:listKylinTable1){
-            System.out.println(jobs.get("quantity"));
-        }
         System.out.println(listKylinTable1);
+        if (listKylinTable1 != null){
+            for (Map<String, Object> jobs:listKylinTable1){
+                System.out.println(jobs.get("quantity"));
+            }
+        }
     }
 
 }

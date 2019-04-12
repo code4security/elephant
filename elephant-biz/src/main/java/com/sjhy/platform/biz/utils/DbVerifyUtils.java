@@ -101,7 +101,7 @@ public class DbVerifyUtils implements DbVerify {
     public boolean isHasIos(Long iosId, String gameId, String channelId) {
         try {
             PlayerIos playerIos = playerIosMapper.selectByGameId
-                    (new PlayerIos(iosId,gameId,channelId,null,null,null,null,null,null));
+                    (new PlayerIos(iosId,gameId,channelId,null,null,null,null,null,null,null));
             if (playerIos != null){
                 return true;
             }else {

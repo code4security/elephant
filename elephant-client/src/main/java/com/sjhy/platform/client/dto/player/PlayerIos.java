@@ -64,4 +64,9 @@ public class PlayerIos implements Serializable {
      * 去广告创建时间
      */
     private Date adTime;
+
+    /**
+     * 是否上传存档
+     */
+    private Boolean putArchive;
 }

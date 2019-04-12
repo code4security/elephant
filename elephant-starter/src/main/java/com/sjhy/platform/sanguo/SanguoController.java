@@ -5,7 +5,6 @@ import com.sjhy.platform.biz.redis.RedisUtil;
 import com.sjhy.platform.biz.utils.DbVerifyUtils;
 import com.sjhy.platform.biz.utils.StringUtils;
 import com.sjhy.platform.client.dto.common.ResultDTO;
-import com.sjhy.platform.client.dto.game.GameContent;
 import com.sjhy.platform.client.dto.game.GameNotify;
 import com.sjhy.platform.client.dto.game.Mail;
 import com.sjhy.platform.client.dto.game.PayGoods;
@@ -94,18 +93,21 @@ public class SanguoController {
         // 判断传入的参数是否为空
         if(dbVerify.isHasGame(gameId) && dbVerify.isHasChannel(channelId,gameId) && StringUtils.isNotEmpty(userId)){
             //查询数据库是否存在改玩家
-            playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null,null,null,null));
+            playerIos = playerIosMapper.selectByClientId
+                    (new PlayerIos(null,gameId,channelId,userId,null,null,null,null,null,null));
             if (playerIos == null){
                 // 查询数据库不存在该玩家，创建新角色
-                playerIosMapper.insert(new PlayerIos(null,gameId,channelId,userId,new Date(),new Date(),null,null,null));
+                playerIosMapper.insert(new PlayerIos
+                        (null,gameId,channelId,userId,new Date(),new Date(),null,null,null,null));
                 // 更新查询
-                playerIos = playerIosMapper.selectByClientId(new PlayerIos(null,gameId,channelId,userId,null,null,null,null,null));
+                playerIos = playerIosMapper.selectByClientId
+                        (new PlayerIos(null,gameId,channelId,userId,null,null,null,null,null,null));
             }else {
                 // 判断玩家是否被封禁
                 if (ban(playerIos.getIosId(),gameId,channelId)){
                     // 返回true表示没有被封
                     playerIosMapper.updateByPrimaryKeySelective
-                            (new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date(),null,null,null));
+                            (new PlayerIos(playerIos.getIosId(),null,null,null,null,new Date(),null,null,null,null));
                 }else {
                     return IosCode.ERROR_BAN.getErrorCode()+"@"+playerIos.getIosId();
                 }

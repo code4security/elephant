@@ -93,6 +93,7 @@ public class GameController {
 
     /**
      * 验证版本
+     *
      * @param gameId
      * @param channelId
      * @param version
@@ -107,9 +108,9 @@ public class GameController {
                     return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(), IosCode.ERROR_UNKNOWN.getDesc(), "未知异常");
                 }
                 if (Float.valueOf(andVersion.getVersionNum()) > version) {
-                    return ResultDTO.getFailureResult(IosCode.UPDATE_NEW_VERSION.getErrorCode(), andVersion.getVersionDownload(),"版本需要进行更新");
+                    return ResultDTO.getFailureResult(IosCode.UPDATE_NEW_VERSION.getErrorCode(), andVersion.getVersionDownload(), "版本需要进行更新");
                 } else {
-                    return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),"");
+                    return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), "");
                 }
             }
             return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getErrorCode(), "游戏或渠道不存在");
@@ -120,25 +121,26 @@ public class GameController {
 
     /**
      * 开启热更新板块
+     *
      * @param gameId
      * @param channelId
      * @return
      */
     @GetMapping(value = "/hotUpdate")
-    public ResultDTO<Boolean> HotUpdate(@RequestParam String gameId, @RequestParam String channelId){
-        if (dbVerify.isHasChannel(channelId,gameId)){
-            ModuleSwitch module = moduleSwitchMapper.selectByModule(new ModuleSwitch(null,gameId,channelId,ModuleConfig.HOT_UPDATE.getModule(),null));
-            if (module == null){
-                return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(),IosCode.ERROR_UNKNOWN.getDesc(),"未找到更新模块");
+    public ResultDTO<Boolean> HotUpdate(@RequestParam String gameId, @RequestParam String channelId) {
+        if (dbVerify.isHasChannel(channelId, gameId)) {
+            ModuleSwitch module = moduleSwitchMapper.selectByModule(new ModuleSwitch(null, gameId, channelId, ModuleConfig.HOT_UPDATE.getModule(), null));
+            if (module == null) {
+                return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(), IosCode.ERROR_UNKNOWN.getDesc(), "未找到更新模块");
             }
             // 判断如果是0表示不更新，1表示更新
-            if (module.getStatus()){
-                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),true);
-            }else {
-                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),false);
+            if (module.getStatus()) {
+                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), true);
+            } else {
+                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), false);
             }
         }
-        return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(),IosCode.ERROR_CLIENT_VALUE.getDesc(),"验证游戏或渠道失败");
+        return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "验证游戏或渠道失败");
     }
 
     /**
@@ -156,12 +158,15 @@ public class GameController {
         // 判断传入的参数是否为空
         if (dbVerify.isHasGame(gameId) && dbVerify.isHasChannel(channelId, gameId) && StringUtils.isNotEmpty(userId)) {
             //查询数据库是否存在改玩家
-            playerIos = playerIosMapper.selectByClientId(new PlayerIos(null, gameId, channelId, userId, null, null, null, null, null));
+            playerIos = playerIosMapper.selectByClientId
+                    (new PlayerIos(null, gameId, channelId, userId, null, null, null, null, null, null));
             if (playerIos == null) {
                 // 查询数据库不存在该玩家，创建新角色
-                playerIosMapper.insert(new PlayerIos(null, gameId, channelId, userId, new Date(), new Date(), null, null, null));
+                playerIosMapper.insert
+                        (new PlayerIos(null, gameId, channelId, userId, new Date(), new Date(), null, null, null, null));
                 // 更新查询
-                playerIos = playerIosMapper.selectByClientId(new PlayerIos(null, gameId, channelId, userId, null, null, null, null, null));
+                playerIos = playerIosMapper.selectByClientId
+                        (new PlayerIos(null, gameId, channelId, userId, null, null, null, null, null, null));
                 // 创建角色物品信息
                 GameContent gameContent = new GameContent();
                 gameContent.setRoleId(playerIos.getIosId());
@@ -173,14 +178,28 @@ public class GameController {
                 if (ban(playerIos.getIosId(), gameId, channelId)) {
                     // 返回true表示没有被封
                     playerIosMapper.updateByPrimaryKeySelective
-                            (new PlayerIos(playerIos.getIosId(), null, null, null, null, new Date(), null, null, null));
+                            (new PlayerIos
+                                    (playerIos.getIosId(), null, null, null, null, new Date(), null, null, null, null));
                 } else {
                     return ResultDTO.getFailureResult(IosCode.ERROR_BAN.getErrorCode(), String.valueOf(playerIos.getIosId()), "该账号已经封禁");
                 }
             }
-            return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), resultVo.getLogin(playerIos.getIosId(), playerIos.getMonthlyCard(), playerIos.getAdTime()));
+            return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), resultVo.getLogin(playerIos.getIosId(), playerIos.getMonthlyCard(), playerIos.getAdTime(), playerIos.getPutArchive()));
         }
         return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "登录失败");
+    }
+
+    /**
+     * 获取服务器当前时间戳
+     * @return
+     */
+    @GetMapping("/serverTime")
+    public ResultDTO<String> serverTime(){
+        return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),String.valueOf(System.currentTimeMillis()));
+    }
+    @GetMapping("/serverDate")
+    public String serverDate(){
+        return String.valueOf(System.currentTimeMillis());
     }
 
     /**

@@ -24,13 +24,14 @@ public class ResultVo {
     private Long monthlyTime;
     private Long endMonthlyTime;
     private Long adTime;
+    private Boolean putArchive;
 
     // 购买商品返回参数
     private String goodName;
     private Map<String,String> propMap;
 
     // 登录
-    public ResultVo getLogin(Long iosId, Date monthlyTime, Date adTime){
+    public ResultVo getLogin(Long iosId, Date monthlyTime, Date adTime, Boolean putArchive){
         resultVo = new ResultVo();
         resultVo.setIosId(iosId);
         resultVo.setServerDate(System.currentTimeMillis());
@@ -45,6 +46,7 @@ public class ResultVo {
             resultVo.setAdTime(adTime.getTime());
         }
         resultVo.setEndMonthlyTime(null);
+        resultVo.setPutArchive(putArchive);
         return resultVo;
     }
 

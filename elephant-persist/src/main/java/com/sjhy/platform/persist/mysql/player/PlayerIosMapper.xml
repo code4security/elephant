@@ -12,11 +12,12 @@
         <result column="monthly_card" property="monthlyCard" jdbcType="TIMESTAMP" />
         <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
         <result column="ad_time" property="adTime" jdbcType="TIMESTAMP" />
+        <result column="put_archive" property="putArchive" jdbcType="BIT" />
     </resultMap>
 
     <sql id="Base_Column_List" >
         ios_id, game_id, channel_id, client_id, create_time, update_time, monthly_card, end_time, 
-        ad_time
+        ad_time, put_archive
     </sql>
 
     <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -34,12 +35,12 @@
     <insert id="insert" parameterType="com.sjhy.platform.client.dto.player.PlayerIos" >
         insert into player_ios (ios_id, game_id, channel_id, 
             client_id, create_time, update_time, 
-            monthly_card, end_time, ad_time
-            )
+            monthly_card, end_time, ad_time, 
+            put_archive)
         values (#{iosId,jdbcType=BIGINT}, #{gameId,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
             #{clientId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-            #{monthlyCard,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{adTime,jdbcType=TIMESTAMP}
-            )
+            #{monthlyCard,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{adTime,jdbcType=TIMESTAMP}, 
+            #{putArchive,jdbcType=BIT})
     </insert>
 
     <insert id="insertSelective" parameterType="com.sjhy.platform.client.dto.player.PlayerIos" >
@@ -72,6 +73,9 @@
             <if test="adTime != null" >
                 ad_time,
             </if>
+            <if test="putArchive != null" >
+                put_archive,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="iosId != null" >
@@ -100,6 +104,9 @@
             </if>
             <if test="adTime != null" >
                 #{adTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="putArchive != null" >
+                #{putArchive,jdbcType=BIT},
             </if>
         </trim>
     </insert>
@@ -131,6 +138,9 @@
             <if test="adTime != null" >
                 ad_time = #{adTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="putArchive != null" >
+                put_archive = #{putArchive,jdbcType=BIT},
+            </if>
         </set>
         where ios_id = #{iosId,jdbcType=BIGINT}
     </update>
@@ -144,7 +154,8 @@
             update_time = #{updateTime,jdbcType=TIMESTAMP},
             monthly_card = #{monthlyCard,jdbcType=TIMESTAMP},
             end_time = #{endTime,jdbcType=TIMESTAMP},
-            ad_time = #{adTime,jdbcType=TIMESTAMP}
+            ad_time = #{adTime,jdbcType=TIMESTAMP},
+            put_archive = #{putArchive,jdbcType=BIT}
         where ios_id = #{iosId,jdbcType=BIGINT}
     </update>
 
