@@ -35,6 +35,6 @@ public interface PlayerPayLogMapper {
     // ios查询玩家订单
     PlayerPayLog selectByIosPayLog(@Param("gameId") String gameId, @Param("roleId") Long roleId, @Param("orderId") String orderId);
 
-    // 验证ios购买凭证 取后100位
-    PlayerPayLog selectVerifyReceipt(@Param("gameId") String gameId, @Param(("iosReceipt")) String iosReceipt);
+    // 查询加密后的凭证是否存在
+    PlayerPayLog selectVerifyReceipt(@Param("gameId") String gameId, @Param(("iosVerify")) String iosVerify);
 }

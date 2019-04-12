@@ -256,5 +256,6 @@
         from player_pay_log
         where game_id = #{gameId,jdbcType=VARCHAR}
         and ios_verify = #{iosVerify,jdbcType=VARCHAR}
+        limit 1
     </select>
 </mapper>
