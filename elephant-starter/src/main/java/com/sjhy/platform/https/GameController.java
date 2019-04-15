@@ -270,6 +270,9 @@ public class GameController {
                 if (mailList != null) {
                     // 遍历邮件集合
                     for (int i = 0; i < mailList.size(); i++) {
+                        if(!mailList.get(i).getChannelId().equalsIgnoreCase(channelId) && !mailList.get(i).getChannelId().equalsIgnoreCase("-1")){
+                            return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "获取奖励失败,渠道有误");
+                        }
                         // 邮件状态值判断，如果小于3进行状态值+1.如果大于等于3，直接删除该邮件
                         if (mailList.get(i).getStatus() < 5) {
                             mail.setId(mailList.get(i).getId());
@@ -315,7 +318,7 @@ public class GameController {
      * @return
      */
     @PostMapping("/money")
-    public ResultDTO<Integer> pdateMedal(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId,
+    public ResultDTO<Integer> updateMedal(@RequestParam Long iosId, @RequestParam String gameId, @RequestParam String channelId,
                                          @RequestParam Integer lastMedal, @RequestParam Integer freeMedal, @RequestParam Integer spendMedal, @RequestParam Integer rmbMedal) {
         if (dbVerify.isHasIos(iosId, gameId, channelId)) {
             // 初始化
@@ -354,6 +357,9 @@ public class GameController {
         }
         Integer listId = codes.getGiftListId();
         GiftCodeList giftCodeList = giftCodeListMapper.selectByPrimaryKey(listId);
+        if (!giftCodeList.getChannelId().equalsIgnoreCase(channelId) && !giftCodeList.getChannelId().equalsIgnoreCase("-1")){
+            return ResultDTO.getFailureResult(IosCode.ERROR_GIFT_CODE.getErrorCode(), IosCode.ERROR_GIFT_CODE.getDesc(), "礼品码不存在,渠道错误");
+        }
         //2丶判断礼品码是否存在
         if (giftCodeList == null) {
             return ResultDTO.getFailureResult(IosCode.ERROR_GIFT_CODE.getErrorCode(), IosCode.ERROR_GIFT_CODE.getDesc(), "礼品码不存在");

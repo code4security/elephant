@@ -4,9 +4,9 @@ package com.sjhy.platform.https;
  */
 
 import com.alibaba.fastjson.JSONObject;
-import com.sjhy.platform.client.deploy.config.IosCode;
 import com.sjhy.platform.biz.redis.RedisUtil;
 import com.sjhy.platform.biz.utils.DbVerifyUtils;
+import com.sjhy.platform.client.deploy.config.IosCode;
 import com.sjhy.platform.client.dto.common.ResultDTO;
 import com.sjhy.platform.client.dto.game.Game;
 import com.sjhy.platform.client.dto.game.GameContent;
@@ -46,9 +46,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
-@RequestMapping("/pay")
-public class PayController {
-    private static final Logger logger = LoggerFactory.getLogger(PayController.class);
+@RequestMapping("/test")
+public class TestController {
+    private static final Logger logger = LoggerFactory.getLogger(TestController.class);
 
     @Autowired
     private PlayerPayLogMapper playerPayLogMapper;
@@ -274,7 +274,7 @@ public class PayController {
                         if (jobReceipt != null) {
                             String gamePackage = gameMapper.selectByGameId(gameId).getNameEn();
                             // 2.1 验证游戏包名是否正确
-                            if (gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bid"))) || gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bundle_id")))) {
+                            if (gamePackage.equalsIgnoreCase(String.valueOf(jobReceipt.get("bundle_id")))) {
                                 // 3. 解析in_app
                                 String jobIn = String.valueOf(jobReceipt.get("in_app"));
                                 logger.info("=============[][][3][][]" + jobIn);

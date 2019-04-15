@@ -1,3 +1,4 @@
+/*
 package com.sjhy.platform.test;
 
 import java.io.BufferedOutputStream;
@@ -16,11 +17,13 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+*/
 /**
  * 苹果IAP内购验证工具类,未使用
  * @ClassName: IosVerify
  * @Description:Apple Pay
- */
+ *//*
+
 public class IosVerifyUtil {
 
     private static class TrustAnyTrustManager implements X509TrustManager {
@@ -45,7 +48,8 @@ public class IosVerifyUtil {
     private static final String url_sandbox = "https://sandbox.itunes.apple.com/verifyReceipt";
     private static final String url_verify = "https://buy.itunes.apple.com/verifyReceipt";
 
-    /**
+    */
+/**
      * 苹果服务器验证
      *
      * @param receipt
@@ -53,7 +57,8 @@ public class IosVerifyUtil {
      * @url 要验证的地址
      * @return null 或返回结果 沙盒 https://sandbox.itunes.apple.com/verifyReceipt
      *
-     */
+     *//*
+
     public static String buyAppVerify(String receipt,int type) {
         //环境判断 线上/开发环境用不同的请求链接
         String url = "";
@@ -98,12 +103,14 @@ public class IosVerifyUtil {
         return null;
     }
 
-    /**
+    */
+/**
      * 用BASE64加密
      *
      * @param str
      * @return
-     */
+     *//*
+
     public static String getBASE64(String str) {
         byte[] b = str.getBytes();
         String s = null;
@@ -114,3 +121,4 @@ public class IosVerifyUtil {
     }
 
 }
+*/

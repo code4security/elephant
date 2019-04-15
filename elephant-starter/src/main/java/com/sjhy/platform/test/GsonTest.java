@@ -18,35 +18,20 @@ public class GsonTest {
     }
 
     public void in(){
-        String j = "{\n" +
-                "\t\"receipt\": {\n" +
-                "\t\t\"original_transaction_id\": \"400000533527605\",\n" +
-                "\t\t\"in_app\": [{\n" +
-                "\t\t\t\t\"quantity\": \"1\"\n" +
-                "\t\t\t},\n" +
-                "\t\t\t{\n" +
-                "\t\t\t\t\"quantity\": \"3\"\n" +
-                "\t\t\t},\n" +
-                "\t\t\t{\n" +
-                "\t\t\t\t\"quantity\": \"2\"\n" +
-                "\t\t\t}\n" +
-                "\t\t]\n" +
-                "\t},\n" +
-                "\t\"status\": 255\n" +
-                "}";
+        String j = "{\"receipt\":{\"receipt_type\":\"ProductionSandbox\",\"adam_id\":0,\"app_item_id\":0,\"bundle_id\":\"com.sj.sanguo\",\"application_version\":\"15\",\"download_id\":0,\"version_external_identifier\":0,\"receipt_creation_date\":\"2019-04-13 10:32:17 Etc/GMT\",\"receipt_creation_date_ms\":\"1555151537000\",\"receipt_creation_date_pst\":\"2019-04-13 03:32:17 America/Los_Angeles\",\"request_date\":\"2019-04-13 10:32:29 Etc/GMT\",\"request_date_ms\":\"1555151549671\",\"request_date_pst\":\"2019-04-13 03:32:29 America/Los_Angeles\",\"original_purchase_date\":\"2013-08-01 07:00:00 Etc/GMT\",\"original_purchase_date_ms\":\"1375340400000\",\"original_purchase_date_pst\":\"2013-08-01 00:00:00 America/Los_Angeles\",\"original_application_version\":\"1.0\",\"in_app\":[{\"quantity\":\"1\",\"product_id\":\"Money_180\",\"transaction_id\":\"1000000518977336\",\"original_transaction_id\":\"1000000518977336\",\"purchase_date\":\"2019-04-13 03:43:44 Etc/GMT\",\"purchase_date_ms\":\"1555127024000\",\"purchase_date_pst\":\"2019-04-12 20:43:44 America/Los_Angeles\",\"original_purchase_date\":\"2019-04-13 03:43:44 Etc/GMT\",\"original_purchase_date_ms\":\"1555127024000\",\"original_purchase_date_pst\":\"2019-04-12 20:43:44 America/Los_Angeles\",\"is_trial_period\":\"false\"},{\"quantity\":\"1\",\"product_id\":\"Money_700\",\"transaction_id\":\"1000000518932794\",\"original_transaction_id\":\"1000000518932794\",\"purchase_date\":\"2019-04-12 18:27:18 Etc/GMT\",\"purchase_date_ms\":\"1555093638000\",\"purchase_date_pst\":\"2019-04-12 11:27:18 America/Los_Angeles\",\"original_purchase_date\":\"2019-04-12 18:27:18 Etc/GMT\",\"original_purchase_date_ms\":\"1555093638000\",\"original_purchase_date_pst\":\"2019-04-12 11:27:18 America/Los_Angeles\",\"is_trial_period\":\"false\"},{\"quantity\":\"1\",\"product_id\":\"Remove_Ads\",\"transaction_id\":\"1000000518214077\",\"original_transaction_id\":\"1000000518214077\",\"purchase_date\":\"2019-04-11 02:55:25 Etc/GMT\",\"purchase_date_ms\":\"1554951325000\",\"purchase_date_pst\":\"2019-04-10 19:55:25 America/Los_Angeles\",\"original_purchase_date\":\"2019-04-11 02:55:25 Etc/GMT\",\"original_purchase_date_ms\":\"1554951325000\",\"original_purchase_date_pst\":\"2019-04-10 19:55:25 America/Los_Angeles\",\"is_trial_period\":\"false\"},{\"quantity\":\"1\",\"product_id\":\"monthly_Card\",\"transaction_id\":\"1000000518118588\",\"original_transaction_id\":\"1000000518118588\",\"purchase_date\":\"2019-04-10 16:59:40 Etc/GMT\",\"purchase_date_ms\":\"1554915580000\",\"purchase_date_pst\":\"2019-04-10 09:59:40 America/Los_Angeles\",\"original_purchase_date\":\"2019-04-10 16:59:40 Etc/GMT\",\"original_purchase_date_ms\":\"1554915580000\",\"original_purchase_date_pst\":\"2019-04-10 09:59:40 America/Los_Angeles\",\"is_trial_period\":\"false\"}]},\"status\":0,\"environment\":\"Sandbox\"}";
         JSONObject job = JSONObject.parseObject(j);
         System.out.println(job.get("receipt"));
         System.out.println(job.get("status"));
         JSONObject jobRece = job.getJSONObject("receipt");
         System.out.println(jobRece);
-        System.out.println(jobRece.get("original_transaction_id"));
         System.out.println(jobRece.get("in_app"));
-        String jobIn = String.valueOf(jobRece.get("in_apps"));
+        System.out.println("in_app");
+        String jobIn = String.valueOf(jobRece.get("in_app"));
         List<Map<String, Object>> listKylinTable1 = JSONObject.parseObject(jobIn, List.class);
         System.out.println(listKylinTable1);
         if (listKylinTable1 != null){
             for (Map<String, Object> jobs:listKylinTable1){
-                System.out.println(jobs.get("quantity"));
+                System.out.println(jobs.get("transaction_id"));
             }
         }
     }
