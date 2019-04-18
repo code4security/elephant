@@ -61,6 +61,8 @@ public class GameController {
     private ResultVo resultVo;
     @Autowired
     private ModuleSwitchMapper moduleSwitchMapper;
+    @Autowired
+    private GameConfigMapper gameConfigMapper;
 
     /**
      * 获取全部商品
@@ -141,6 +143,25 @@ public class GameController {
             }
         }
         return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "验证游戏或渠道失败");
+    }
+
+    /**
+     * 获取游戏单位时间和最大字节
+     * @param gameId
+     * @param channelId
+     * @return
+     */
+    @RequestMapping(value = "/config" , method = RequestMethod.GET)
+    public ResultDTO<GameConfig> getConfig(@RequestParam String gameId, @RequestParam String channelId){
+        if (dbVerify.isHasChannel(channelId,gameId)){
+            GameConfig gameConfig = gameConfigMapper.selectByCon(gameId,channelId);
+            if (gameConfig != null){
+                return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(),gameConfig);
+            }else {
+                return ResultDTO.getFailureResult(IosCode.ERROR_UNKNOWN.getErrorCode(),IosCode.ERROR_UNKNOWN.getDesc(),"未找到对应查询");
+            }
+        }
+        return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(),IosCode.ERROR_CLIENT_VALUE.getDesc(),"验证游戏或渠道失败");
     }
 
     /**
