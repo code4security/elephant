@@ -287,13 +287,10 @@ public class GameController {
             // 判断是否需要删除邮件
             if (del == false) {
                 // 查询所有未领取奖励邮件
-                List<Mail> mailList = mailMapper.selectByRoleId(iosId, gameId, 0, 30);
+                List<Mail> mailList = mailMapper.selectByChannel(iosId, gameId, channelId, 0, 30);
                 if (mailList != null) {
                     // 遍历邮件集合
                     for (int i = 0; i < mailList.size(); i++) {
-                        if(!mailList.get(i).getChannelId().equalsIgnoreCase(channelId) && !mailList.get(i).getChannelId().equalsIgnoreCase("-1")){
-                            return ResultDTO.getFailureResult(IosCode.ERROR_CLIENT_VALUE.getErrorCode(), IosCode.ERROR_CLIENT_VALUE.getDesc(), "获取奖励失败,渠道有误");
-                        }
                         // 邮件状态值判断，如果小于3进行状态值+1.如果大于等于3，直接删除该邮件
                         if (mailList.get(i).getStatus() < 5) {
                             mail.setId(mailList.get(i).getId());
@@ -309,7 +306,7 @@ public class GameController {
                         }
                     }
                     // 更新查询
-                    mailList = mailMapper.selectByRoleId(iosId, gameId, 0, 30);
+                    mailList = mailMapper.selectByChannel(iosId, gameId, channelId,0, 30);
                     // 返回邮件列表
                     return ResultDTO.getSuccessResult(IosCode.OK.getErrorCode(), mailList);
                 } else {

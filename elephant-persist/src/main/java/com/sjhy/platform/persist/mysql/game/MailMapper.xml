@@ -216,4 +216,21 @@
             send_time DESC
         LIMIT #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}
   </select>
+
+    <!-- 查询邮件列表,渠道 -->
+    <select id="selectByChannel" parameterType="com.sjhy.platform.client.dto.game.Mail" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM
+        mail
+        WHERE
+        recv_role_id = #{recvRoleId,jdbcType=BIGINT}
+        and game_id = #{gameId,jdbcType=VARCHAR}
+        and channel_id = #{channelId,jdbcType=VARCHAR}
+        or channel_id = -1
+        /*and status &lt; 3*/
+        ORDER BY
+        send_time DESC
+        LIMIT #{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}
+    </select>
 </mapper>

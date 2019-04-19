@@ -2,7 +2,9 @@ package com.sjhy.platform.persist.mysql.game;
 
 import com.sjhy.platform.client.dto.game.GameConfig;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface GameConfigMapper {
     int deleteByPrimaryKey(Integer id);
 

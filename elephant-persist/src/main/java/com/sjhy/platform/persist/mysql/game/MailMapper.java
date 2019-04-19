@@ -28,4 +28,7 @@ public interface MailMapper {
 
     // 查询邮件列表
     List<Mail> selectByRoleId(@Param("recvRoleId") Long recvRoleId, @Param("gameId") String gameId, @Param("from")int from, @Param("to")int to);
+
+    // 查询邮件列表，渠道
+    List<Mail> selectByChannel(@Param("recvRoleId") Long recvRoleId, @Param("gameId") String gameId, @Param("channelId") String channelId, @Param("from")int from, @Param("to")int to);
 }
