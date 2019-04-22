@@ -423,7 +423,7 @@ public class GameController {
         }
     }
 
-    @PostMapping("/test")
+    @GetMapping("/test")
     public String test() {
         return "ok";
     }
