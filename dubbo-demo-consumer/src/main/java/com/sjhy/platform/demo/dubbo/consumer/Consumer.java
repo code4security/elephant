@@ -18,7 +18,7 @@ public class Consumer {
             try {
                 Thread.sleep(1000);
                 ResultDTO<String> testRst = personService.test(); // call remote method
-                System.out.println(testRst.getResult()); // get result
+                System.out.println(testRst.getSuccessResult()); // get result
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }

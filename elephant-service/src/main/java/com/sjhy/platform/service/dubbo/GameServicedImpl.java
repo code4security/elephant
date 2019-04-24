@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * @HJ
+ * @HJhh
  */
 @Service(value = "GameServiced")
 public class GameServicedImpl implements GameServiced {
